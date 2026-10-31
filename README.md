@@ -22,7 +22,7 @@ HTML, CSS, JavaScript, PWA, Google Apps Script (GAS), Google Sheets dan GitHub P
 ## Rujukan
 
 - Repository: https://github.com/kevitu/championship
-- Spreadsheet utama: https://docs.google.com/spreadsheets/d/1j8xz7G2CksaZt_LOVvSSk8fVsC78LXMVDgioF2tqQ-E/edit
+- Spreadsheet utama: **Daftar Rumah Sukan Kevitu** (pautan disimpan di luar repository awam).
 
 ## Langkah kerja
 
