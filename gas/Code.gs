@@ -85,20 +85,28 @@ function doPost(e) {
   }
 }
 
+function kevituSafeText_(value, label, maxLength) {
+  const text = String(value == null ? '' : value).trim().replace(/\s+/g, ' ');
+  if (text.length > maxLength || /^[=+@\-]/.test(text) || /[\x00-\x1f]/.test(text)) {
+    throw new Error(label + ' tidak selamat atau terlalu panjang.');
+  }
+  return text;
+}
+
 function kevituEventInput_(payload) {
-  const name = String(payload.nama_acara || '').trim().replace(/\s+/g, ' ');
-  if (!name || name.length > 120 || /[<>]/.test(name)) throw new Error('Nama acara tidak sah.');
+  const name = kevituSafeText_(payload.nama_acara, 'Nama acara', 120);
+  if (!name || /[<>]/.test(name)) throw new Error('Nama acara tidak sah.');
   const date = String(payload.tarikh_acara || '').trim();
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date) ||
       isNaN(new Date(date + 'T00:00:00Z').getTime()) ||
       new Date(date + 'T00:00:00Z').toISOString().slice(0, 10) !== date) throw new Error('Tarikh acara tidak sah.');
   const status = String(payload.status || 'SELESAI').trim().toUpperCase();
   if (!['AKTIF','SELESAI'].includes(status)) throw new Error('Status tidak sah.');
-  const notes = String(payload.catatan || '').trim();
-  if (notes.length > 500) throw new Error('Catatan terlalu panjang.');
+  const notes = kevituSafeText_(payload.catatan, 'Catatan', 500);
   const scores = payload.mata;
   if (!scores || typeof scores !== 'object' || Array.isArray(scores) ||
-      Object.keys(scores).some(x => !KEVITU_HOUSES.includes(x))) throw new Error('Mata empat rumah diperlukan.');
+      Object.keys(scores).length !== KEVITU_HOUSES.length ||
+      KEVITU_HOUSES.some(x => !Object.prototype.hasOwnProperty.call(scores, x))) throw new Error('Mata empat rumah diperlukan.');
   const normalized = {};
   KEVITU_HOUSES.forEach(h => {
     const value = scores[h];
@@ -197,7 +205,7 @@ function kevituAggregate_(events, scores) {
   events.forEach(row => {
     const id = String(row[0]).trim().toUpperCase();
     const status = String(row[3]).trim().toUpperCase();
-    if (id && status !== 'BATAL') valid.add(id);
+    if (id && (status === 'AKTIF' || status === 'SELESAI')) valid.add(id);
   });
   const sums = new Map(KEVITU_HOUSES.map(h=>[h,{house:h,total:0,events:new Set()}]));
   const seen = new Set();
