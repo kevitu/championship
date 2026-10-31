@@ -15,6 +15,15 @@ Sistem mata terkumpul Kejohanan Sukan KEVITU untuk empat rumah sukan: **Merah**,
 - **STRAVA STRIKE 2026** merupakan acara pertama.
 - Sumber utama ialah spreadsheet Google **Daftar Rumah Sukan Kevitu** dengan tab pendaftaran sedia ada serta tiga tab sistem: `ACARA`, `MATA_ACARA`, dan `KEDUDUKAN`.
 
+
+## Keputusan pengurusan mata — LOCK (Pilihan B)
+
+- Mata yang disimpan oleh Admin/AJK Sukan terus diambil kira dalam ranking tanpa aliran kelulusan digital.
+- Admin boleh mengubah mata acara pada bila-bila masa selepas persetujuan lisan antara AJK.
+- Edit menggantikan nilai mata sebelumnya; jumlah terkumpul dikira semula, bukan ditambah dua kali.
+- Cadangan teknikal: simpan log audit perubahan (masa, identiti Admin, acara, rumah, mata lama/baharu) tanpa menjadikannya syarat kelulusan.
+- Mata acara ditentukan oleh Ketua Biro Sukan, bukan dijana secara automatik oleh sistem.
+
 ## Teknologi yang dirancang
 
 HTML, CSS, JavaScript, PWA, Google Apps Script (GAS), Google Sheets dan GitHub Pages.
