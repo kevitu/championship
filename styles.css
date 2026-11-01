@@ -8,3 +8,10 @@
 .house .rank{margin-bottom:7px}
 @media(max-width:850px){.logo-frame{height:124px}}
 @media(max-width:520px){.brand-logo{width:44px;height:44px}.hero-logo{display:none}.logo-frame{height:96px;margin-bottom:10px}}
+
+/* Single dashboard entry point to Google-authenticated Admin DEV */
+.top-actions{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:10px}
+.admin-button{display:inline-flex;align-items:center;justify-content:center;padding:9px 16px;border:1px solid #ffe178;border-radius:12px;background:#ffe178;color:#10203a;text-decoration:none;font-size:.85rem;font-weight:850;white-space:nowrap}
+.admin-button:hover,.admin-button:focus-visible{background:#fff0ac;outline:2px solid #fff0ac;outline-offset:2px}
+.admin-inline{color:#ffe178;font-weight:750}
+@media(max-width:520px){.top-actions{gap:6px}.top-actions .chip{font-size:.72rem;padding:6px 8px}.admin-button{font-size:.76rem;padding:7px 10px}}
