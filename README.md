@@ -59,9 +59,16 @@ Acara `EVT001` kemudian **dibatalkan melalui Admin**, status bertukar `BATAL`, t
 | `gas/public/Code.gs` | Public Reader read-only |
 | `docs/` | Dokumentasi keputusan dan checkpoint |
 
+## Panduan dan audit keselamatan
+
+- [Manual ringkas Admin](docs/MANUAL_ADMIN_KEVITU.md)
+- [Security Hardening — status dan prosedur deployment](docs/SECURITY_HARDENING_2026-11-01.md)
+
+**Security Hardening belum LOCK:** kod legacy Web App telah dimatikan di GitHub, tetapi deployment LIVE masih perlu dikemas kini serta disahkan. Dashboard UI V1 kekal LOCK.
+
 ## Status yang masih terbuka (bukan blocker Dashboard V1)
 
-- Pengesahan khusus akses **Admin kedua** melalui akaun akaun Ketua Biro Sukan yang diluluskan.
+- Pengesahan khusus akses **Admin kedua** melalui akaun Ketua Biro Sukan yang diluluskan.
 - Kemasan latar putih pada logo Rumah **Biru** dan **Kuning**.
 - Fail PNG ikon PWA 192×192 / 512×512 belum berada di repo; ikon SVG kini digunakan.
 - Ujian pemulihan partial-write/fault injection belum direkodkan.
