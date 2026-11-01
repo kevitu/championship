@@ -1,28 +1,49 @@
-# Security Hardening — 1 November 2026
+# KEVITU Security Hardening V8 — Penutupan Operasi (1 November 2026)
 
-## Keadaan semasa
-- **LIVE backend:** Admin PWA menggunakan Apps Script Execution API; identiti disemak dengan `Session.getActiveUser().getEmail()` terhadap private Script Property `ADMIN_EMAILS` setiap kali operasi; spreadsheet Restricted.
-- **PUBLIC READ:** projek GAS berasingan, read-only; pulangkan agregat tanpa senarai peserta.
-- **Audit:** perubahan mata dan batal acara direkodkan dalam `LOG_MATA`.
-- **Pendedahan identiti:** emel Admin kedua telah dikeluarkan daripada README semasa; **historical Git commits masih mungkin menyimpan maklumat lama**.
-- **GitHub source hardening:** legacy `doPost` digantikan dengan penolakan tetap, dan fungsi token-id lama yang tidak digunakan dibuang (**commit e1d06ea**). **Belum deployed ke Apps Script LIVE**; jangan dakwa laluan lama telah ditutup pada production.
+**Keputusan pemilik:** Hardening V8 dianggap mencukupi bagi skop pertandingan rumah sukan semasa. **Tiada perubahan kod atau deployment diperlukan oleh penutupan dokumentasi ini.** Penilaian ini bukan pensijilan keselamatan atau jaminan tiada risiko.
 
-## Prosedur deploy terkawal (pemilik Apps Script)
-1. Backup/simpan kod Apps Script LIVE sekarang dan catat deployment serta version yang digunakan.
-2. Paste **keseluruhan** `gas/bridge/Code.gs` terkini dari GitHub, kemudian Save.
-3. Semak Script Properties masih lengkap dan sepadan; **jangan** ubah `ADMIN_EMAILS`, `OAUTH_CLIENT_ID` atau `SPREADSHEET_ID` tanpa semakan.
-4. **Deploy → Manage deployments:** edit **setiap deployment aktif** yang mungkin melayani Web App lama atau Execution API supaya semua menggunakan New version hardened. Jangan archive/delete ID semasa yang digunakan PWA.
-5. Pastikan `doPost` Web App membalas `Endpoint disabled` (bukan melaksanakan operasi). Jangan hantar token atau data sebenar untuk ujian.
-6. Uji login/baca satu acara dengan Admin utama melalui PWA. Jangan buat transaksi mata dummy semata-mata untuk hardening.
-7. Uji akaun Google **bukan** dalam whitelist: mesti gagal akses tanpa memaparkan data.
-8. Admin kedua sendiri log masuk dan pastikan `Akses Admin disahkan.` dengan akaun yang diluluskan. Tidak perlu submit mata ujian.
-9. Catat keputusan dan versi deployment; hanya kemudian tandakan hardening sebagai selesai.
+## Sistem rasmi yang kekal digunakan
+- **GitHub production:** `main`; dashboard https://kevitu.github.io/championship/ dan Admin https://kevitu.github.io/championship/admin.html.
+- **Backend Admin LIVE:** Apps Script Execution API, deployment ditunjukkan pemilik sebagai **Version 8 — Security Hardened** pada 1 November 2026. `admin-auth.js` di `main` kekal menggunakan kontrak V8.
+- **PUBLIC READ:** Apps Script berasingan; hanya memulangkan data agregat kedudukan/acara. Kod pembaca tiada fungsi mutasi.
+- **Google Sheets:** `Daftar Rumah Sukan Kevitu` ialah **satu-satunya spreadsheet rasmi**. Data `ACARA`, `MATA_ACARA`, `KEDUDUKAN`, `LOG_MATA` dan tab pendaftaran kekal.
+- **QA V9:** branch `security/v9-transaction-integrity-qa` ialah hasil penyelidikan/ujian; **bukan production**, tidak digabungkan dan tidak dideploy. Jangan ikut runbook V9 secara automatik.
 
-## Risiko masih wujud / tidak dilindungi oleh patch ini
-- Keupayaan Google Sheets Editor mengubah helaian secara terus (bukan hanya melalui Admin UI). Had akses dan protected ranges perlu dinilai secara berasingan.
-- Backend mutasi berbilang tab tidak menggunakan transaksi atomik; fault injection/recovery QA belum dilaksanakan.
-- Exact LIVE Spreadsheet ID berada dalam source public GAS sebagai safety lock; ini bukan credential, namun pendedahan metadata yang wajar diminimumkan pada fasa seterusnya. Jangan buang guard tanpa menggantikannya dengan private pinned ID yang fail-closed.
-- OAuth consent dalam Testing dan scopes luas: semak sebelum penggunaan meluas; jangan publish OAuth client secret.
-- Git history boleh menyimpan butiran lama meskipun README terkini telah disunting.
+## Kawalan keselamatan yang ada pada V8
+1. Admin login menggunakan Google OAuth melalui Execution API.
+2. Setiap entrypoint Admin memanggil pemeriksaan server-side `Session.getActiveUser().getEmail()` terhadap private `ADMIN_EMAILS`; frontend tidak menjadi sumber autorisasi.
+3. Backend memerlukan padanan tepat `SPREADSHEET_ID` dengan workbook yang diluluskan (fail-closed).
+4. Source Bridge V8 menutup legacy `doPost()` dengan respons `Endpoint disabled`; deployment V8 telah dikemas kini menurut tindakan dan screenshot pemilik, tetapi ujian HTTP langsung bagi endpoint tidak direkodkan.
+5. Dua deployment Admin Bridge lama (V6 dan V2) ditunjukkan telah di-archive. PUBLIC READ ialah projek lain dan kekal.
+6. Input acara/mata mempunyai validasi asas, operasi menggunakan `LockService`, dan tindakan mata/pembatalan merekodkan audit di `LOG_MATA`.
+7. Source PUBLIC READ ialah read-only dan tidak mendedahkan senarai peserta.
+8. README HEAD telah dibersihkan daripada email Admin kedua. **Sejarah Git lama berpotensi masih mengandungi maklumat tersebut**; jangan simpan rahsia dalam repository.
 
-**Keputusan:** Dashboard UI V1 LOCK; Security Hardening masih **PENDING LIVE DEPLOY + VERIFICATION**.
+## Bukti operasi dan batas verifikasi
+| Item | Keputusan |
+|---|---|
+| Admin utama login ke V8 selepas hardening | **PASS (screenshot pemilik)** — `Akses Admin disahkan.` |
+| OAuth bukan Test User | **PASS** — cubaan pengguna luar ditolak oleh Google dengan 403 sebelum backend |
+| Backend whitelist menolak OAuth Test User yang tidak di-`ADMIN_EMAILS` | **NOT VERIFIED secara langsung** |
+| Simpan mata, batal acara, ranking dashboard | **PASS pada ujian LIVE terdahulu**; selepas patch V8, ujian tulis baharu tidak dijalankan |
+| Deployment Bridge lama di-archive | **PASS berdasarkan screenshot pemilik** |
+| Exact deployed GAS bytes, active deployment ACL, Google Sheets Editors, GAS quotas | **NOT VERIFIED secara bebas** |
+| Ujian V9-A/V9-B mock | Direkodkan pada branch QA; **bukan bukti V8 production PASS** |
+
+## Matlamat praktikal: lindungi data mata
+- Pengguna awam **tidak** mempunyai fungsi tulis melalui Public Reader atau dashboard.
+- Hanya akaun Google yang dibenarkan oleh backend Admin sepatutnya boleh melakukan operasi Admin melalui API rasmi.
+- **Penting:** Sesiapa yang mempunyai kebenaran **Editor** pada spreadsheet, atau akses menulis melalui skrip/credential lain yang dipercayai, mungkin boleh mengubah data secara langsung di luar Admin PWA.
+- Pemilik perlu mengekalkan **Google Sheets > Share > General access: Restricted** dan menghadkan **Editor** kepada petugas benar-benar diperlukan. Senarai Editor sebenar belum disahkan dalam sesi ini.
+- Simpan backup spreadsheet dan kawal akses kepada Apps Script, OAuth, dan Script Properties.
+
+## Risiko diterima untuk fasa ini
+- V8 bukan transaksi atomik merentas berbilang tab: duplicate submit, partial write dan recovery mempunyai risiko yang dikenal pasti dalam mock audit; tidak dilindungi secara menyeluruh oleh hardening V8.
+- Direct Sheet Editor, pemilik skrip dan kemungkinan legacy writer lain berada di luar kawalan frontend whitelist.
+- `SPREADSHEET_ID` tepat terdapat dalam source sebagai safety pin; ia bukan kata laluan. Jangan terbitkan `ADMIN_EMAILS`, token atau secret.
+- Tiada pensijilan 9/10 atau tuntutan bahawa tiada siapa boleh mengubah data dalam semua keadaan.
+
+## Keputusan penutup
+**V8 LIVE kekal tanpa perubahan; Security Hardening V8 ditutup sebagai mencukupi untuk operasi semasa berdasarkan risiko yang diterima pemilik.** Pembangunan/penambahbaikan fungsi biasa boleh diteruskan; isu keselamatan yang nyata boleh ditangani kemudian secara minimum. V9 QA disimpan sebagai rujukan sahaja.
+
+**Safety:** Dokumen ini sahaja dikemas kini pada `main`; tiada perubahan kod, OAuth, Script Properties, deployment, Google Sheets, PR atau merge V9.
