@@ -184,3 +184,32 @@ function doPost(e){
   }
 }
 function doGet(){return HtmlService.createHtmlOutput('KEVITU Admin Bridge — POST only');}
+
+/**
+ * API Executable entrypoints (called with user's OAuth ACCESS token).
+ * All functions independently verify Google session identity + private allowlist.
+ * AJK must also have Google Sheets access when executing via scripts.run.
+ */
+function kevituApiAdmin_() {
+  const config=bridgeProperties_();
+  const email=String(Session.getActiveUser().getEmail()||'').trim().toLowerCase();
+  if(!email||!config.admins.includes(email))throw Error('Akses Admin tidak dibenarkan');
+  return {email,book:bridgeBook_(config)};
+}
+function apiListKevituEvents() {
+  const ctx=kevituApiAdmin_();
+  return bridgeData_(ctx.book);
+}
+function apiSaveKevituEvent(payload) {
+  const ctx=kevituApiAdmin_();
+  if(!payload||typeof payload!=='object'||Array.isArray(payload))throw Error('Payload tidak sah');
+  const lock=LockService.getScriptLock();lock.waitLock(20000);
+  try {const result=bridgeMutation_(ctx.book,'save',payload,ctx.email);SpreadsheetApp.flush();return result}
+  finally{lock.releaseLock()}
+}
+function apiCancelKevituEvent(id) {
+  const ctx=kevituApiAdmin_();
+  const lock=LockService.getScriptLock();lock.waitLock(20000);
+  try {const result=bridgeMutation_(ctx.book,'cancel',{id_acara:id},ctx.email);SpreadsheetApp.flush();return result}
+  finally{lock.releaseLock()}
+}
