@@ -15,3 +15,18 @@
 .admin-button:hover,.admin-button:focus-visible{background:#fff0ac;outline:2px solid #fff0ac;outline-offset:2px}
 .admin-inline{color:#ffe178;font-weight:750}
 @media(max-width:520px){.top-actions{gap:6px}.top-actions .chip{font-size:.72rem;padding:6px 8px}.admin-button{font-size:.76rem;padding:7px 10px}}
+
+/* LIVE podium: ranked 1–4, responsive, and no artificial champion when scores are empty. */
+.houses{align-items:end;padding-top:12px}
+.podium-card{min-height:350px;display:flex;flex-direction:column;transform:translateY(var(--podium-rise));margin-bottom:66px;animation:podium-reveal .65s both;animation-delay:var(--podium-delay)}
+.podium-card .points{margin-top:auto}
+.podium-base{position:relative;margin:18px -22px -22px;border-top:3px solid var(--house);background:linear-gradient(180deg,color-mix(in srgb,var(--house) 22%,#10213a),#10213a);min-height:50px;display:grid;place-items:center;font-weight:900;font-size:1.35rem;color:var(--ink)}
+.podium-base span{line-height:1}
+@keyframes podium-reveal{from{opacity:0;translate:0 18px}to{opacity:1;translate:0 0}}
+.house-skeleton{min-height:350px;display:flex;flex-direction:column;gap:17px;transform:none;margin-bottom:66px}
+.skeleton-logo,.skeleton-line{background:linear-gradient(95deg,#263e62 15%,#355174 45%,#263e62 75%);background-size:200% 100%;animation:skeleton-shimmer 1.5s ease-in-out infinite;border-radius:12px}
+.skeleton-logo{height:148px;width:75%;align-self:center}.skeleton-line{height:18px;width:90%}.skeleton-line.short{width:62%}
+@keyframes skeleton-shimmer{to{background-position-x:-200%}}
+@media(max-width:850px){.podium-card{min-height:320px}.house-skeleton{min-height:320px}}
+@media(max-width:520px){.podium-card{min-height:275px;margin-bottom:48px;transform:translateY(calc(var(--podium-rise) * .6))}.podium-base{margin:14px -14px -17px;min-height:37px}.house-skeleton{min-height:275px;margin-bottom:48px}.skeleton-logo{height:96px}}
+@media(prefers-reduced-motion:reduce){.podium-card,.skeleton-logo,.skeleton-line{animation:none!important}}
