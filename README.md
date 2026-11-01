@@ -61,7 +61,7 @@ Acara `EVT001` kemudian **dibatalkan melalui Admin**, status bertukar `BATAL`, t
 
 ## Status yang masih terbuka (bukan blocker Dashboard V1)
 
-- Pengesahan khusus akses **Admin kedua** melalui akaun `ctmoja0626@gmail.com`.
+- Pengesahan khusus akses **Admin kedua** melalui akaun akaun Ketua Biro Sukan yang diluluskan.
 - Kemasan latar putih pada logo Rumah **Biru** dan **Kuning**.
 - Fail PNG ikon PWA 192×192 / 512×512 belum berada di repo; ikon SVG kini digunakan.
 - Ujian pemulihan partial-write/fault injection belum direkodkan.
