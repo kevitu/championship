@@ -42,7 +42,8 @@ function request(action,payload){
    const form=document.createElement('form');form.method='POST';form.action=bridge;form.target=frame.name;form.hidden=true;
    const args={request_id:requestId,action,credential,payload:JSON.stringify(payload||{})};
    for(const [name,value] of Object.entries(args)){const input=document.createElement('input');input.type='hidden';input.name=name;input.value=value;form.append(input)}
-   function cleanup(){window.removeEventListener('message',receive);frame.remove();form.remove();pending=null;busy=false;enable()}
+   const watchdog=setTimeout(()=>{cleanup();reject(Error('Tiada respons daripada backend. Semak data sebelum cuba lagi.'))},30000);
+   function cleanup(){clearTimeout(watchdog);window.removeEventListener('message',receive);frame.remove();form.remove();pending=null;busy=false;enable()}
    function receive(e){
      // HtmlService may execute from a sandboxed googleusercontent.com iframe.
      // Both frame source and exact message identifier are mandatory.
