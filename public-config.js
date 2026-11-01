@@ -1,4 +1,3 @@
-// Public dashboard data is not connected yet.
-// After review and deployment of the SEPARATE read-only GAS app,
-// set this to its approved /exec URL. Never set an Admin GAS URL here.
-window.KEVITU_PUBLIC_READ_URL = '';
+// DEV TEST ONLY — NOT OFFICIAL KEVITU RESULTS.
+window.KEVITU_ENV = 'DEV';
+window.KEVITU_PUBLIC_READ_URL = 'https://script.google.com/macros/s/AKfycbzEtzkh5H_208pA_5B0FEUiX9ZNI2g6SgISv5NKOeaPfsZZDq-IwkXR0wCYfTUm0IKx/exec';
