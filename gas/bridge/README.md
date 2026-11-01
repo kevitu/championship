@@ -32,3 +32,13 @@
 - No protection guarantees against DDoS or Google quota exhaustion; token verification adds request cost.
 - Web app access `Anyone` and `Execute as Me` must **not** be used for the old Admin GAS.
 - Do not promote DEV test scores to official results. Dashboard still points to DEV PUBLIC READ.
+
+## 2026-11-01 — Execution API integration (supersedes iframe)
+- PWA now uses Google Identity Services OAuth token client and `scripts.run`; no hidden iframe, no Web App POST is needed by the UI.
+- API executable deployment ID configured in `admin-auth.js`. Both the script and OAuth client use KEVITU standard Cloud Project.
+- New server functions: `apiListKevituEvents`, `apiSaveKevituEvent`, `apiCancelKevituEvent`. All require Google Session email in `ADMIN_EMAILS` and DEV workbook lock.
+- **Action required:** Copy updated `Code.gs` to `KEVITU Admin Bridge - DEV`; **update the API Executable deployment to a NEW VERSION**. GitHub commits don't deploy GAS code automatically.
+- An OAuth access token will request `spreadsheets` and `script.external_request` to cover existing Apps Script project scopes. This is broad access; Google may flag app verification. The browser keeps token only in memory and sends it to Google's script API.
+- Execution API runs using calling account's OAuth permissions. Admin 2+ may require API deployment access changes and spreadsheet sharing; **private whitelist alone is not enough**. Keep `Only myself` until that access model is reviewed.
+- A successful `scripts.run` response verifies authentication and connectivity; not yet tested in a real browser.
+- The original Web App `doPost` remains in source and previous deployments but is not used by new PWA; review/disable those deployments after API verified, to reduce attack surface.
