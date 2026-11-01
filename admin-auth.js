@@ -1,104 +1,84 @@
 'use strict';
-const KEVITU_OAUTH_CLIENT_ID='556436437882-flsu8vhvkt2cmsvbbp0nm3mtn7s0cth0.apps.googleusercontent.com';
+/* KEVITU API Executable: OAuth access token in memory only. */
+const KEVITU_CLIENT_ID='556436437882-flsu8vhvkt2cmsvbbp0nm3mtn7s0cth0.apps.googleusercontent.com';
+const API_URL='https://script.googleapis.com/v1/scripts/AKfycby7JmaCo93QYuetstRvCQkGTV8l1I-y8Jxlu3lDfnHs5ggs_3IW8IVidOsHhI_nnj3z:run';
+const API_SCOPES='https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/script.external_request';
 const $=id=>document.getElementById(id);
-const bridge=String(window.KEVITU_ADMIN_BRIDGE_URL||'').trim();
-let credential='',events=[],pending=null,busy=false,authorised=false;
-const fields=['existing','eventName','eventDate','eventStatus','merah','biru','hijau','kuning'];
-function validBridge(){
-  try {const u=new URL(bridge);return u.protocol==='https:'&&u.hostname==='script.google.com'&&u.pathname.endsWith('/exec')}catch(_){return false}
-}
+const ids=['existing','eventName','eventDate','eventStatus','merah','biru','hijau','kuning'];
+let accessToken='',expiry=0,authorised=false,busy=false,events=[],tokenClient;
 function status(t){$('bridge-status').textContent=t}
 function message(t){$('operation-status').textContent=t}
 function selected(){return events.find(x=>x.id_acara===$('existing').value)}
 function enable(){
-  const ok=!!credential&&authorised&&validBridge()&&!busy;
-  for(const id of fields)$(id).disabled=!ok;
-  const item=selected();
-  $('save').disabled=!ok||item?.status==='BATAL';
-  $('cancel').disabled=!ok||!item||item.status==='BATAL';
+ const ready=authorised&&!!accessToken&&Date.now()<expiry&&!busy;
+ ids.forEach(id=>$(id).disabled=!ready);
+ $('save').disabled=!ready||selected()?.status==='BATAL';
+ $('cancel').disabled=!ready||!selected()||selected().status==='BATAL';
 }
 function fill(){
- const item=selected();
- $('eventName').value=item?.nama_acara||'';
- $('eventDate').value=item?.tarikh_acara||'';
- $('eventStatus').value=item?.status==='SELESAI'?'SELESAI':'AKTIF';
- for(const [house,id] of [['MERAH','merah'],['BIRU','biru'],['HIJAU','hijau'],['KUNING','kuning']])$(id).value=item?.mata?.[house]??'';
+ const e=selected();
+ $('eventName').value=e?.nama_acara||'';
+ $('eventDate').value=e?.tarikh_acara||'';
+ $('eventStatus').value=e?.status==='SELESAI'?'SELESAI':'AKTIF';
+ for(const [house,id] of [['MERAH','merah'],['BIRU','biru'],['HIJAU','hijau'],['KUNING','kuning']])$(id).value=e?.mata?.[house]??'';
  enable();
 }
 function renderEvents(preferred=''){
- const selector=$('existing');selector.replaceChildren(new Option('+ Acara baharu',''));
- events.forEach(item=>selector.add(new Option(item.id_acara+' · '+item.nama_acara+' ['+item.status+']',item.id_acara)));
- selector.value=preferred;
- fill();
+ const s=$('existing');s.replaceChildren(new Option('+ Acara baharu',''));
+ for(const e of events)s.add(new Option(e.id_acara+' · '+e.nama_acara+' ['+e.status+']',e.id_acara));
+ s.value=preferred;fill();
 }
-function request(action,payload){
- if(!credential||!validBridge())return Promise.reject(Error('Sambungan Admin belum disahkan.'));
- if(pending)return Promise.reject(Error('Operasi sebelumnya belum selesai.'));
+async function run(functionName,params=[]){
+ if(!accessToken||Date.now()>=expiry)throw Error('Sesi Google tamat. Log masuk semula.');
  busy=true;enable();
- const requestId='k'+Array.from(crypto.getRandomValues(new Uint8Array(16)),x=>x.toString(16).padStart(2,'0')).join('');
- return new Promise((resolve,reject)=>{
-   const frame=document.createElement('iframe');
-   frame.hidden=true;frame.name='kevitu-bridge-'+requestId;frame.title='KEVITU Admin Bridge';
-   const form=document.createElement('form');form.method='POST';form.action=bridge;form.target=frame.name;form.hidden=true;
-   const args={request_id:requestId,action,credential,payload:JSON.stringify(payload||{})};
-   for(const [name,value] of Object.entries(args)){const input=document.createElement('input');input.type='hidden';input.name=name;input.value=value;form.append(input)}
-   const watchdog=setTimeout(()=>{cleanup();reject(Error('Tiada respons daripada backend. Semak data sebelum cuba lagi.'))},30000);
-   function cleanup(){clearTimeout(watchdog);window.removeEventListener('message',receive);frame.remove();form.remove();pending=null;busy=false;enable()}
-   function receive(e){
-     // HtmlService may execute from a sandboxed googleusercontent.com iframe.
-     // Both frame source and exact message identifier are mandatory.
-     if(e.source!==frame.contentWindow||!e.data||e.data.source!=='kevitu-admin-bridge'||e.data.requestId!==requestId)return;
-     if(!['https://script.google.com','https://script.googleusercontent.com','null'].includes(e.origin))return;
-     const data=e.data;cleanup();data.ok?resolve(data.data):reject(Error(data.error||'Operasi ditolak'));
-   }
-   window.addEventListener('message',receive);
-   pending={requestId};
-   document.body.append(frame,form);
-   form.submit();
-   // Intentionally no automatic retry on a write: unknown network outcome might have committed.
- });
+ try{
+  const response=await fetch(API_URL,{method:'POST',headers:{'Authorization':'Bearer '+accessToken,'Content-Type':'application/json'},body:JSON.stringify({function:functionName,parameters:params,devMode:false}),cache:'no-store'});
+  const json=await response.json().catch(()=>({}));
+  if(!response.ok)throw Error('Apps Script API '+response.status+' — semak kebenaran OAuth atau deployment');
+  if(json.error)throw Error(json.error.message||'Operasi API gagal');
+  if(!json.done||!json.response)throw Error('API belum memulangkan keputusan');
+  return json.response.result;
+ }finally{busy=false;enable()}
 }
 async function refresh(preferred=''){
- try{const rows=await request('list',{});if(!Array.isArray(rows))throw Error('Format senarai tidak sah');events=rows;authorised=true;renderEvents(preferred);status('Akses Admin disahkan oleh backend DEV.');message('Acara berjaya dimuatkan.')}
- catch(e){authorised=false;enable();status('Admin belum boleh digunakan: '+e.message);message('');}
+ try{const result=await run('apiListKevituEvents');if(!Array.isArray(result))throw Error('Format senarai salah');events=result;authorised=true;renderEvents(preferred);status('Akses Admin disahkan oleh API DEV.');}
+ catch(e){authorised=false;enable();status('Akses Admin gagal: '+e.message);}
 }
-function onGoogleCredential(response){
- if(!response||typeof response.credential!=='string'){status('Google Sign-In gagal.');return}
- credential=response.credential;authorised=false;
- status('Sedang menghubungi backend DEV untuk semakan Admin…');
- $('login-status').textContent='Google Sign-In berjaya. Menyemak whitelist Admin dengan backend…';
- $('signout').hidden=false;enable();
- if(validBridge())refresh();else status('Google Sign-In berjaya. Backend DEV belum dipasang; fungsi simpan masih dikunci.');
+function clearSession(){
+ if(accessToken&&window.google?.accounts?.oauth2)google.accounts.oauth2.revoke(accessToken,()=>{});
+ accessToken='';expiry=0;authorised=false;events=[];renderEvents();$('signout').hidden=true;
+ $('login-status').textContent='Log masuk Google diperlukan.';status('Log masuk untuk semakan Admin.');
+}
+function onToken(response){
+ if(response.error||!response.access_token){status('Google OAuth gagal.');return}
+ accessToken=response.access_token;expiry=Date.now()+(Number(response.expires_in)||3600)*1000-60000;
+ authorised=false;
+ $('signout').hidden=false;$('login-status').textContent='Kebenaran Google diperoleh. Menyemak Admin melalui API…';
+ status('Sedang menyemak akaun Admin…');refresh();
+}
+function start(){
+ if(!window.google?.accounts?.oauth2){$('login-status').textContent='Google OAuth tidak tersedia. Refresh halaman.';return}
+ tokenClient=google.accounts.oauth2.initTokenClient({client_id:KEVITU_CLIENT_ID,scope:API_SCOPES,callback:onToken});
+ const button=$('google-signin');button.replaceChildren();
+ const btn=document.createElement('button');btn.type='button';btn.textContent='Sign in with Google';btn.addEventListener('click',()=>tokenClient.requestAccessToken({prompt:'consent'}));
+ button.append(btn);enable();
 }
 $('existing').addEventListener('change',fill);
+$('signout').addEventListener('click',clearSession);
 $('save').addEventListener('click',async()=>{
- if(busy||!credential)return;
- const id=selected()?.id_acara||'';
- const name=$('eventName').value.trim(),date=$('eventDate').value;
- if(!name||!date)return message('Nama acara dan tarikh diperlukan.');
- const payload={id_acara:id,nama_acara:name,tarikh_acara:date,status:$('eventStatus').value};
- for(const [house,input] of [['MERAH','merah'],['BIRU','biru'],['HIJAU','hijau'],['KUNING','kuning']])payload['mata_'+house]=$(input).value.trim();
- message('Menyimpan mata…');
- try{const response=await request('save',payload);message('Berjaya: '+response.id_acara+'. Paparan leaderboard mungkin mengambil masa 60 saat.');await refresh(response.id_acara)}
- catch(e){message('Gagal: '+e.message+' — jika permintaan terganggu, semak data dahulu; jangan hantar semula secara automatik.')}
+ if(!authorised||busy)return;
+ const event=selected();
+ const body={id_acara:event?.id_acara||'',nama_acara:$('eventName').value.trim(),tarikh_acara:$('eventDate').value,status:$('eventStatus').value};
+ if(!body.nama_acara||!body.tarikh_acara)return message('Nama dan tarikh acara diperlukan.');
+ for(const [h,id] of [['MERAH','merah'],['BIRU','biru'],['HIJAU','hijau'],['KUNING','kuning']])body['mata_'+h]=$(id).value;
+ message('Menyimpan…');
+ try{const r=await run('apiSaveKevituEvent',[body]);message('Berjaya: '+r.id_acara+'. Refresh dashboard selepas 60 saat.');await refresh(r.id_acara)}
+ catch(e){message('Ralat: '+e.message+'. Semak mata sebelum cuba lagi; jangan auto-retry.')}
 });
 $('cancel').addEventListener('click',async()=>{
- const item=selected();if(!item||busy||!confirm('Batalkan '+item.id_acara+'? Mata acara akan dikecualikan.'))return;
+ const e=selected();if(!e||busy||!authorised||!confirm('Batal acara '+e.id_acara+'?'))return;
  message('Membatalkan…');
- try{await request('cancel',{id_acara:item.id_acara});message('Acara dibatalkan.');await refresh(item.id_acara)}
- catch(e){message('Gagal: '+e.message)}
+ try{await run('apiCancelKevituEvent',[e.id_acara]);message('Acara telah dibatalkan.');await refresh(e.id_acara)}
+ catch(err){message('Ralat: '+err.message)}
 });
-$('signout').addEventListener('click',()=>{
- if(pending)return message('Selesaikan operasi terdahulu sebelum log keluar.');
- credential='';authorised=false;events=[];renderEvents();$('signout').hidden=true;
- window.google?.accounts?.id?.disableAutoSelect();
- $('login-status').textContent='Telah log keluar daripada sesi aplikasi.';
- status('Log masuk Admin diperlukan.');
-});
-function start(){
- if(!window.google?.accounts?.id){$('login-status').textContent='Google Sign-In tidak dimuatkan. Semak internet.';return}
- google.accounts.id.initialize({client_id:KEVITU_OAUTH_CLIENT_ID,callback:onGoogleCredential,auto_select:false});
- google.accounts.id.renderButton($('google-signin'),{theme:'outline',size:'large',text:'signin_with',shape:'rectangular'});
- enable();
-}
 window.addEventListener('load',start);
