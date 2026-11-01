@@ -11,7 +11,7 @@
 const $=id=>document.getElementById(id);
 let events=[],busy=false;
 function message(t){$('message').textContent=t}
-function lock(on){busy=on; $('submit').disabled=on;$('cancel').disabled=on||!$('existing').value;$('reload').disabled=on;$('existing').disabled=on}
+function lock(on){busy=on; $('submit').disabled=on||current()?.status==='BATAL';$('cancel').disabled=on||!$('existing').value||current()?.status==='BATAL';$('reload').disabled=on;$('existing').disabled=on}
 function current(){return events.find(e=>e.id_acara===$('existing').value)}
 function fill(){const e=current();$('eventName').value=e?.nama_acara||'';$('eventDate').value=e?.tarikh_acara||'';$('eventStatus').value=e?.status==='SELESAI'?'SELESAI':'AKTIF';for(const [key,id] of [['MERAH','merah'],['BIRU','biru'],['HIJAU','hijau'],['KUNING','kuning']])$(id).value=e?.mata?.[key]??'';$('submit').textContent=e?'Kemaskini Mata DEV':'Simpan Acara DEV';$('submit').disabled=e?.status==='BATAL';$('cancel').disabled=!e||e.status==='BATAL';message(e?.status==='BATAL'?'Acara BATAL hanya untuk rujukan.': '')}
 function reload(selected){google.script.run.withSuccessHandler(rows=>{events=rows;const sel=$('existing');sel.replaceChildren(new Option('+ Acara baharu',''));rows.forEach(e=>sel.add(new Option(e.id_acara+' · '+e.nama_acara+' ['+e.status+']',e.id_acara)));sel.value=selected||'';fill();lock(false);if(selected&&sel.value!==selected)message('Rekod tidak dijumpai.');}).withFailureHandler(err=>{lock(false);message('Ralat senarai: '+err.message)}).adminListEventsDev()}
