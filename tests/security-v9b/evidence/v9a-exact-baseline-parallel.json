@@ -1,0 +1,187 @@
+{
+  "timestamp": "2026-11-01T08:58:09.187Z",
+  "summary": {
+    "total": 6,
+    "pass": 6,
+    "fail": 0
+  },
+  "limitation": "Real Node worker concurrency; mock Sheets and Atomics LockService. Actual Google service locking and quotas NOT VERIFIED.",
+  "results": [
+    {
+      "id": "duplicate create same request across workers",
+      "status": "PASS",
+      "responses": [
+        {
+          "ok": true,
+          "result": {
+            "id_acara": "EVT001",
+            "status": "SELESAI",
+            "revision": "cc867403e17ad508ed33c6ded31ed2f26ee1d13b0643b6ae2485441cdce3fa32",
+            "request_id": "request-create-0001"
+          }
+        },
+        {
+          "ok": true,
+          "result": {
+            "id_acara": "EVT001",
+            "status": "SELESAI",
+            "revision": "cc867403e17ad508ed33c6ded31ed2f26ee1d13b0643b6ae2485441cdce3fa32",
+            "request_id": "request-create-0001"
+          }
+        }
+      ],
+      "counts": {
+        "ACARA": 1,
+        "MATA_ACARA": 4,
+        "KEDUDUKAN": 4,
+        "LOG_MATA": 4,
+        "V9_JOURNAL": 1
+      }
+    },
+    {
+      "id": "two independent creates",
+      "status": "PASS",
+      "responses": [
+        {
+          "ok": true,
+          "result": {
+            "id_acara": "EVT001",
+            "status": "SELESAI",
+            "revision": "59f567e2a7a563e0762c2c254484397300fd747d095482b6e10042c67da8fb76",
+            "request_id": "parallel-create-0001"
+          }
+        },
+        {
+          "ok": true,
+          "result": {
+            "id_acara": "EVT002",
+            "status": "SELESAI",
+            "revision": "cdf80fe2ed24b2dd2be0ee700f8c4754fbc690706f8f92b2c66a55900ab395c8",
+            "request_id": "parallel-create-0002"
+          }
+        }
+      ],
+      "counts": {
+        "ACARA": 2,
+        "MATA_ACARA": 8,
+        "KEDUDUKAN": 4,
+        "LOG_MATA": 8,
+        "V9_JOURNAL": 2
+      }
+    },
+    {
+      "id": "two admins stale edit race",
+      "status": "PASS",
+      "responses": [
+        {
+          "ok": true,
+          "result": {
+            "id_acara": "EVT001",
+            "status": "SELESAI",
+            "revision": "b37383de7b4d1c6fb5b7315b79091449cd3f9916f58f52ce3cb4fc0ffdb1890b",
+            "request_id": "parallel-edit-0001"
+          }
+        },
+        {
+          "ok": false,
+          "error": "STALE_REVISION: refresh before editing"
+        }
+      ],
+      "counts": {
+        "ACARA": 1,
+        "MATA_ACARA": 4,
+        "KEDUDUKAN": 4,
+        "LOG_MATA": 5,
+        "V9_JOURNAL": 2
+      }
+    },
+    {
+      "id": "cancel versus edit stale race",
+      "status": "PASS",
+      "responses": [
+        {
+          "ok": true,
+          "result": {
+            "id_acara": "EVT001",
+            "status": "BATAL",
+            "revision": "950977ef20c92f0d8412adfe068253c8f6adb64a716b0311884230df0c87ec19",
+            "request_id": "parallel-cancel-0001"
+          }
+        },
+        {
+          "ok": false,
+          "error": "STALE_REVISION: refresh before editing"
+        }
+      ],
+      "counts": {
+        "ACARA": 1,
+        "MATA_ACARA": 4,
+        "KEDUDUKAN": 4,
+        "LOG_MATA": 5,
+        "V9_JOURNAL": 2
+      }
+    },
+    {
+      "id": "duplicate concurrent cancel",
+      "status": "PASS",
+      "responses": [
+        {
+          "ok": true,
+          "result": {
+            "id_acara": "EVT001",
+            "status": "BATAL",
+            "revision": "ab948eb7a2211d7c9d4bfaebc1e9787f5bc8f5b72102d77b7d6a7f3e92e27bc8",
+            "request_id": "parallel-cancel-0002"
+          }
+        },
+        {
+          "ok": true,
+          "result": {
+            "id_acara": "EVT001",
+            "status": "BATAL",
+            "revision": "ab948eb7a2211d7c9d4bfaebc1e9787f5bc8f5b72102d77b7d6a7f3e92e27bc8",
+            "request_id": "parallel-cancel-0002"
+          }
+        }
+      ],
+      "counts": {
+        "ACARA": 1,
+        "MATA_ACARA": 4,
+        "KEDUDUKAN": 4,
+        "LOG_MATA": 5,
+        "V9_JOURNAL": 2
+      }
+    },
+    {
+      "id": "concurrent retry versus operator recovery",
+      "status": "PASS",
+      "responses": [
+        {
+          "ok": true,
+          "result": {
+            "id_acara": "EVT001",
+            "status": "SELESAI",
+            "revision": "78512254a6c9e207de214a32da08deb4ece0cefdcb3f28251ad95e265f2713be",
+            "request_id": "request-create-0001"
+          }
+        },
+        {
+          "ok": true,
+          "result": {
+            "id_acara": "EVT001",
+            "status": "SELESAI",
+            "revision": "78512254a6c9e207de214a32da08deb4ece0cefdcb3f28251ad95e265f2713be",
+            "request_id": "request-create-0001"
+          }
+        }
+      ],
+      "counts": {
+        "ACARA": 1,
+        "MATA_ACARA": 4,
+        "KEDUDUKAN": 4,
+        "LOG_MATA": 4,
+        "V9_JOURNAL": 1
+      }
+    }
+  ]
+}

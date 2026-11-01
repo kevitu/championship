@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-11-01T08:30:12.946Z",
+  "timestamp": "2026-11-01T08:58:15.164Z",
   "summary": {
-    "total": 27,
-    "pass": 27,
+    "total": 40,
+    "pass": 40,
     "fail": 0
   },
   "results": [
@@ -140,6 +140,71 @@
     },
     {
       "id": "bootstrap attests private legacy state against later outside audit edits",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "auth new API anonymous apiGetKevituAdminContext",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "auth new API anonymous apiPublishKevituSnapshot",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "auth new API anonymous apiCloseKevituRequest",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "auth new API outsider apiGetKevituAdminContext",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "auth new API outsider apiPublishKevituSnapshot",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "auth new API outsider apiCloseKevituRequest",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "CLOSED fault 1 before",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "CLOSED fault 2 before",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "CLOSED fault 1 after",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "CLOSED fault 2 after",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "snapshot table capacity rejects new mutation before journal",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "legacy bootstrap plus new event cannot exceed signed snapshot cell limit",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "Execution API global function surface exposes no signing or config helper",
       "status": "PASS",
       "detail": "assertions satisfied"
     }

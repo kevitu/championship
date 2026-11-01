@@ -1,0 +1,11 @@
+{
+  "recordedAt": "2026-11-01T08:57:33.250Z",
+  "sourceCommit": "b5f394942c3003bbed2b8c84f5b6ecad1da40d6f",
+  "status": "FAIL",
+  "expected": "sensitive helper globals undefined",
+  "actual": {
+    "bridgeKey": "function",
+    "readerKey": "function"
+  },
+  "scope": "Source-level regression; no real scripts.run exploit attempted"
+}

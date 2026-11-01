@@ -1,0 +1,66 @@
+{
+  "timestamp": "2026-11-01T08:58:15.701Z",
+  "runtime": "v24.22.1",
+  "baseline": {
+    "commit": "4234353c947f7c5f8a1527618345b5e16bdfe7f6",
+    "total": 331,
+    "pass": 331,
+    "fail": 0
+  },
+  "originalAssertionsRetained": 331,
+  "current": {
+    "total": 438,
+    "pass": 438,
+    "fail": 0
+  },
+  "suites": {
+    "expandedV9AOnV9B": {
+      "total": 373,
+      "pass": 373,
+      "fail": 0
+    },
+    "v9AWorkerOnV9B": {
+      "total": 6,
+      "pass": 6,
+      "fail": 0
+    },
+    "publication": {
+      "total": 40,
+      "pass": 40,
+      "fail": 0
+    },
+    "adminIntegration": {
+      "total": 12,
+      "pass": 12,
+      "fail": 0
+    },
+    "concurrency": {
+      "total": 3,
+      "pass": 3,
+      "fail": 0
+    },
+    "publicClient": {
+      "total": 4,
+      "pass": 4,
+      "fail": 0
+    }
+  },
+  "browser": {
+    "total": 6,
+    "pass": 6,
+    "fail": 0,
+    "scope": "Actual in-app Chromium browser, localhost mock only"
+  },
+  "hashes": {
+    "gas/bridge/Code.gs": "e9298ffafa65242d7dd958a7f3fa00f29046bd5493d781ade0191db72a2419f3",
+    "gas/public/Code.gs": "7d83ce171e4aa898275823c47f1c9ef5d7504b3ee8a69f4c3498ed3828269ae5",
+    "admin-auth.js": "331c728c6804f41c88bfe5106c7ac4a748b54a2ee1ebe8c26e5393e36f305ced",
+    "admin.html": "18f26d9e75a688d6b5724fe88cb658bbc11e64f5dc2e6c3ae473515aac6fd5c3",
+    "app.js": "a0403761f8d1bd0ff4dcd0881ae58b8ac5eaebb86c4e89d7f383157de8217d66"
+  },
+  "notVerified": [
+    "Real GAS/OAuth/Sheets identity, permissions, quotas and deployment",
+    "Physical mobile devices and browsers beyond this Chromium viewport run",
+    "Independent execution of full Node/DOM/worker/browser suite; separate reviewer pure checks recorded separately"
+  ]
+}

@@ -1,3 +1,5 @@
+/* Only explicit safe entrypoints are global; helper secrecy does not rely on underscore routing. */
+var KEVITU_BRIDGE_V9=(function(){
 /**
  * KEVITU Bridge V9-B — QA branch only; NOT DEPLOYED.
  * See docs/SECURITY_V9_TRANSACTIONS.md before any future migration.
@@ -508,3 +510,16 @@ function v9PlanMac_(plan){
  return Utilities.computeHmacSha256Signature('KEVITU_JOURNAL_V9B:'+JSON.stringify(copy),pubKey_(),Utilities.Charset.UTF_8).map(x=>(x&255).toString(16).padStart(2,'0')).join('');
 }
 function v9SealPlan_(plan){plan.plan_hmac=v9PlanMac_(plan);return plan}
+
+return Object.freeze({apiListKevituEvents,apiSaveKevituEvent,apiCancelKevituEvent,apiRecoverKevituTransaction,apiInspectKevituTransactions,apiGetKevituAdminContext,apiPublishKevituSnapshot,apiCloseKevituRequest,doPost,doGet});
+})();
+function apiListKevituEvents(arg){return KEVITU_BRIDGE_V9.apiListKevituEvents(arg)}
+function apiSaveKevituEvent(arg){return KEVITU_BRIDGE_V9.apiSaveKevituEvent(arg)}
+function apiCancelKevituEvent(arg){return KEVITU_BRIDGE_V9.apiCancelKevituEvent(arg)}
+function apiRecoverKevituTransaction(arg){return KEVITU_BRIDGE_V9.apiRecoverKevituTransaction(arg)}
+function apiInspectKevituTransactions(arg){return KEVITU_BRIDGE_V9.apiInspectKevituTransactions(arg)}
+function apiGetKevituAdminContext(arg){return KEVITU_BRIDGE_V9.apiGetKevituAdminContext(arg)}
+function apiPublishKevituSnapshot(arg){return KEVITU_BRIDGE_V9.apiPublishKevituSnapshot(arg)}
+function apiCloseKevituRequest(arg){return KEVITU_BRIDGE_V9.apiCloseKevituRequest(arg)}
+function doPost(arg){return KEVITU_BRIDGE_V9.doPost(arg)}
+function doGet(arg){return KEVITU_BRIDGE_V9.doGet(arg)}

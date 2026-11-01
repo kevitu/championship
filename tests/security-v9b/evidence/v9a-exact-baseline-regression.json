@@ -1,0 +1,1913 @@
+{
+  "timestamp": "2026-11-01T08:58:08.712Z",
+  "sourceSHA256": "3d239d25d583ba1a606cd3a3a94d2a2cbf3779ed7d1cda2c3ce6289f64e4cf61",
+  "runtime": "v24.22.1",
+  "summary": {
+    "total": 325,
+    "pass": 325,
+    "fail": 0
+  },
+  "boundaryCounts": {
+    "create": 31,
+    "edit": 19,
+    "cancel": 17,
+    "recovery-create": 27,
+    "recovery-edit": 15,
+    "recovery-cancel": 13
+  },
+  "results": [
+    {
+      "id": "auth legacy doPost",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "auth anonymous apiListKevituEvents",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "auth anonymous apiSaveKevituEvent",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "auth anonymous apiCancelKevituEvent",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "auth anonymous apiRecoverKevituTransaction",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "auth anonymous apiInspectKevituTransactions",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "auth outsider apiListKevituEvents",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "auth outsider apiSaveKevituEvent",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "auth outsider apiCancelKevituEvent",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "auth outsider apiRecoverKevituTransaction",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "auth outsider apiInspectKevituTransactions",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "config empty whitelist",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "config wrong book",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "config migration gate",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "input points -1 number",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "input points 1000001 number",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "input points NaN number",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "input points Infinity number",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "input points -Infinity number",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "input points true boolean",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "input points false boolean",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "input points  object",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "input points 7 object",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "input points [object Object] object",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "input points abc string",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "input points =1 string",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "input points 0x10 string",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "input points 1e2 string",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "input name \"\"",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "input name \"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\"",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "input name \"<img src=x>\"",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "input name \"=1+1\"",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "input name \"+1\"",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "input name \"@SUM(1)\"",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "input name \"-1\"",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "input name \"safe\\u0000bad\"",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "input name \"safe\\nbad\"",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "input name []",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "input name {}",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "input date 2026-02-30",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "input date 2026-13-01",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "input date 2026-1-01",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "input date x",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "input date true",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "input date ",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "input unknown field rejected",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "input fake event FAKE",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "input fake event EVT999",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "request ID \"\"",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "request ID \"=formula\"",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "request ID \"short\"",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "request ID []",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "request ID {}",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "create repeat after restart",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "request ID different payload actor action rejected",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "revision stale two admins",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "replacement ranking ties and blank zero max",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "cancel retry and cancelled edit",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "preflight bad header ACARA",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "preflight bad header MATA_ACARA",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "preflight bad header KEDUDUKAN",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "preflight bad header LOG_MATA",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "preflight bad header V9_JOURNAL",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "duplicate active or BATAL IDs rejected",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "duplicate score rejected",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "stored formula rejected before journal",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "revision missing and legacy positional cancel fail closed",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "committed retry remains original result after later valid edits",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault create 1 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": false
+      }
+    },
+    {
+      "id": "fault create 1 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault create 2 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault create 2 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault create 3 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault create 3 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault create 4 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault create 4 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault create 5 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault create 5 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault create 6 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault create 6 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault create 7 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault create 7 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault create 8 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault create 8 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault create 9 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault create 9 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault create 10 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault create 10 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault create 11 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault create 11 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault create 12 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault create 12 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault create 13 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault create 13 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault create 14 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault create 14 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault create 15 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault create 15 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault create 16 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault create 16 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault create 17 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault create 17 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault create 18 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault create 18 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault create 19 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault create 19 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault create 20 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault create 20 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault create 21 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault create 21 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault create 22 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault create 22 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault create 23 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault create 23 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault create 24 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault create 24 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault create 25 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault create 25 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault create 26 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault create 26 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault create 27 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault create 27 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault create 28 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault create 28 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault create 29 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault create 29 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault create 30 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault create 30 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": false
+      }
+    },
+    {
+      "id": "fault create 31 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": false
+      }
+    },
+    {
+      "id": "fault create 31 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": false
+      }
+    },
+    {
+      "id": "fault edit 1 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": false
+      }
+    },
+    {
+      "id": "fault edit 1 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault edit 2 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault edit 2 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault edit 3 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault edit 3 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault edit 4 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault edit 4 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault edit 5 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault edit 5 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault edit 6 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault edit 6 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault edit 7 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault edit 7 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault edit 8 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault edit 8 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault edit 9 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault edit 9 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault edit 10 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault edit 10 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault edit 11 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault edit 11 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault edit 12 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault edit 12 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault edit 13 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault edit 13 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault edit 14 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault edit 14 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault edit 15 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault edit 15 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault edit 16 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault edit 16 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault edit 17 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault edit 17 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault edit 18 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault edit 18 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": false
+      }
+    },
+    {
+      "id": "fault edit 19 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": false
+      }
+    },
+    {
+      "id": "fault edit 19 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": false
+      }
+    },
+    {
+      "id": "fault cancel 1 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": false
+      }
+    },
+    {
+      "id": "fault cancel 1 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault cancel 2 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault cancel 2 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault cancel 3 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault cancel 3 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault cancel 4 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault cancel 4 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault cancel 5 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault cancel 5 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault cancel 6 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault cancel 6 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault cancel 7 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault cancel 7 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault cancel 8 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault cancel 8 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault cancel 9 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault cancel 9 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault cancel 10 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault cancel 10 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault cancel 11 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault cancel 11 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault cancel 12 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault cancel 12 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault cancel 13 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault cancel 13 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault cancel 14 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault cancel 14 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault cancel 15 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault cancel 15 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault cancel 16 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": true
+      }
+    },
+    {
+      "id": "fault cancel 16 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": false
+      }
+    },
+    {
+      "id": "fault cancel 17 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": false
+      }
+    },
+    {
+      "id": "fault cancel 17 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": false
+      }
+    },
+    {
+      "id": "journal corrupted checksum blocks without writes",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "foreign edit during pending recovery blocks",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "malformed partial journal row blocks",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "tampered result JSON blocked",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "orphan score and stale ranking block preflight",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "capacity fail closed",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "committed audit deletion fails closed",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "committed event alteration fails closed even if totals unchanged",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "partial business row ambiguous blocks entire recovery",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery create 1 before",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery create 1 after",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery create 2 before",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery create 2 after",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery create 3 before",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery create 3 after",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery create 4 before",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery create 4 after",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery create 5 before",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery create 5 after",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery create 6 before",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery create 6 after",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery create 7 before",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery create 7 after",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery create 8 before",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery create 8 after",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery create 9 before",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery create 9 after",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery create 10 before",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery create 10 after",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery create 11 before",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery create 11 after",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery create 12 before",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery create 12 after",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery create 13 before",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery create 13 after",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery create 14 before",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery create 14 after",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery create 15 before",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery create 15 after",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery create 16 before",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery create 16 after",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery create 17 before",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery create 17 after",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery create 18 before",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery create 18 after",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery create 19 before",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery create 19 after",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery create 20 before",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery create 20 after",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery create 21 before",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery create 21 after",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery create 22 before",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery create 22 after",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery create 23 before",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery create 23 after",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery create 24 before",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery create 24 after",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery create 25 before",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery create 25 after",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery create 26 before",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery create 26 after",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery create 27 before",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery create 27 after",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery edit 1 before",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery edit 1 after",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery edit 2 before",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery edit 2 after",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery edit 3 before",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery edit 3 after",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery edit 4 before",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery edit 4 after",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery edit 5 before",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery edit 5 after",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery edit 6 before",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery edit 6 after",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery edit 7 before",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery edit 7 after",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery edit 8 before",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery edit 8 after",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery edit 9 before",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery edit 9 after",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery edit 10 before",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery edit 10 after",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery edit 11 before",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery edit 11 after",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery edit 12 before",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery edit 12 after",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery edit 13 before",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery edit 13 after",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery edit 14 before",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery edit 14 after",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery edit 15 before",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery edit 15 after",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery cancel 1 before",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery cancel 1 after",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery cancel 2 before",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery cancel 2 after",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery cancel 3 before",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery cancel 3 after",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery cancel 4 before",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery cancel 4 after",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery cancel 5 before",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery cancel 5 after",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery cancel 6 before",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery cancel 6 after",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery cancel 7 before",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery cancel 7 after",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery cancel 8 before",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery cancel 8 after",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery cancel 9 before",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery cancel 9 after",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery cancel 10 before",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery cancel 10 after",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery cancel 11 before",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery cancel 11 after",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery cancel 12 before",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery cancel 12 after",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery cancel 13 before",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fault recovery cancel 13 after",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "journal result request binding validated",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "journal never replays formula cell even with recomputed checksum",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "legacy Date cell retains Malaysia calendar date",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fractional totals tie after replacement across events",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    }
+  ]
+}

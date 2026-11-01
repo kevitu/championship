@@ -1,3 +1,5 @@
+/* Only explicit safe entrypoints are global; helper secrecy does not rely on underscore routing. */
+var KEVITU_PUBLIC_V9=(function(){
 /**
  * KEVITU Public Reader V9-B — QA only, strictly read-only.
  * Reads only signed immutable snapshots + descriptor; never physical score tabs.
@@ -112,3 +114,8 @@ function doGet(e){
  const json=JSON.stringify(result).replace(/</g,'\\u003c').replace(/\u2028/g,'\\u2028').replace(/\u2029/g,'\\u2029');
  return ContentService.createTextOutput('kevituPublicCallback('+json+');').setMimeType(ContentService.MimeType.JAVASCRIPT);
 }
+
+return Object.freeze({doGet,publicSnapshot_});
+})();
+function doGet(arg){return KEVITU_PUBLIC_V9.doGet(arg)}
+function publicSnapshot_(arg){return KEVITU_PUBLIC_V9.publicSnapshot_(arg)}

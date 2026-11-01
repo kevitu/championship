@@ -23,5 +23,7 @@ Baseline read and rerun: V9-A 331/331 PASS (325 regression +6 worker scenarios);
 [ ] Whole baseline/concurrency/recovery suite, exact-file independent review, docs/report.
 [ ] QA-only commit, remote byte/hash verification and unchanged main.
 
-Implemented: signed persistent journal plans, signed publication source-state commitment, deterministic publication after COMMITTED; terminal CLOSED excludes generation; primary383? counts are in machine evidence, not guessed here. Actual local Chromium390/1280 retry/reload tested with synthetic OAuth; server stopped and browser overrides/tabs cleaned.
+Implemented: signed persistent journal plans, signed publication source-state commitment, deterministic publication after COMMITTED; terminal CLOSED excludes generation; Counts are recorded in machine evidence. Actual local Chromium390/1280 retry/reload tested with synthetic OAuth; server stopped and browser overrides/tabs cleaned.
 Minimal app.js change: publication provenance/freshness required, actual snapshot timestamp shown and fractional final counter preserved; no dashboard redesign.
+
+Final hardening: functions ending underscore are not treated as an Execution API security boundary. All helpers (including key/config/signing) are lexical closure locals; only explicit API wrappers and safe Reader handlers are global. Source-level RED at b5f3949 reproduced, then closure fix GREEN. Native browser390/1280 network-drop/reload/retry repeated on closure-protected source; one event/four audit records remain.

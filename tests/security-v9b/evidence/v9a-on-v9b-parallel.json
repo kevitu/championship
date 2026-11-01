@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-11-01T08:32:31.062Z",
+  "timestamp": "2026-11-01T08:58:13.784Z",
   "summary": {
     "total": 6,
     "pass": 6,
@@ -16,7 +16,7 @@
           "result": {
             "id_acara": "EVT001",
             "status": "SELESAI",
-            "revision": "6bc5a28d268700ed6f7ade384154e972644817e182a5e59df8ea62f062a3770a",
+            "revision": "3c4806ab7f836235297f91af99073d569b5e98d7e1d9ac08b7d636d9bcd778c8",
             "request_id": "request-create-0001"
           }
         },
@@ -25,7 +25,7 @@
           "result": {
             "id_acara": "EVT001",
             "status": "SELESAI",
-            "revision": "6bc5a28d268700ed6f7ade384154e972644817e182a5e59df8ea62f062a3770a",
+            "revision": "3c4806ab7f836235297f91af99073d569b5e98d7e1d9ac08b7d636d9bcd778c8",
             "request_id": "request-create-0001"
           }
         }
@@ -49,7 +49,7 @@
           "result": {
             "id_acara": "EVT001",
             "status": "SELESAI",
-            "revision": "ca0d1e142c4b10c1701acf18003c64b7232b09d87b40d5b41f55774cd8aa7efd",
+            "revision": "0a990f54f1bf817ebfb848f06e38ff2484ae9ab46a4600660428af2024c41ba0",
             "request_id": "parallel-create-0001"
           }
         },
@@ -58,7 +58,7 @@
           "result": {
             "id_acara": "EVT002",
             "status": "SELESAI",
-            "revision": "339d015bfa23a15aa022ddabf46cf61413f2beea48d2ec6f36ee852e3f872df6",
+            "revision": "36f8eec6ed657a06b4f39d3ad79cf68360a396616465789a433f8920f97d6978",
             "request_id": "parallel-create-0002"
           }
         }
@@ -86,7 +86,7 @@
           "result": {
             "id_acara": "EVT001",
             "status": "SELESAI",
-            "revision": "0ede121aadf2d224219fbff422982e47294ba324a90c65b45090ec116180ad08",
+            "revision": "38b89b34089b274d89517d80a4b2e3f1147f6558d95c9f1d89b3b7077c6911f4",
             "request_id": "parallel-edit-0002"
           }
         }
@@ -110,7 +110,7 @@
           "result": {
             "id_acara": "EVT001",
             "status": "BATAL",
-            "revision": "132ba48137bd2d918ee3758b4e199656de2544f4b2e23f43423362ab698ea437",
+            "revision": "4d33181cc35b371be0fd5cf3cb13d486c48398c5d8e6a7c8759d612c22b99001",
             "request_id": "parallel-cancel-0001"
           }
         },
@@ -138,7 +138,7 @@
           "result": {
             "id_acara": "EVT001",
             "status": "BATAL",
-            "revision": "fe4bd03c2d68c139928d36b9867c757b781ab73c00ff868a622f87be39409786",
+            "revision": "d2c54b926413ae8507a2e26fde374a8177cc781a080e7e345cd53efda3dbf80d",
             "request_id": "parallel-cancel-0002"
           }
         },
@@ -147,7 +147,7 @@
           "result": {
             "id_acara": "EVT001",
             "status": "BATAL",
-            "revision": "fe4bd03c2d68c139928d36b9867c757b781ab73c00ff868a622f87be39409786",
+            "revision": "d2c54b926413ae8507a2e26fde374a8177cc781a080e7e345cd53efda3dbf80d",
             "request_id": "parallel-cancel-0002"
           }
         }
@@ -171,7 +171,7 @@
           "result": {
             "id_acara": "EVT001",
             "status": "SELESAI",
-            "revision": "08ce49ae122e0851dedf77a043c8746c6462c16537f4a342f290d2be76479e88",
+            "revision": "5033d5acbce2976249de6fb1ef166a7a72f7dbd8a2badfa438cd702b6561fee7",
             "request_id": "request-create-0001"
           }
         },
@@ -180,7 +180,7 @@
           "result": {
             "id_acara": "EVT001",
             "status": "SELESAI",
-            "revision": "08ce49ae122e0851dedf77a043c8746c6462c16537f4a342f290d2be76479e88",
+            "revision": "5033d5acbce2976249de6fb1ef166a7a72f7dbd8a2badfa438cd702b6561fee7",
             "request_id": "request-create-0001"
           }
         }
