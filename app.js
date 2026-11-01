@@ -14,9 +14,10 @@ function drawHouses(items){
  if(!items){for(let i=0;i<4;i++){const skeleton=element('article','house house-skeleton');skeleton.setAttribute('aria-hidden','true');skeleton.append(element('div','skeleton-logo'),element('div','skeleton-line'),element('div','skeleton-line short'),element('div','skeleton-line short'));container.append(skeleton)}return}
  const ranked=items.some(r=>r.jumlah_acara>0)||items.some(r=>r.jumlah_mata>0);
  const ordered=[...HOUSES].sort((a,b)=>{if(!ranked)return HOUSES.indexOf(a)-HOUSES.indexOf(b);const ar=items.find(x=>x.rumah_sukan===a.id),br=items.find(x=>x.rumah_sukan===b.id);return (ar?.kedudukan??99)-(br?.kedudukan??99)||HOUSES.indexOf(a)-HOUSES.indexOf(b)});
- for(const [i,h] of ordered.entries()){
+ const podiumOrder=ranked?[ordered[1],ordered[0],ordered[2],ordered[3]]:ordered;
+ for(const [i,h] of podiumOrder.entries()){
   const row=items.find(x=>x.rumah_sukan===h.id);const rank=ranked?row?.kedudukan:null;
-  const card=element('article','house podium-card');card.style.setProperty('--house',h.colour);card.style.setProperty('--podium-delay',i*100+'ms');card.style.setProperty('--podium-rise',rank===1?'0px':rank===2?'22px':rank===3?'44px':'66px');
+  const card=element('article','house podium-card '+(ranked?'podium-slot-'+(i+1):'podium-neutral'));card.style.setProperty('--house',h.colour);card.style.setProperty('--podium-delay',i*100+'ms');card.style.setProperty('--podium-rise',rank===1?'0px':rank===2?'22px':rank===3?'44px':'66px');
   const frame=element('div','logo-frame'),img=element('img','house-logo');img.src=h.image;img.alt='Logo '+h.name;img.loading='lazy';img.decoding='async';img.addEventListener('error',()=>{frame.replaceChildren(element('span','logo-fallback',h.fallback))},{once:true});frame.append(img);
   const label=rank?'KEDUDUKAN #'+rank:'BELUM ADA KEDUDUKAN';
   const pointWrap=element('div','points'),numeric=element('span','point-number','0');pointWrap.append(numeric,element('small','',' mata'));
