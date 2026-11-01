@@ -48,3 +48,9 @@ Brute-force password guessing **is not the main threat** because no custom passw
 - https://developers.google.com/apps-script/guides/html/communication
 - https://developers.google.com/apps-script/guides/web
 - https://developers.google.com/apps-script/guides/content
+
+## Hardening progress — same day
+- GitHub commit `42f7051`: corrected 4 faulty event-ID regular-expression literals in `gas/Code.gs`; included a read-only regression check `testKevituIdRegex_`.
+- JavaScript syntax checked. **Not yet installed in running GAS DEV**. Because the running script already has customised routing and test code, do not wholesale overwrite its `Code.gs` from GitHub.
+- First gate now: reconcile current GAS editor code against the repository (especially `doGet`, `doPost`, journal, event regex and Admin handlers), then deploy a tested aligned version.
+- Outstanding: user identity denial test, recovery fault test, public-reader caching/quotas, stale edit controls.
