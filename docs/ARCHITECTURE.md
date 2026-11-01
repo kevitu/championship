@@ -1,25 +1,43 @@
-# KEVITU Championship — Architecture V1
+# KEVITU Championship — Architecture V1.1
 
-## Status
-Design baseline, not yet deployed.
+## Environment
 
-## Components
-- Public responsive PWA / GitHub Pages: four house standings, event listing, visual identities.
-- Admin frontend: enter an event and scores for MERAH, BIRU, HIJAU, KUNING. Access must be enforced server-side.
-- Google Apps Script backend: validate input, authenticate Admin, save/edit/cancel event, aggregate standings, append audit log.
-- Restricted Google Sheets workbook: existing registration tab (never modified by MVP) plus ACARA, MATA_ACARA, KEDUDUKAN, LOG_MATA.
+| Komponen | DEV | LIVE |
+|---|---|---|
+| Workbook | KEVITU Championship - DEV QA | Daftar Rumah Sukan Kevitu (Restricted) |
+| GAS Admin backend | standalone, tested by editor functions | not deployed |
+| GAS Public Reader | separate, public read-only Web App, points to DEV QA | not configured |
+| Static dashboard | GitHub Pages showing **MOD UJIAN DEV** | official data not yet enabled |
 
-## Data flow
-Admin -> authenticated backend -> ACARA + MATA_ACARA -> recalculate KEDUDUKAN -> dashboard public read.
-On score changes: append LOG_MATA (old/new points and editor identity).
-Score changes replace previous values; no approval workflow. Oral AJK consent is an operational rule, not an app approval step.
+## Flow
 
-## Security and deployment
-- Spreadsheet remains Restricted; never commit its URL/ID or credential to public GitHub.
-- Verify Admin identity at backend. The current GAS draft has a known deployment-authentication blocker: do not expose admin writes through public execute-as-owner.
-- Google Sheets writes across tabs are not atomic. Add failure recovery/reconciliation before production.
-- Development and integration tests must use a separate restricted QA spreadsheet.
-- The public dashboard must not expose participant registration data, PINs, admin credentials, or raw audit logs.
+```text
+Google Sheets DEV QA (ACARA + MATA_ACARA)
+         |
+  GAS Public Reader (doGet only)
+         |
+    GitHub Pages (JSONP callback)
+         |
+  Leaderboard 4 houses + events
+```
 
-## Deployment boundary
-Source code in GitHub is not a deployed Apps Script. /dev refers to a GAS test deployment accessible to authorised editors; /exec is a deployed version. Nothing deployed yet.
+For **score writes**, a different GAS Admin backend validates inputs/identity, writes event+house scores, logs changes, recalculates standings and maintains a recovery journal.
+
+## Security boundaries
+
+- Only a dedicated **read-only** GAS project may be public. Do not merge Admin `doPost` into that public deployment.
+- Google Sheets remains Restricted; Public Reader executes under a Google account authorised to read, returns aggregate scores and safe event summaries only.
+- Public frontend never ships credentials, spreadsheet ID, participant records or log identities.
+- `public-config.js` points to **DEV Public Reader**; it must not be mistaken for official data.
+- GAS Admin currently has auth design that needs deployment-specific review; editor-based Admin PASS is insufficient for public network use.
+- JSONP callback is fixed; public endpoint may execute JavaScript in browser, so it is only appropriate for public non-sensitive data and must be operated with care.
+- Google Sheets multi-tab writes are not atomic; journal recovery has not been fault-injection tested.
+- No LIVE spreadsheet writes or LIVE GAS deployment have been carried out during Championship development.
+
+## Locked data model
+
+`ACARA`, `MATA_ACARA`, `KEDUDUKAN`, `LOG_MATA`; legacy `Form Responses 1` belongs to registration, not the scoring backend.
+
+## Next step: Admin UI
+
+Build Admin functionality within an identity-aware Google Apps Script experience. Do not use a public GitHub Pages form to POST to execute-as-owner Admin Web App. Test rejection for non-Admin before enabling writes outside the Editor.
