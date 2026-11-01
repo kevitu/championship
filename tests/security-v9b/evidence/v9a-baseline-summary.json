@@ -1,0 +1,25 @@
+{
+  "baseline": {
+    "total": 55,
+    "pass": 41,
+    "fail": 14,
+    "sourceCommit": "5babbe255a26beb330d5db9ca80b03d9dfaa6512"
+  },
+  "v9": {
+    "total": 331,
+    "pass": 331,
+    "fail": 0
+  },
+  "deferred": [
+    {
+      "id": "3.public duplicate BATAL event rejected",
+      "status": "FAIL",
+      "reason": "Public Reader unchanged by explicit scope lock"
+    }
+  ],
+  "notVerified": [
+    "Real GAS/Sheets deployment, quotas and permissions",
+    "Public read isolation across scripts",
+    "Current frontend compatibility; migration documented but not implemented"
+  ]
+}

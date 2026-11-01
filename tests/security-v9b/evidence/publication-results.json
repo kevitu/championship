@@ -1,0 +1,147 @@
+{
+  "timestamp": "2026-11-01T08:30:12.946Z",
+  "summary": {
+    "total": 27,
+    "pass": 27,
+    "fail": 0
+  },
+  "results": [
+    {
+      "id": "initial signed snapshot read only without physical tables",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "create publishes committed snapshot and excludes audit identity",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "every physical write boundary stays on last committed published snapshot",
+      "status": "PASS",
+      "detail": {
+        "samples": 23
+      }
+    },
+    {
+      "id": "post-commit publication failure blocks new request and named retry completes",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "missing snapshot schema or signing key fails before journal",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "duplicate BATAL in signed snapshot rejected",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "fractional backend and Reader ties agree",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "Reader rejects payload",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "Reader rejects signature",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "Reader rejects scope",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "Reader rejects expired",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "Reader rejects future",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "pointer changed during independent read fails closed",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "callback validation and JSONP response stay safe",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "closed tombstone blocks delayed original and excludes publication generation",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "close after original started finishes existing transaction",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "context is allowlisted and exposes no secret or token",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "unauthorised sheet editor cannot forge journal by recomputing public checksums",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "expired last-known-good cache is never served",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "Reader rejects formula V9_PUBLIC_POINTER:1:1",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "Reader rejects formula V9_PUBLIC_POINTER:2:1",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "Reader rejects formula V9_PUBLIC_SNAPSHOTS:1:1",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "Reader rejects formula V9_PUBLIC_SNAPSHOTS:2:1",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "cold cache serves signed LKG during PREPARED, never physical rows",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "foreign complete event insertion after commit is detected before signing",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "cache quota failure does not discard a verified coherent snapshot",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "bootstrap attests private legacy state against later outside audit edits",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    }
+  ]
+}

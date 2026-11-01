@@ -1,0 +1,26 @@
+{
+  "timestamp": "2026-11-01T08:34:10.136Z",
+  "summary": {
+    "total": 4,
+    "pass": 4,
+    "fail": 0
+  },
+  "results": [
+    {
+      "id": "V9 public client accepts verified publication metadata",
+      "status": "PASS"
+    },
+    {
+      "id": "V9 public client refuses V8 raw publication without provenance",
+      "status": "PASS"
+    },
+    {
+      "id": "V9 public client refuses expired snapshot",
+      "status": "PASS"
+    },
+    {
+      "id": "counter preserves final fractional points",
+      "status": "PASS"
+    }
+  ]
+}

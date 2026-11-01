@@ -1,0 +1,60 @@
+{
+  "timestamp": "2026-11-01T08:20:30.335Z",
+  "summary": {
+    "total": 10,
+    "pass": 1,
+    "fail": 9
+  },
+  "results": [
+    {
+      "id": "login denied disables every mutative control",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "list revision save edit cancel end-to-end via scripts.run mock",
+      "status": "FAIL",
+      "detail": "Expected values to be strictly equal:\n\n0 !== 1\n"
+    },
+    {
+      "id": "lost response reload retry preserves exact immutable payload and ID",
+      "status": "FAIL",
+      "detail": "Expected values to be strictly equal:\n\n0 !== 1\n"
+    },
+    {
+      "id": "unconfirmed/mismatched ACK never clears request",
+      "status": "FAIL",
+      "detail": "Expected values to be strictly equal:\n\n0 !== 1\n"
+    },
+    {
+      "id": "stale conflict holds payload then explicit close permits refresh",
+      "status": "FAIL",
+      "detail": "Expected values to be strictly equal:\n\n0 !== 1\n"
+    },
+    {
+      "id": "pending retry resumes PREPARED fault and public publication",
+      "status": "FAIL",
+      "detail": "Expected values to be strictly equal:\n\n0 !== 1\n"
+    },
+    {
+      "id": "storage failure blocks send before first mutation",
+      "status": "FAIL",
+      "detail": "Expected values to be strictly equal:\n\n1 !== 0\n"
+    },
+    {
+      "id": "cross-account pending cannot be sent by another actor",
+      "status": "FAIL",
+      "detail": "Cannot read properties of undefined (reading 'hidden')"
+    },
+    {
+      "id": "two tabs do not queue a second new logical create",
+      "status": "FAIL",
+      "detail": "Expected values to be strictly equal:\n\n0 !== 1\n"
+    },
+    {
+      "id": "mobile and desktop unknown error keeps retry controls available",
+      "status": "FAIL",
+      "detail": "The expression evaluated to a falsy value:\n\n  assert(p.$('save').disabled)\n"
+    }
+  ]
+}

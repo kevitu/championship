@@ -1,0 +1,95 @@
+{
+  "timestamp": "2026-11-01T08:14:05.758Z",
+  "summary": {
+    "total": 17,
+    "pass": 6,
+    "fail": 11
+  },
+  "results": [
+    {
+      "id": "initial signed snapshot read only without physical tables",
+      "status": "FAIL",
+      "detail": "PHYSICAL_READ_FORBIDDEN"
+    },
+    {
+      "id": "create publishes committed snapshot and excludes audit identity",
+      "status": "FAIL",
+      "detail": "Expected values to be strictly equal:\n\n0 !== 1\n"
+    },
+    {
+      "id": "every physical write boundary stays on last committed published snapshot",
+      "status": "FAIL",
+      "detail": "PHYSICAL_READ_FORBIDDEN"
+    },
+    {
+      "id": "post-commit publication failure blocks new request and named retry completes",
+      "status": "FAIL",
+      "detail": "The expression evaluated to a falsy value:\n\n  assert(at>0)\n"
+    },
+    {
+      "id": "missing snapshot schema or signing key fails before journal",
+      "status": "FAIL",
+      "detail": "Missing expected exception."
+    },
+    {
+      "id": "duplicate BATAL in signed snapshot rejected",
+      "status": "FAIL",
+      "detail": "The input did not match the regular expression /Duplicate/. Input:\n\n'Error: PHYSICAL_READ_FORBIDDEN'\n"
+    },
+    {
+      "id": "fractional backend and Reader ties agree",
+      "status": "FAIL",
+      "detail": "PHYSICAL_READ_FORBIDDEN"
+    },
+    {
+      "id": "Reader rejects payload",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "Reader rejects signature",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "Reader rejects scope",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "Reader rejects expired",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "Reader rejects future",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "pointer changed during independent read fails closed",
+      "status": "FAIL",
+      "detail": "The input did not match the regular expression /changed|Snapshot/. Input:\n\n'Error: PHYSICAL_READ_FORBIDDEN'\n"
+    },
+    {
+      "id": "callback validation and JSONP response stay safe",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "closed tombstone blocks delayed original and excludes publication generation",
+      "status": "FAIL",
+      "detail": "q.c.apiCloseKevituRequest is not a function"
+    },
+    {
+      "id": "close after original started finishes existing transaction",
+      "status": "FAIL",
+      "detail": "q.c.apiCloseKevituRequest is not a function"
+    },
+    {
+      "id": "context is allowlisted and exposes no secret or token",
+      "status": "FAIL",
+      "detail": "q.c.apiGetKevituAdminContext is not a function"
+    }
+  ]
+}

@@ -1,5 +1,5 @@
 /**
- * KEVITU Bridge V9-A — QA branch only; NOT DEPLOYED.
+ * KEVITU Bridge V9-B — QA branch only; NOT DEPLOYED.
  * See docs/SECURITY_V9_TRANSACTIONS.md before any future migration.
  * Existing workbook pin, Google Session allowlist and disabled doPost retained.
  * V9 requires V9_JOURNAL, BRIDGE_V9_ENABLED=true and a migrated caller.
@@ -52,6 +52,7 @@ function bridgeTable_(book,name,headers){
  const sh=book.getSheetByName(name);if(!sh)throw Error('Missing '+name+'; V9 migration required');
  const h=headers||V9_HEADERS[name],last=sh.getLastRow();
  if(last<1||last-1>V9_LIMIT)throw Error('Table capacity exceeded: '+name);
+ if(sh.getRange(1,1,1,h.length).getFormulas().some(r=>r.some(Boolean)))throw Error('Formula in '+name+' header');
  const actual=sh.getRange(1,1,1,h.length).getDisplayValues()[0];
  if(actual.some((x,i)=>String(x)!==h[i]))throw Error('Invalid '+name+' header');
  return sh;
@@ -172,13 +173,14 @@ function v9Journal_(book){
   try{
    if(row.some(x=>typeof x!=='string'))throw Error('types');
    v9Request_(row[0]);if(seen.has(row[0]))throw Error('duplicate request');seen.add(row[0]);
-   if(!/^[0-9a-f]{64}$/.test(row[1])||!['PREPARED','COMMITTED'].includes(row[2])||row[3].length>40000||v9Hash_(row[3])!==row[4])throw Error('checksum/state');
-   const plan=JSON.parse(row[3]);
+   if(!/^[0-9a-f]{64}$/.test(row[1])||!['PREPARED','COMMITTED','CLOSED'].includes(row[2])||row[3].length>40000||v9Hash_(row[3])!==row[4])throw Error('checksum/state');
+   const plan=JSON.parse(row[3]),closed=row[2]==='CLOSED';
+   if(typeof plan.plan_hmac!=='string'||!/^[a-f0-9]{64}$/.test(plan.plan_hmac)||!pubSame_(v9PlanMac_(plan),plan.plan_hmac))throw Error('journal authentication');
    if(plan.v!==9||plan.request!==row[0]||plan.fingerprint!==row[1]||!['save','cancel'].includes(plan.command.action)||
-    plan.command.request!==plan.request||plan.result.request_id!==plan.request||!['AKTIF','SELESAI','BATAL'].includes(plan.result.status)||v9Hash_(JSON.stringify([plan.actor,plan.command]))!==plan.fingerprint||
-    JSON.stringify(plan.result)!==row[5]||!Array.isArray(plan.targets)||plan.targets.length>20||
-    !/^[0-9a-f]{64}$/.test(plan.result.revision))throw Error('schema/result');
-   v9Id_(plan.result.id_acara);
+    plan.command.request!==plan.request||plan.result.request_id!==plan.request||v9Hash_(JSON.stringify([plan.actor,plan.command]))!==plan.fingerprint||
+    JSON.stringify(plan.result)!==row[5]||!Array.isArray(plan.targets)||plan.targets.length>20)throw Error('schema/result');
+   if(closed){if(plan.kind!=='CLOSED'||plan.targets.length||Object.keys(plan.result).sort().join(',')!=='outcome,request_id'||plan.result.outcome!=='CLOSED_UNAPPLIED')throw Error('closed schema')}
+   else{if(plan.kind==='CLOSED'||!['AKTIF','SELESAI','BATAL'].includes(plan.result.status)||!/^[0-9a-f]{64}$/.test(plan.result.revision))throw Error('score schema');v9Id_(plan.result.id_acara)}
    const keys=new Set();
    plan.targets.forEach(t=>{
     if(!V9_TABLES.includes(t.table)||!Number.isInteger(t.row)||t.row<2||t.row>V9_LIMIT+1||
@@ -204,6 +206,8 @@ function v9CheckCommitted_(data,journal,pendingId){
  latest.forEach((revision,id)=>{
   if(id!==pendingId&&v9Revision_(data,id)!==revision)throw Error('CONSISTENCY_BLOCKED: committed event changed');
  });
+ const committed=journal.filter(r=>r.state!=='PREPARED');
+ if(!pendingId&&committed.length){const plan=committed[committed.length-1].plan;v9CheckPlan_(data,plan);if(plan.targets.some(t=>!v9Equal_(data[t.table][t.row-2],t.after)))throw Error('CONSISTENCY_BLOCKED: committed after-state differs')}
 }
 function v9Masked_(data,name,targets,length){
  const indices=new Set(targets.filter(t=>t.table===name).map(t=>t.row-2));
@@ -263,8 +267,9 @@ function v9Build_(data,command,actor){
   masks[n]={length,hash:v9Hash_(JSON.stringify(v9Masked_(data,n,targets,length)))};
  });
  // Validate the complete intended state before the first persistent write.
- v9Validate_(after);
+ v9Validate_(after);v9PublicJson_(after,2000);
  const plan={v:9,request:command.request,fingerprint,actor,command,targets,masks,result};
+ v9SealPlan_(plan);
  if(JSON.stringify(plan).length>40000)throw Error('Journal plan capacity exceeded');
  return plan;
 }
@@ -289,7 +294,7 @@ function v9Replay_(book,record){
  SpreadsheetApp.flush();
  const committed=v9Journal_(book).find(x=>x.request===record.request);
  if(!committed||committed.state!=='COMMITTED')throw Error('CONSISTENCY_BLOCKED: commit not confirmed');
- return plan.result;
+ v9EnsurePublished_(book);return plan.result;
 }
 function v9Execute_(ctx,action,body){
  v9Gate_();const command=v9Command_(action,body);
@@ -298,16 +303,18 @@ function v9Execute_(ctx,action,body){
   const fingerprint=v9Hash_(JSON.stringify([ctx.email,command]));
   const old=journal.find(r=>r.request===command.request);
   if(old&&old.fingerprint!==fingerprint)throw Error('IDEMPOTENCY_CONFLICT: request_id already bound');
-  const pending=journal.filter(r=>r.state!=='COMMITTED');
+  const pending=journal.filter(r=>r.state==='PREPARED');
   if(pending.length>1||pending.some(r=>r.request!==command.request))throw Error('RECOVERY_REQUIRED: pending transaction');
+  if(!pending.length)v9Validate_(data);
   v9CheckCommitted_(data,journal,pending.length?pending[0].plan.result.id_acara:null);
   if(old){
    if(old.state==='PREPARED')return v9Replay_(ctx.book,old);
-   v9Validate_(data);
+   v9Validate_(data);v9EnsurePublished_(ctx.book);
    return old.plan.result;
   }
   v9Validate_(data);
   if(journal.length>=V9_LIMIT)throw Error('Journal capacity exceeded');
+  const pub=v9PublicationReady_(ctx.book,data,journal);if(pub.rows.length>=2000)throw Error('Publication snapshot capacity exceeded');
   const plan=v9Build_(data,command,ctx.email),json=JSON.stringify(plan),row=journal.length+2;
   bridgeTable_(ctx.book,'V9_JOURNAL').getRange(row,1,1,6).setValues([[command.request,fingerprint,'PREPARED',json,v9Hash_(json),JSON.stringify(plan.result)]]);
   SpreadsheetApp.flush();
@@ -320,8 +327,8 @@ function apiListKevituEvents(){
  const ctx=kevituApiAdmin_();
  return v9Lock_(()=>{
   const data=v9Data_(ctx.book),journal=v9Journal_(ctx.book);
-  if(journal.some(r=>r.state!=='COMMITTED'))throw Error('RECOVERY_REQUIRED: pending transaction');
-  v9Validate_(data);v9CheckCommitted_(data,journal,null);
+  if(journal.some(r=>r.state==='PREPARED'))throw Error('RECOVERY_REQUIRED: pending transaction');
+  v9Validate_(data);v9CheckCommitted_(data,journal,null);v9PublicationReady_(ctx.book,data,journal);
   return data.ACARA.map(r=>{
    const points={};KEVITU_BRIDGE_HOUSES.forEach(h=>{const p=data.MATA_ACARA.find(x=>x[0]===r[0]&&x[1]===h);points[h]=!p||p[2]===''?null:Number(p[2])});
    return {id_acara:r[0],nama_acara:r[1],tarikh_acara:String(r[2]).slice(0,10),status:r[3],catatan:r[4],mata:points,revision:v9Revision_(data,r[0])};
@@ -335,15 +342,169 @@ function apiRecoverKevituTransaction(requestId){
  return v9Lock_(()=>{
   const journal=v9Journal_(ctx.book),record=journal.find(r=>r.request===requestId);
   if(!record)throw Error('Transaction not found');
-  if(journal.some(r=>r.state!=='COMMITTED'&&r.request!==requestId))throw Error('RECOVERY_REQUIRED: different pending transaction');
+  if(journal.some(r=>r.state==='PREPARED'&&r.request!==requestId))throw Error('RECOVERY_REQUIRED: different pending transaction');
   const data=v9Data_(ctx.book);v9CheckCommitted_(data,journal,record.state==='PREPARED'?record.plan.result.id_acara:null);
-  if(record.state==='COMMITTED'){v9Validate_(data);return record.plan.result}
+  if(record.state!=='PREPARED'){v9Validate_(data);v9EnsurePublished_(ctx.book);return record.plan.result}
   return v9Replay_(ctx.book,record);
  });
 }
 function apiInspectKevituTransactions(){
  const ctx=kevituApiAdmin_();
- return v9Lock_(()=>v9Journal_(ctx.book).map(r=>({request_id:r.request,state:r.state,id_acara:r.plan.result.id_acara})));
+ return v9Lock_(()=>v9Journal_(ctx.book).map(r=>({request_id:r.request,state:r.state,id_acara:r.plan.result.id_acara||r.plan.command.id||''})));
 }
 function doPost(){return ContentService.createTextOutput(JSON.stringify({ok:false,error:'Endpoint disabled'})).setMimeType(ContentService.MimeType.JSON)}
 function doGet(){return HtmlService.createHtmlOutput('KEVITU Admin Bridge — API Executable only')}
+
+// Publication protocol v1: pure validation/signing shared verbatim with Reader.
+const PUB_WORKBOOK_ID='1j8xz7G2CksaZt_LOVvSSk8fVsC78LXMVDgioF2tqQ-E';
+const PUB_HOUSES=['MERAH','BIRU','HIJAU','KUNING'];
+const PUB_MAX_AGE=86400000;
+function pubHash_(s){return Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256,s,Utilities.Charset.UTF_8).map(x=>(x&255).toString(16).padStart(2,'0')).join('')}
+function pubScope_(){return pubHash_('KEVITU_PUBLIC_V1:'+PUB_WORKBOOK_ID)}
+function pubKey_(){const k=PropertiesService.getScriptProperties().getProperty('PUBLIC_SNAPSHOT_HMAC_KEY');if(typeof k!=='string'||k.length<32||k.length>200)throw Error('Publication configuration missing');return k}
+function pubSign_(p){return Utilities.computeHmacSha256Signature(JSON.stringify(p),pubKey_(),Utilities.Charset.UTF_8).map(x=>(x&255).toString(16).padStart(2,'0')).join('')}
+function pubSame_(a,b){if(typeof a!=='string'||typeof b!=='string'||a.length!==b.length)return false;let d=0;for(let i=0;i<a.length;i++)d|=a.charCodeAt(i)^b.charCodeAt(i);return d===0}
+function pubPointer_(text,allowExpired){
+ let p;try{p=JSON.parse(text)}catch(e){throw Error('Invalid signed pointer')}
+ if(!p||Object.keys(p).sort().join(',')!=='expires_at,generation,published_at,row,schema,scope,sha256,signature,source_hash')throw Error('Invalid signed pointer schema');
+ const u={schema:p.schema,scope:p.scope,row:p.row,sha256:p.sha256,generation:p.generation,source_hash:p.source_hash,published_at:p.published_at,expires_at:p.expires_at};
+ const at=Date.parse(u.published_at),until=Date.parse(u.expires_at);
+ if(u.schema!==1||u.scope!==pubScope_()||!Number.isInteger(u.row)||u.row<2||u.row>2001||
+ !Number.isInteger(u.generation)||u.generation<0||u.generation>2000||!/^[a-f0-9]{64}$/.test(u.sha256)||!/^[a-f0-9]{64}$/.test(u.source_hash)||
+ typeof p.signature!=='string'||!/^[a-f0-9]{64}$/.test(p.signature)||!Number.isFinite(at)||!Number.isFinite(until)||
+ new Date(at).toISOString()!==u.published_at||new Date(until).toISOString()!==u.expires_at||until-at!==PUB_MAX_AGE||
+ at>Date.now()+300000||(!allowExpired&&until<=Date.now())||!pubSame_(pubSign_(u),p.signature))throw Error('Invalid or expired signed pointer');
+ return p;
+}
+function pubDecimalSum_(values){
+ const parts=values.map(n=>{
+  const bits=String(n).split('e'),mantissa=bits[0].split('.');
+  let digits=(mantissa[0]+(mantissa[1]||'')).replace(/^0+/,'')||'0';
+  let scale=(mantissa[1]||'').length-Number(bits[1]||0);
+  if(scale<0){digits+='0'.repeat(-scale);scale=0}
+  return {digits,scale};
+ });
+ const scale=Math.max(0,...parts.map(p=>p.scale));let sum='0';
+ parts.forEach(p=>{
+  const digits=p.digits+'0'.repeat(scale-p.scale);let carry=0,out='',i=sum.length-1,j=digits.length-1;
+  while(i>=0||j>=0||carry){const x=(i>=0?Number(sum[i--]):0)+(j>=0?Number(digits[j--]):0)+carry;out=String(x%10)+out;carry=Math.floor(x/10)}
+  sum=out.replace(/^0+/,'')||'0';
+ });
+ if(!scale)return Number(sum);
+ sum=sum.padStart(scale+1,'0');return Number(sum.slice(0,-scale)+'.'+sum.slice(-scale));
+}
+function pubValidate_(snapshot){
+ if(!snapshot||Object.keys(snapshot).sort().join(',')!=='acara,generation,kedudukan,schema'||snapshot.schema!==1||
+ !Number.isInteger(snapshot.generation)||snapshot.generation<0||snapshot.generation>2000||
+ !Array.isArray(snapshot.acara)||snapshot.acara.length>2000||!Array.isArray(snapshot.kedudukan)||snapshot.kedudukan.length!==4)throw Error('Invalid snapshot');
+ const seen=new Set(),agg=PUB_HOUSES.map(h=>({h,values:[],count:0}));
+ snapshot.acara.forEach(e=>{
+  if(!e||Object.keys(e).sort().join(',')!=='id_acara,mata,nama_acara,status,tarikh_acara'||
+  typeof e.id_acara!=='string'||!/^EVT\d{3,}$/.test(e.id_acara))throw Error('Invalid snapshot event');
+  if(seen.has(e.id_acara))throw Error('Duplicate event including BATAL');seen.add(e.id_acara);
+  if(typeof e.nama_acara!=='string'||!e.nama_acara.trim()||e.nama_acara.length>120||/^[\s]*[=+@-]|[<>\x00-\x1f\x7f]/.test(e.nama_acara)||
+  !['AKTIF','SELESAI','BATAL'].includes(e.status)||typeof e.tarikh_acara!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(e.tarikh_acara)||
+  !Number.isFinite(Date.parse(e.tarikh_acara+'T00:00:00Z'))||new Date(e.tarikh_acara+'T00:00:00Z').toISOString().slice(0,10)!==e.tarikh_acara||
+  !e.mata||Object.keys(e.mata).sort().join(',')!==PUB_HOUSES.slice().sort().join(','))throw Error('Invalid snapshot event data');
+  PUB_HOUSES.forEach((h,i)=>{const n=e.mata[h];if(n!==null&&(typeof n!=='number'||!Number.isFinite(n)||n<0||n>1000000))throw Error('Invalid snapshot points');if(e.status!=='BATAL'&&n!==null){agg[i].values.push(n);agg[i].count++}});
+ });
+ agg.forEach(x=>{x.total=pubDecimalSum_(x.values);if(!Number.isFinite(x.total)||x.total>2000000000)throw Error('Invalid snapshot total')});
+ agg.sort((a,b)=>b.total-a.total||PUB_HOUSES.indexOf(a.h)-PUB_HOUSES.indexOf(b.h));
+ const rows=agg.map(x=>({rumah_sukan:x.h,jumlah_mata:x.total,kedudukan:1+agg.filter(y=>y.total>x.total).length,jumlah_acara:x.count}));
+ snapshot.kedudukan.forEach((r,i)=>{if(!r||Object.keys(r).sort().join(',')!=='jumlah_acara,jumlah_mata,kedudukan,rumah_sukan'||Object.keys(rows[i]).some(k=>r[k]!==rows[i][k]))throw Error('Snapshot ranking mismatch')});
+ return {kedudukan:rows,acara:snapshot.acara.filter(e=>e.status!=='BATAL').map(e=>({id_acara:e.id_acara,nama_acara:e.nama_acara,tarikh_acara:e.tarikh_acara,status:e.status}))};
+}
+function pubDecode_(pointer,text,allowExpired){
+ pubPointer_(JSON.stringify(pointer),allowExpired);
+ if(typeof text!=='string'||text.length>40000||pubHash_(text)!==pointer.sha256)throw Error('Snapshot checksum mismatch');
+ let snapshot;try{snapshot=JSON.parse(text)}catch(e){throw Error('Invalid snapshot JSON')}
+ if(snapshot.generation!==pointer.generation)throw Error('Snapshot generation mismatch');
+ const data=pubValidate_(snapshot);
+ data.publication={generation:pointer.generation,published_at:pointer.published_at,expires_at:pointer.expires_at,age_seconds:Math.max(0,Math.floor((Date.now()-Date.parse(pointer.published_at))/1000)),cache_max_age_seconds:60,policy:'signed_committed_snapshot'};
+ return data;
+}
+
+V9_HEADERS.V9_PUBLIC_SNAPSHOTS=['SNAPSHOT_JSON'];
+V9_HEADERS.V9_PUBLIC_POINTER=['POINTER_JSON'];
+function v9PublicJson_(data,generation){
+ const acara=data.ACARA.map(r=>{
+  const mata={};KEVITU_BRIDGE_HOUSES.forEach(h=>{const p=data.MATA_ACARA.find(x=>x[0]===r[0]&&x[1]===h),n=p?v9Points_(p[2]):'';mata[h]=n===''?null:n});
+  return {id_acara:r[0],nama_acara:r[1],tarikh_acara:String(r[2]).slice(0,10),status:r[3],mata};
+ });
+ const kedudukan=v9Aggregate_(data).map(r=>({rumah_sukan:r[0],jumlah_mata:r[1],kedudukan:r[2],jumlah_acara:r[3]}));
+ const snapshot={schema:1,generation,acara,kedudukan};pubValidate_(snapshot);
+ const text=JSON.stringify(snapshot);if(text.length>40000)throw Error('Publication snapshot capacity exceeded');return text;
+}
+function v9Publication_(book){
+ pubKey_();
+ const rows=v9Read_(book,'V9_PUBLIC_SNAPSHOTS'),ptrRows=v9Read_(book,'V9_PUBLIC_POINTER');
+ if(ptrRows.length>1||rows.some(r=>typeof r[0]!=='string'||!r[0]))throw Error('CONSISTENCY_BLOCKED: publication schema');
+ const raw=ptrRows.length?ptrRows[0][0]:'',pointer=raw?pubPointer_(raw,true):null;
+ return {rows,raw,pointer};
+}
+function v9PublicGeneration_(journal){return journal.filter(r=>r.state==='COMMITTED').length}
+function v9PublicationReady_(book,data,journal){
+ const p=v9Publication_(book),generation=v9PublicGeneration_(journal),text=v9PublicJson_(data,generation);
+ if(!p.pointer)throw Error('MIGRATION_REQUIRED: publish initial snapshot first');
+ if(p.pointer.generation<generation)throw Error('RECOVERY_REQUIRED: committed publication pending');
+ if(p.pointer.generation!==generation||p.pointer.sha256!==pubHash_(text)||p.pointer.source_hash!==v9Hash_(JSON.stringify(data))||p.rows[p.pointer.row-2]?.[0]!==text)throw Error('CONSISTENCY_BLOCKED: publication differs');
+ pubDecode_(p.pointer,text,true);
+ return p;
+}
+function v9EnsurePublished_(book){
+ const data=v9Data_(book),journal=v9Journal_(book);
+ if(journal.some(r=>r.state==='PREPARED'))throw Error('RECOVERY_REQUIRED: no publication while PREPARED');
+ v9Validate_(data);v9CheckCommitted_(data,journal,null);
+ const state=v9Publication_(book),generation=v9PublicGeneration_(journal),text=v9PublicJson_(data,generation),sha=pubHash_(text);
+ if(state.pointer&&state.pointer.generation>generation)throw Error('CONSISTENCY_BLOCKED: publication generation ahead');
+ if(state.pointer&&state.pointer.generation===generation&&(state.pointer.sha256!==sha||state.pointer.source_hash!==v9Hash_(JSON.stringify(data))))throw Error('CONSISTENCY_BLOCKED: publication content differs');
+ if(state.pointer&&state.pointer.generation===generation&&state.pointer.sha256===sha&&state.rows[state.pointer.row-2]?.[0]===text&&Date.parse(state.pointer.expires_at)>Date.now()){
+  pubDecode_(state.pointer,text);return state.pointer;
+ }
+ const matches=[];
+ state.rows.forEach((r,i)=>{let s;try{s=JSON.parse(r[0]);pubValidate_(s)}catch(e){throw Error('CONSISTENCY_BLOCKED: malformed immutable snapshot')}
+  if(s.generation===generation){if(r[0]!==text)throw Error('CONSISTENCY_BLOCKED: snapshot generation collision');matches.push(i+2)}});
+ if(matches.length>1)throw Error('CONSISTENCY_BLOCKED: duplicate snapshot generation');
+ let row=matches[0];
+ if(!row){
+  if(state.rows.length>=2000)throw Error('Publication snapshot capacity exceeded');
+  row=state.rows.length+2;bridgeTable_(book,'V9_PUBLIC_SNAPSHOTS').getRange(row,1).setValue(text);SpreadsheetApp.flush();
+  if(bridgeTable_(book,'V9_PUBLIC_SNAPSHOTS').getRange(row,1).getValues()[0][0]!==text)throw Error('CONSISTENCY_BLOCKED: snapshot readback');
+ }
+ const now=new Date(),u={schema:1,scope:pubScope_(),row,sha256:sha,generation,source_hash:v9Hash_(JSON.stringify(data)),published_at:now.toISOString(),expires_at:new Date(now.getTime()+PUB_MAX_AGE).toISOString()};
+ const raw=JSON.stringify({...u,signature:pubSign_(u)});
+ bridgeTable_(book,'V9_PUBLIC_POINTER').getRange(2,1).setValue(raw);SpreadsheetApp.flush();
+ if(bridgeTable_(book,'V9_PUBLIC_POINTER').getRange(2,1).getValues()[0][0]!==raw)throw Error('CONSISTENCY_BLOCKED: pointer readback');
+ pubDecode_(pubPointer_(raw),text);return JSON.parse(raw);
+}
+function apiGetKevituAdminContext(){
+ const ctx=kevituApiAdmin_();
+ return {protocol:9,publication_protocol:1,actor:v9Hash_('KEVITU_ACTOR:'+ctx.email),scope:pubScope_()};
+}
+function apiPublishKevituSnapshot(){const ctx=kevituApiAdmin_();v9Gate_();return v9Lock_(()=>v9EnsurePublished_(ctx.book))}
+function apiCloseKevituRequest(envelope){
+ const ctx=kevituApiAdmin_();v9Gate_();
+ if(!envelope||!['save','cancel'].includes(envelope.action)||Object.keys(envelope).sort().join(',')!=='action,payload')throw Error('Invalid close request');
+ const command=v9Command_(envelope.action,envelope.payload),fingerprint=v9Hash_(JSON.stringify([ctx.email,command]));
+ return v9Lock_(()=>{
+  const data=v9Data_(ctx.book),journal=v9Journal_(ctx.book),old=journal.find(r=>r.request===command.request);
+  if(old&&old.fingerprint!==fingerprint)throw Error('IDEMPOTENCY_CONFLICT: request_id already bound');
+  if(journal.some(r=>r.state==='PREPARED'&&r.request!==command.request))throw Error('RECOVERY_REQUIRED: different pending transaction');
+  if(old){if(old.state==='PREPARED')return v9Replay_(ctx.book,old);v9Validate_(data);v9CheckCommitted_(data,journal,null);v9EnsurePublished_(ctx.book);return old.plan.result}
+  v9Validate_(data);v9CheckCommitted_(data,journal,null);
+  if(journal.length>=V9_LIMIT)throw Error('Journal capacity exceeded');
+  v9PublicationReady_(ctx.book,data,journal);
+  const masks={};V9_TABLES.forEach(n=>{masks[n]={length:data[n].length,hash:v9Hash_(JSON.stringify(v9Masked_(data,n,[],data[n].length)))}});
+  const result={request_id:command.request,outcome:'CLOSED_UNAPPLIED'},plan={v:9,kind:'CLOSED',request:command.request,fingerprint,actor:ctx.email,command,targets:[],masks,result};
+  v9SealPlan_(plan);const json=JSON.stringify(plan),row=journal.length+2;
+  bridgeTable_(ctx.book,'V9_JOURNAL').getRange(row,1,1,6).setValues([[command.request,fingerprint,'CLOSED',json,v9Hash_(json),JSON.stringify(result)]]);SpreadsheetApp.flush();
+  const record=v9Journal_(ctx.book).find(r=>r.request===command.request);
+  if(!record||record.state!=='CLOSED'||!v9Equal_(record.plan,plan))throw Error('JOURNAL_CORRUPT: close readback');
+  return result;
+ });
+}
+function v9PlanMac_(plan){
+ const copy={};Object.keys(plan).forEach(k=>{if(k!=='plan_hmac')copy[k]=plan[k]});
+ return Utilities.computeHmacSha256Signature('KEVITU_JOURNAL_V9B:'+JSON.stringify(copy),pubKey_(),Utilities.Charset.UTF_8).map(x=>(x&255).toString(16).padStart(2,'0')).join('');
+}
+function v9SealPlan_(plan){plan.plan_hmac=v9PlanMac_(plan);return plan}

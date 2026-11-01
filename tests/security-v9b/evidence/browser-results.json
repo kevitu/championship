@@ -1,0 +1,50 @@
+{
+  "timestamp": "2026-11-01T08:42:13.912Z",
+  "surface": "Actual in-app Chromium browser, localhost mock only",
+  "network": "CSP self-only; Google GIS replaced with synthetic callback; all scripts.run requests routed to local mock",
+  "viewports": [
+    {
+      "width": 390,
+      "height": 844,
+      "overflow": false,
+      "unknownOutcome": {
+        "locked": true,
+        "retryVisible": true
+      }
+    },
+    {
+      "width": 1280,
+      "height": 900,
+      "overflow": false,
+      "afterRetry": {
+        "locked": false,
+        "retryVisible": false
+      }
+    }
+  ],
+  "summary": {
+    "total": 6,
+    "pass": 6,
+    "fail": 0
+  },
+  "checks": [
+    "Synthetic sign-in verified and controls enabled",
+    "Transport retransmit reused same request ID and created one event",
+    "Post-commit unknown outcome locked payload and exposed retry at390px",
+    "Reload required authentication and preserved immutable pending request",
+    "Retry returned matching stored result with no extra event/audit",
+    "Desktop1280px result confirmed and no horizontal overflow"
+  ],
+  "retryRequest": "802a9dec-4a6b-4557-8032-6c1e55245487",
+  "eventsAfterRetry": 1,
+  "auditAfterRetry": 6,
+  "sourceHashes": {
+    "bridge": "8216b2f71eae2b178042bb6532ac57afaf3e40c9a9f573867002e29e60005a57",
+    "admin": "331c728c6804f41c88bfe5106c7ac4a748b54a2ee1ebe8c26e5393e36f305ced"
+  },
+  "screenshot": "browser-mobile-unknown.jpg",
+  "limitations": [
+    "Synthetic OAuth and mock Sheets; not real Google authorisation",
+    "Viewport test is not physical iPhone/Android device verification"
+  ]
+}

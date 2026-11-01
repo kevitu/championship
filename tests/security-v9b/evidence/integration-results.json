@@ -1,0 +1,70 @@
+{
+  "timestamp": "2026-11-01T08:29:10.797Z",
+  "summary": {
+    "total": 12,
+    "pass": 12,
+    "fail": 0
+  },
+  "results": [
+    {
+      "id": "login denied disables every mutative control",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "list revision save edit cancel end-to-end via scripts.run mock",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "lost response reload retry preserves exact immutable payload and ID",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "unconfirmed/mismatched ACK never clears request",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "stale conflict holds payload then explicit close permits refresh",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "pending retry resumes PREPARED fault and public publication",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "storage failure blocks send before first mutation",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "cross-account pending cannot be sent by another actor",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "two tabs do not queue a second new logical create",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "mobile and desktop unknown error keeps retry controls available",
+      "status": "PASS",
+      "detail": "DOM viewports390/1280; not a real layout/browser verification"
+    },
+    {
+      "id": "reauthentication does not revoke the newly issued OAuth grant",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "V8 server without protocol handshake never receives a mutation",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    }
+  ]
+}
