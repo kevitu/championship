@@ -1,5 +1,5 @@
 /**
- * KEVITU Admin Bridge — GitHub Pages -> GAS, DEV ONLY.
+ * KEVITU Admin Bridge — LIVE API Executable, allowlisted Google identities.
  * STANDALONE Apps Script project. Not the Public Reader or the legacy Admin GAS.
  *
  * Script Properties:
@@ -7,21 +7,13 @@
  * ADMIN_EMAILS = comma-separated explicit whitelist (private)
  * OAUTH_CLIENT_ID = Google web OAuth client ID (not a secret)
  *
- * Deploy Web App: Execute as Me; Who has access: Anyone.
- * Do not deploy until permissions and DEV workbook are verified.
- * Auth occurs on EVERY operation with a signed Google ID token checked at Google.
+ * API Executable invokes api* functions with caller OAuth identity.
+ * Legacy Web App doPost explicitly disabled (no writes via Web App).
  */
 'use strict';
 const KEVITU_BRIDGE_ORIGIN='https://kevitu.github.io';
 const KEVITU_BRIDGE_LIVE_ID='1j8xz7G2CksaZt_LOVvSSk8fVsC78LXMVDgioF2tqQ-E';
 const KEVITU_BRIDGE_HOUSES=['MERAH','BIRU','HIJAU','KUNING'];
-function bridgeReply_(result,requestId){
-  const safe=JSON.stringify({source:'kevitu-admin-bridge',requestId:String(requestId||''),...result})
-    .replace(/</g,'\\u003c').replace(/\u2028/g,'\\u2028').replace(/\u2029/g,'\\u2029');
-  // Only this exact origin receives the callback. Never echo the Google token.
-  return HtmlService.createHtmlOutput('<!doctype html><meta charset="utf-8"><script>parent.postMessage('+safe+','+JSON.stringify(KEVITU_BRIDGE_ORIGIN)+');<\/script>')
-    .setTitle('KEVITU Admin Response');
-}
 function bridgeProperties_(){
   const props=PropertiesService.getScriptProperties();
   const id=props.getProperty('SPREADSHEET_ID');
@@ -29,21 +21,6 @@ function bridgeProperties_(){
   const admins=String(props.getProperty('ADMIN_EMAILS')||'').split(',').map(x=>x.trim().toLowerCase()).filter(Boolean);
   if(!id||!client||!admins.length)throw Error('Bridge configuration missing');
   return {id,client,admins};
-}
-function bridgeVerifyGoogle_(token,config){
-  if(typeof token!=='string'||token.length<100||token.length>8000)throw Error('Invalid login token');
-  // Google tokeninfo validates signature and expiry for dev/small usage;
-  // verify audience, issuer, email verification and the private allowlist ourselves.
-  const url='https://oauth2.googleapis.com/tokeninfo';
-  const response=UrlFetchApp.fetch(url,{method:'post',payload:{id_token:token},muteHttpExceptions:true,followRedirects:true});
-  if(response.getResponseCode()!==200)throw Error('Google login expired or invalid');
-  const data=JSON.parse(response.getContentText());
-  const email=String(data.email||'').trim().toLowerCase();
-  if(data.aud!==config.client || !['accounts.google.com','https://accounts.google.com'].includes(data.iss) ||
-      String(data.email_verified)!=='true'||!data.sub||
-      !Number.isFinite(Number(data.exp))||Number(data.exp)*1000<=Date.now()||
-      !config.admins.includes(email))throw Error('Admin access denied');
-  return email;
 }
 function bridgeBook_(config){
   if(String(config.id||'').trim()!==KEVITU_BRIDGE_LIVE_ID)throw Error('STOP: SPREADSHEET_ID tidak sepadan dengan LIVE yang diluluskan');
@@ -156,32 +133,13 @@ function bridgeMutation_(book,action,body,email){
   bridgeRecalculate_(book,now);
   return {id_acara:id,status:input.status};
 }
-function doPost(e){
-  const p=e&&e.parameter||{};
-  const requestId=String(p.request_id||'').slice(0,80);
-  try{
-    if(!/^[A-Za-z0-9_-]{12,80}$/.test(requestId))throw Error('Invalid request');
-    const body=JSON.parse(String(p.payload||'{}'));
-    if(!body||typeof body!=='object'||Array.isArray(body))throw Error('Invalid payload');
-    if(!['list','save','cancel'].includes(String(p.action)))throw Error('Invalid action');
-    const config=bridgeProperties_();
-    const email=bridgeVerifyGoogle_(String(p.credential||''),config);
-    const book=bridgeBook_(config);
-    if(p.action==='list')return bridgeReply_({ok:true,data:bridgeData_(book)},requestId);
-    const lock=LockService.getScriptLock();lock.waitLock(20000);
-    try{
-      const recent=CacheService.getScriptCache();
-      const key='req_'+requestId;
-      if(recent.get(key))throw Error('Duplicate request blocked');
-      const result=bridgeMutation_(book,p.action,body,email);
-      recent.put(key,'1',600);
-      SpreadsheetApp.flush();
-      return bridgeReply_({ok:true,data:result},requestId);
-    }finally{lock.releaseLock()}
-  }catch(error){
-    console.error('Admin bridge rejected: '+String(error&&error.message||error));
-    return bridgeReply_({ok:false,error:String(error&&error.message||error)},requestId);
-  }
+/** Disabled legacy Web App mutation entry point.
+ * Admin PWA uses scripts.run + kevituApiAdmin_() allowlist.
+ * Keep a fail-closed response even if older Web App URLs remain accessible.
+ */
+function doPost() {
+  return ContentService.createTextOutput(JSON.stringify({ok:false,error:'Endpoint disabled'}))
+    .setMimeType(ContentService.MimeType.JSON);
 }
 function doGet(){return HtmlService.createHtmlOutput('KEVITU Admin Bridge — POST only');}
 
