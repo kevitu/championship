@@ -41,7 +41,7 @@ async function run(functionName,params=[]){
  }finally{busy=false;enable()}
 }
 async function refresh(preferred=''){
- try{const result=await run('apiListKevituEvents');if(!Array.isArray(result))throw Error('Format senarai salah');events=result;authorised=true;renderEvents(preferred);status('Akses Admin disahkan oleh API DEV.');}
+ try{const result=await run('apiListKevituEvents');if(!Array.isArray(result))throw Error('Format senarai salah');events=result;authorised=true;renderEvents(preferred);status('Akses Admin disahkan.');}
  catch(e){authorised=false;enable();status('Akses Admin gagal: '+e.message);}
 }
 function clearSession(){
