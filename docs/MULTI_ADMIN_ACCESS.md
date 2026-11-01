@@ -20,3 +20,9 @@
 
 ## Release status
 UI route is present at `admin.html`, but controls are intentionally disabled. Multi-Admin *policy* is documented, not yet a functioning Google Sign-In flow. Do not claim production-ready or enable writes before backend token validation and an unauthorised-user check.
+
+## 2026-11-01 — Google Sign-In frontend checkpoint
+- Added Google Identity Services to `admin.html` and `admin-auth.js`, configured with public OAuth client ID.
+- A Google ID token is kept temporarily **in page memory only**; the UI does not claim whitelist authorisation or unlock writes.
+- **Backend token verification, role check and secure cross-origin transport are not implemented yet.** No active data-write action on GitHub Pages.
+- Never upload OAuth client secret JSON to the repository. The OAuth client secret was previously displayed in an image; operator has reported rotation complete.
