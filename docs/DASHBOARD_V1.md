@@ -1,17 +1,15 @@
-# Dashboard V1 — implementation checkpoint
+# Dashboard V1.1 — 1 November 2026
 
-Created a responsive static frontend at repository root (index.html, styles.css, app.js, manifest.webmanifest).
+## Delivered
+- Live static preview at https://kevitu.github.io/championship/.
+- KEVITU logo in header and hero; all four official house logos in responsive leaderboard.
+- Source images in `assets/img/brand/` and `assets/img/houses/` (five WebP files).
+- GitHub Pages connected to **separate read-only GAS Public Reader** through `public-config.js`.
+- User screenshot verified dashboard loads four houses, 0 points, tied ranking #1 after DEV event EVT001 was cancelled.
+- Label **MOD UJIAN DEV** shows that these are NOT official sports results.
 
-## Current behaviour
-- Renders four KEVITU houses and their identities in a mobile responsive grid.
-- No fake marks: shows an explicit **belum ada keputusan** state until a verified public read-only API is configured.
-- Safe DOM construction using textContent, no HTML injection for event names.
-- Rendering supports event list and validated ranking payload from existing GAS doGet contract.
-- No Admin credential or spreadsheet ID is shipped in frontend.
-
-## Before live integration
-- The GAS DEV script is not deployed; public endpoint config does not exist.
-- Architecture for authenticated Admin editing remains pending; do not use unrestricted execute-as-owner GAS for writes.
-- Recovery journal must be fault-tested; current simulation save/edit/cancel passed, recovery failure case not verified.
-- Branding assets (four original logos) must be added to repository when available; current symbols are placeholders, not official logos.
-- Static site hosting/GitHub Pages must be configured separately after review.
+## Pending
+- Clarify UI status strings: use 'Data ujian DEV berjaya dimuatkan' rather than 'Data rasmi berjaya dimuatkan'.
+- Test actual phone layout.
+- Add secure Admin management interface only after auth architecture is confirmed.
+- Before official release, switch deployment/configuration deliberately; do not publish DEV scores as LIVE.
