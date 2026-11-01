@@ -1,7 +1,7 @@
 'use strict';
 /* KEVITU API Executable: OAuth access token in memory only. */
 const KEVITU_CLIENT_ID='556436437882-flsu8vhvkt2cmsvbbp0nm3mtn7s0cth0.apps.googleusercontent.com';
-const API_URL='https://script.googleapis.com/v1/scripts/AKfycby7JmaCo93QYuetstRvCQkGTV8l1I-y8Jxlu3lDfnHs5ggs_3IW8IVidOsHhI_nnj3z:run';
+const API_URL='https://script.googleapis.com/v1/scripts/AKfycbwTHh9hIeFQXALpkZwqwwyr1WGCZTOux-hUpJj4knw3dRImwdnvmYpUHO9J99o9UJ9g:run';
 const API_SCOPES='https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/script.external_request';
 const $=id=>document.getElementById(id);
 const ids=['existing','eventName','eventDate','eventStatus','merah','biru','hijau','kuning'];
