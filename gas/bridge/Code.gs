@@ -3,7 +3,7 @@
  * STANDALONE Apps Script project. Not the Public Reader or the legacy Admin GAS.
  *
  * Script Properties:
- * SPREADSHEET_ID = DEV workbook
+ * SPREADSHEET_ID = approved LIVE workbook; fail-closed exact ID check
  * ADMIN_EMAILS = comma-separated explicit whitelist (private)
  * OAUTH_CLIENT_ID = Google web OAuth client ID (not a secret)
  *
@@ -13,7 +13,7 @@
  */
 'use strict';
 const KEVITU_BRIDGE_ORIGIN='https://kevitu.github.io';
-const KEVITU_BRIDGE_DEV_BOOK='KEVITU Championship - DEV QA';
+const KEVITU_BRIDGE_LIVE_ID='1j8xz7G2CksaZt_LOVvSSk8fVsC78LXMVDgioF2tqQ-E';
 const KEVITU_BRIDGE_HOUSES=['MERAH','BIRU','HIJAU','KUNING'];
 function bridgeReply_(result,requestId){
   const safe=JSON.stringify({source:'kevitu-admin-bridge',requestId:String(requestId||''),...result})
@@ -46,8 +46,8 @@ function bridgeVerifyGoogle_(token,config){
   return email;
 }
 function bridgeBook_(config){
-  const book=SpreadsheetApp.openById(config.id);
-  if(book.getName()!==KEVITU_BRIDGE_DEV_BOOK)throw Error('DEV only — workbook mismatch');
+  if(String(config.id||'').trim()!==KEVITU_BRIDGE_LIVE_ID)throw Error('STOP: SPREADSHEET_ID tidak sepadan dengan LIVE yang diluluskan');
+  const book=SpreadsheetApp.openById(KEVITU_BRIDGE_LIVE_ID);
   return book;
 }
 function bridgeTable_(book,name,headers){
