@@ -1,1 +1,20 @@
-{"name":"KEVITU Sports Championship","short_name":"KEVITU Cup","lang":"ms","start_url":"./","display":"standalone","background_color":"#081326","theme_color":"#101b32","description":"Dashboard kedudukan mata rumah sukan KEVITU"}
+{
+  "name": "KEVITU Sports Championship",
+  "short_name": "KEVITU Cup",
+  "lang": "ms",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#081326",
+  "theme_color": "#101b32",
+  "description": "Dashboard kedudukan mata rumah sukan KEVITU",
+  "scope": "./",
+  "id": "./",
+  "icons": [
+    {
+      "src": "./assets/img/brand/kevitu-logo.webp",
+      "sizes": "any",
+      "type": "image/webp",
+      "purpose": "any"
+    }
+  ]
+}
