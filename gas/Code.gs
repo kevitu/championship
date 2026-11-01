@@ -134,6 +134,8 @@ function kevituSaveEvent_(payload, admin) {
     const audit = kevituTable_(ss, KEVITU_SHEETS.audit);
     const events = kevituRows_(acara, 7);
     const scores = kevituRows_(mata, 5);
+    // Verify current data before any write: stop if inconsistent.
+    kevituAggregate_(events, scores);
     const now = new Date();
     let id = requestedId;
     let rowIndex = events.findIndex(row => String(row[0]).trim().toUpperCase() === id);
@@ -161,7 +163,8 @@ function kevituSaveEvent_(payload, admin) {
     const changed = [];
     updates.forEach(u => {
       const old = u.prior ? u.prior.value : '';
-      const equal = (old === '' || old === null ? '' : Number(old)) === u.score;
+      const oldNormal = old === '' || old === null ? '' : Number(old);
+      const equal = oldNormal === u.score;
       if (equal) return;
       if (u.prior) mata.getRange(u.prior.row, 3, 1, 3).setValues([[u.score,now,admin]]);
       else mata.appendRow([id,u.house,u.score,now,admin]);
@@ -187,6 +190,7 @@ function kevituCancelEvent_(payload, admin) {
     const ranking = kevituTable_(ss,'KEDUDUKAN');
     const audit = kevituTable_(ss,'LOG_MATA');
     const events = kevituRows_(acara,7);
+    kevituAggregate_(events, kevituRows_(mata,5));
     const index = events.findIndex(row => String(row[0]).trim().toUpperCase() === id);
     if (index < 0) throw new Error('Acara tidak dijumpai.');
     if (String(events[index][3]).trim().toUpperCase() === 'BATAL') return {id_acara:id,status:'BATAL'};
@@ -269,4 +273,30 @@ function testKevituConnection_() {
   const ss = kevituBook_();
   ['ACARA','MATA_ACARA','KEDUDUKAN','LOG_MATA'].forEach(name => kevituTable_(ss,name));
   Logger.log('PASS: connection to ' + ss.getName() + ' and 4 system headers.');
+}
+
+/** DEV only: verify configured Admin without writing any sheet. */
+function testKevituAdminAccess() {
+  const admin = kevituAdmin_();
+  Logger.log('PASS: authorised Admin identity confirmed (' + admin + ').');
+}
+
+/** Read-only dry run of the first event. Never saves points. */
+function testKevituSavePreflight() {
+  const ss = kevituBook_();
+  const eventsSheet = kevituTable_(ss,'ACARA');
+  const pointsSheet = kevituTable_(ss,'MATA_ACARA');
+  kevituTable_(ss,'KEDUDUKAN');
+  kevituTable_(ss,'LOG_MATA');
+  const events = kevituRows_(eventsSheet,7);
+  const points = kevituRows_(pointsSheet,5);
+  const input = kevituEventInput_({
+    nama_acara:'STRAVA STRIKE 2026 - UJIAN DEV',
+    tarikh_acara:'2026-10-31', status:'SELESAI',
+    catatan:'DATA UJIAN SAHAJA',
+    mata:{MERAH:10,BIRU:20,HIJAU:0,KUNING:15}
+  });
+  kevituAggregate_(events,points);
+  Logger.log('PASS: preflight validated. Events currently: ' + events.length +
+    ', score records: ' + points.length + ', test event: ' + input.name + '. NO WRITES.');
 }
