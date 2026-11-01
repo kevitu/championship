@@ -176,7 +176,7 @@ function kevituPending_(props) {
   const raw=props.getProperty(KEVITU_PENDING_KEY);
   if(!raw)return null;
   const op=JSON.parse(raw);
-  if(!op||!['SAVE','CANCEL'].includes(op.type)||!/^EVT\\d{3,}$/.test(op.id)) {
+  if(!op||!['SAVE','CANCEL'].includes(op.type)||!/^EVT\d{3,}$/.test(op.id)) {
     throw new Error('Journal rosak; jangan teruskan.');
   }
   return op;
@@ -219,13 +219,13 @@ function kevituExecute_(build) {
 function kevituSaveEvent_(payload,admin) {
   const input=kevituEventInput_(payload);
   const requestedId=String(payload.id_acara||'').trim().toUpperCase();
-  if(requestedId&&!/^EVT\\d{3,}$/.test(requestedId))throw new Error('ID acara tidak sah.');
+  if(requestedId&&!/^EVT\d{3,}$/.test(requestedId))throw new Error('ID acara tidak sah.');
   return kevituExecute_((events,points)=>{
     const existing=events.filter(r=>String(r[0]).trim()===requestedId);
     if(existing.length>1)throw new Error('ID acara pendua.');
     if(requestedId&&!existing.length)throw new Error('Acara tidak dijumpai.');
     if(existing.length&&String(existing[0][3]).trim()==='BATAL')throw new Error('Acara batal tidak boleh diedit.');
-    const nums=events.map(r=>/^EVT(\\d+)$/.exec(String(r[0]))).filter(Boolean).map(m=>Number(m[1]));
+    const nums=events.map(r=>/^EVT(\d+)$/.exec(String(r[0]))).filter(Boolean).map(m=>Number(m[1]));
     const id=requestedId||'EVT'+String(Math.max(0,...nums)+1).padStart(3,'0');
     const current=new Map();
     points.filter(r=>String(r[0])===id).forEach(r=>{
@@ -251,7 +251,7 @@ function kevituSaveEvent_(payload,admin) {
 
 function kevituCancelEvent_(payload,admin) {
   const id=String(payload.id_acara||'').trim().toUpperCase();
-  if(!/^EVT\\d{3,}$/.test(id))throw new Error('ID acara tidak sah.');
+  if(!/^EVT\d{3,}$/.test(id))throw new Error('ID acara tidak sah.');
   return kevituExecute_((events)=>{
     const matches=events.filter(r=>String(r[0]).trim()===id);
     if(matches.length!==1)throw new Error('ID acara tiada atau pendua.');
@@ -358,4 +358,17 @@ function testKevituSavePreflight() {
   kevituAggregate_(events,points);
   Logger.log('PASS: preflight validated. Events currently: ' + events.length +
     ', score records: ' + points.length + ', test event: ' + input.name + '. NO WRITES.');
+}
+
+/** Regression guard — pure logic, no Spreadsheet/Script Properties writes. */
+function testKevituIdRegex_() {
+  const valid=/^EVT\d{3,}$/;
+  const extraction=/^EVT(\d+)$/;
+  const accepted=['EVT001','EVT002','EVT12345'];
+  const rejected=['EVT01','EVTABC','EVT001X','evT001','EVT\\d',''];
+  if(accepted.some(id=>!valid.test(id)||!extraction.exec(id))||
+     rejected.some(id=>valid.test(id))) {
+    throw new Error('ID regex regression FAIL');
+  }
+  Logger.log('PASS: event ID regex positive and negative cases.');
 }
