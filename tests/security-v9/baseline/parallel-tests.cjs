@@ -1,0 +1,8 @@
+const fs=require('node:fs'),{Worker}=require('node:worker_threads'),assert=require('node:assert/strict');
+module.exports=(async()=>{const shared=new SharedArrayBuffer(12),a=new Int32Array(shared),state=__dirname+'/parallel-state.json';
+const headers=JSON.parse(fs.readFileSync(__dirname+'/headers.json','utf8'));fs.writeFileSync(state,JSON.stringify(Object.fromEntries(Object.entries(headers).map(([n,h])=>[n,[h]]))));
+const jobs=[1,2].map(index=>new Promise((resolve,reject)=>{let w=new Worker(__dirname+'/parallel-worker.cjs',{workerData:{shared,state,index}});w.once('message',resolve);w.once('error',reject);w.once('exit',c=>{if(c)reject(Error('worker exit '+c))})}));
+while(Atomics.load(a,1)<2)await new Promise(r=>setTimeout(r,10));Atomics.store(a,2,1);Atomics.notify(a,2,2);
+let responses=await Promise.all(jobs),data=JSON.parse(fs.readFileSync(state,'utf8'));
+assert(responses.every(x=>!x.error));assert.equal(new Set(responses.map(x=>x.result.id_acara)).size,2);assert.equal(data.ACARA.length-1,2);assert.equal(data.MATA_ACARA.length-1,8);assert.equal(data.LOG_MATA.length-1,8);assert.equal(data.KEDUDUKAN.length-1,4);assert(data.KEDUDUKAN.slice(1).filter(r=>r[0]==='MERAH'||r[0]==='BIRU').every(r=>r[1]===20));
+let r={status:'PASS',test:'Two real Node worker requests released together; shared Sheets mock serialised by Atomics lock',responses,events:2,scores:8,logs:8,rankingRows:4,limitation:'Mock LockService implementation; does not certify actual GAS LockService waiting, quotas or cross-project locks'};fs.writeFileSync(__dirname+'/parallel-results.json',JSON.stringify(r,null,2));return r})();

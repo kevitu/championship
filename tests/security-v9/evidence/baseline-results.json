@@ -1,0 +1,295 @@
+{
+  "timestamp": "2026-11-01T07:35:05.963Z",
+  "commit": "5babbe255a26beb330d5db9ca80b03d9dfaa6512",
+  "runtime": "v24.22.1",
+  "network": "No network API supplied to source VM; no live endpoint requests",
+  "hashes": {
+    "bridge": "c4c79593bcb92a769770a100d7760facf6629b670a8331448e5c512c78587354",
+    "public": "83356419a03022814e181a0ca143b2dd457b7ea2c8fc8633f2265018dc323415"
+  },
+  "summary": {
+    "total": 54,
+    "pass": 40,
+    "fail": 14
+  },
+  "results": [
+    {
+      "id": "2.1 legacy doPost denied without service access",
+      "status": "PASS",
+      "detail": "Assertion satisfied"
+    },
+    {
+      "id": "2.2 public reader has no doPost",
+      "status": "PASS",
+      "detail": "Assertion satisfied"
+    },
+    {
+      "id": "2.3 anonymous apiListKevituEvents",
+      "status": "PASS",
+      "detail": "Assertion satisfied"
+    },
+    {
+      "id": "2.3 anonymous apiSaveKevituEvent",
+      "status": "PASS",
+      "detail": "Assertion satisfied"
+    },
+    {
+      "id": "2.3 anonymous apiCancelKevituEvent",
+      "status": "PASS",
+      "detail": "Assertion satisfied"
+    },
+    {
+      "id": "2.3 outsider apiListKevituEvents",
+      "status": "PASS",
+      "detail": "Assertion satisfied"
+    },
+    {
+      "id": "2.3 outsider apiSaveKevituEvent",
+      "status": "PASS",
+      "detail": "Assertion satisfied"
+    },
+    {
+      "id": "2.3 outsider apiCancelKevituEvent",
+      "status": "PASS",
+      "detail": "Assertion satisfied"
+    },
+    {
+      "id": "2.4 empty whitelist fails closed",
+      "status": "PASS",
+      "detail": "Assertion satisfied"
+    },
+    {
+      "id": "2.5 wrong workbook fails before open",
+      "status": "PASS",
+      "detail": "Assertion satisfied"
+    },
+    {
+      "id": "3.points negative",
+      "status": "PASS",
+      "detail": "Assertion satisfied"
+    },
+    {
+      "id": "3.points text",
+      "status": "PASS",
+      "detail": "Assertion satisfied"
+    },
+    {
+      "id": "3.points too large",
+      "status": "PASS",
+      "detail": "Assertion satisfied"
+    },
+    {
+      "id": "3.points NaN",
+      "status": "PASS",
+      "detail": "Assertion satisfied"
+    },
+    {
+      "id": "3.points Infinity",
+      "status": "PASS",
+      "detail": "Assertion satisfied"
+    },
+    {
+      "id": "3.name empty",
+      "status": "PASS",
+      "detail": "Assertion satisfied"
+    },
+    {
+      "id": "3.name long",
+      "status": "PASS",
+      "detail": "Assertion satisfied"
+    },
+    {
+      "id": "3.name html",
+      "status": "PASS",
+      "detail": "Assertion satisfied"
+    },
+    {
+      "id": "3.name formula",
+      "status": "PASS",
+      "detail": "Assertion satisfied"
+    },
+    {
+      "id": "3.name formula @",
+      "status": "PASS",
+      "detail": "Assertion satisfied"
+    },
+    {
+      "id": "3.date 2026-02-30",
+      "status": "PASS",
+      "detail": "Assertion satisfied"
+    },
+    {
+      "id": "3.date 2026-13-01",
+      "status": "PASS",
+      "detail": "Assertion satisfied"
+    },
+    {
+      "id": "3.date not-a-date",
+      "status": "PASS",
+      "detail": "Assertion satisfied"
+    },
+    {
+      "id": "3.date 2026-1-01",
+      "status": "PASS",
+      "detail": "Assertion satisfied"
+    },
+    {
+      "id": "3.fake ID FAKE",
+      "status": "PASS",
+      "detail": "Assertion satisfied"
+    },
+    {
+      "id": "3.fake ID EVT999",
+      "status": "PASS",
+      "detail": "Assertion satisfied"
+    },
+    {
+      "id": "3.cancelled cannot edit",
+      "status": "PASS",
+      "detail": "Assertion satisfied"
+    },
+    {
+      "id": "3.ranking ties and cancelled exclusion",
+      "status": "PASS",
+      "detail": "Assertion satisfied"
+    },
+    {
+      "id": "3.replacement does not double count",
+      "status": "PASS",
+      "detail": "Assertion satisfied"
+    },
+    {
+      "id": "3.duplicate score rejected before writes",
+      "status": "PASS",
+      "detail": "Assertion satisfied"
+    },
+    {
+      "id": "3.duplicate active event rejected",
+      "status": "FAIL",
+      "detail": "Missing expected exception."
+    },
+    {
+      "id": "3.invalid header ACARA",
+      "status": "PASS",
+      "detail": "Assertion satisfied"
+    },
+    {
+      "id": "3.invalid header MATA_ACARA",
+      "status": "PASS",
+      "detail": "Assertion satisfied"
+    },
+    {
+      "id": "3.invalid header KEDUDUKAN",
+      "status": "FAIL",
+      "detail": "Expected values to be strictly equal:\n\n6 !== 0\n"
+    },
+    {
+      "id": "3.invalid header LOG_MATA",
+      "status": "PASS",
+      "detail": "Assertion satisfied"
+    },
+    {
+      "id": "3.boolean points rejected",
+      "status": "FAIL",
+      "detail": "Missing expected exception."
+    },
+    {
+      "id": "3.array points rejected",
+      "status": "FAIL",
+      "detail": "Missing expected exception."
+    },
+    {
+      "id": "3.public duplicate BATAL event rejected",
+      "status": "FAIL",
+      "detail": "Missing expected exception."
+    },
+    {
+      "id": "4.lock contention simulated at write boundary",
+      "status": "PASS",
+      "detail": {
+        "trace": [
+          "wait",
+          "acquire",
+          "wait",
+          "release"
+        ],
+        "limitation": "Deterministic contention mock, not real waitLock scheduler or parallel GAS workers"
+      }
+    },
+    {
+      "id": "4.duplicate create submit idempotent",
+      "status": "FAIL",
+      "detail": "Expected values to be strictly equal:\n\n'EVT002' !== 'EVT001'\n"
+    },
+    {
+      "id": "4.duplicate edit submit leaves score and audit stable",
+      "status": "PASS",
+      "detail": "Assertion satisfied"
+    },
+    {
+      "id": "4.failure MATA_ACARA leaves no partial commit",
+      "status": "FAIL",
+      "detail": "Partial commit: {\"events\":1,\"scores\":0,\"logs\":0,\"ranking\":0,\"pending\":[]}\n+ actual - expected\n\n+ '{\"ACARA\":[[\"ID_ACARA\",\"NAMA_ACARA\",\"TARIKH_ACARA\",\"STATUS\",\"CATATAN\",\"DICIPTA_PADA\",\"DIKEMASKINI_PADA\"],[\"EVT001\",\"QA Event\",\"2026-11-01\",\"SELESAI\",\"\",\"2026-11-01T07:35:05.936Z\",\"2026-11-01T07:35:05.936Z\"]],\"MATA_ACARA\":[[\"ID_ACARA\",\"RUMAH_SUKAN\",\"MATA\",\"DIKEMASKINI_PADA\",\"DIKEMASKINI_OLEH\"]],\"KEDUDUKAN\":[[\"RUMAH_SUKAN\",\"JUMLAH_MATA\",\"KEDUDUKAN\",\"JUMLAH_ACARA\",\"DIKEMASKINI_PADA\"]],\"LOG_MATA\":[[\"ID_LOG\",\"TIMESTAMP\",\"ID_ACARA\",\"RUMAH_SUKAN\",\"MATA_LAMA\",\"MATA_BAHARU\",\"TINDAKAN\",\"ADMIN_ID\"]]}'\n- '{\"ACARA\":[[\"ID_ACARA\",\"NAMA_ACARA\",\"TARIKH_ACARA\",\"STATUS\",\"CATATAN\",\"DICIPTA_PADA\",\"DIKEMASKINI_PADA\"]],\"MATA_ACARA\":[[\"ID_ACARA\",\"RUMAH_SUKAN\",\"MATA\",\"DIKEMASKINI_PADA\",\"DIKEMASKINI_OLEH\"]],\"KEDUDUKAN\":[[\"RUMAH_SUKAN\",\"JUMLAH_MATA\",\"KEDUDUKAN\",\"JUMLAH_ACARA\",\"DIKEMASKINI_PADA\"]],\"LOG_MATA\":[[\"ID_LOG\",\"TIMESTAMP\",\"ID_ACARA\",\"RUMAH_SUKAN\",\"MATA_LAMA\",\"MATA_BAHARU\",\"TINDAKAN\",\"ADMIN_ID\"]]}'\n"
+    },
+    {
+      "id": "4.failure LOG_MATA leaves no partial commit",
+      "status": "FAIL",
+      "detail": "Partial commit: {\"events\":1,\"scores\":4,\"logs\":0,\"ranking\":0,\"pending\":[]}\n+ actual - expected\n\n+ '{\"ACARA\":[[\"ID_ACARA\",\"NAMA_ACARA\",\"TARIKH_ACARA\",\"STATUS\",\"CATATAN\",\"DICIPTA_PADA\",\"DIKEMASKINI_PADA\"],[\"EVT001\",\"QA Event\",\"2026-11-01\",\"SELESAI\",\"\",\"2026-11-01T07:35:05.937Z\",\"2026-11-01T07:35:05.937Z\"]],\"MATA_ACARA\":[[\"ID_ACARA\",\"RUMAH_SUKAN\",\"MATA\",\"DIKEMASKINI_PADA\",\"DIKEMASKINI_OLEH\"],[\"EVT001\",\"MERAH\",10,\"2026-11-01T07:35:05.937Z\",\"admin@example.invalid\"],[\"EVT001\",\"BIRU\",10,\"2026-11-01T07:35:05.937Z\",\"admin@example.invalid\"],[\"EVT001\",\"HIJAU\",5,\"2026-11-01T07:35:05.937Z\",\"admin@example.invalid\"],[\"EVT001\",\"KUNING\",0,\"2026-11-01T07:35:05.937Z\",\"admin@example.invalid\"]],\"KEDUDUKAN\":[[\"RUMAH_SUKAN\",\"JUMLAH_MATA\",\"KEDUDUKAN\",\"JUMLAH_ACARA\",\"DIKEMASKINI_PADA\"]],\"LOG_MATA\":[[\"ID_LOG\",\"TIMESTAMP\",\"ID_ACARA\",\"RUMAH_SUKAN\",\"MATA_LAMA\",\"MATA_BAHARU\",\"TINDAKAN\",\"ADMIN_ID\"]]}'\n- '{\"ACARA\":[[\"ID_ACARA\",\"NAMA_ACARA\",\"TARIKH_ACARA\",\"STATUS\",\"CATATAN\",\"DICIPTA_PADA\",\"DIKEMASKINI_PADA\"]],\"MATA_ACARA\":[[\"ID_ACARA\",\"RUMAH_SUKAN\",\"MATA\",\"DIKEMASKINI_PADA\",\"DIKEMASKINI_OLEH\"]],\"KEDUDUKAN\":[[\"RUMAH_SUKAN\",\"JUMLAH_MATA\",\"KEDUDUKAN\",\"JUMLAH_ACARA\",\"DIKEMASKINI_PADA\"]],\"LOG_MATA\":[[\"ID_LOG\",\"TIMESTAMP\",\"ID_ACARA\",\"RUMAH_SUKAN\",\"MATA_LAMA\",\"MATA_BAHARU\",\"TINDAKAN\",\"ADMIN_ID\"]]}'\n"
+    },
+    {
+      "id": "4.failure KEDUDUKAN leaves no partial commit",
+      "status": "FAIL",
+      "detail": "Partial commit: {\"events\":1,\"scores\":4,\"logs\":4,\"ranking\":0,\"pending\":[]}\n+ actual - expected\n\n+ '{\"ACARA\":[[\"ID_ACARA\",\"NAMA_ACARA\",\"TARIKH_ACARA\",\"STATUS\",\"CATATAN\",\"DICIPTA_PADA\",\"DIKEMASKINI_PADA\"],[\"EVT001\",\"QA Event\",\"2026-11-01\",\"SELESAI\",\"\",\"2026-11-01T07:35:05.937Z\",\"2026-11-01T07:35:05.937Z\"]],\"MATA_ACARA\":[[\"ID_ACARA\",\"RUMAH_SUKAN\",\"MATA\",\"DIKEMASKINI_PADA\",\"DIKEMASKINI_OLEH\"],[\"EVT001\",\"MERAH\",10,\"2026-11-01T07:35:05.937Z\",\"admin@example.invalid\"],[\"EVT001\",\"BIRU\",10,\"2026-11-01T07:35:05.937Z\",\"admin@example.invalid\"],[\"EVT001\",\"HIJAU\",5,\"2026-11-01T07:35:05.937Z\",\"admin@example.invalid\"],[\"EVT001\",\"KUNING\",0,\"2026-11-01T07:35:05.937Z\",\"admin@example.invalid\"]],\"KEDUDUKAN\":[[\"RUMAH_SUKAN\",\"JUMLAH_MATA\",\"KEDUDUKAN\",\"JUMLAH_ACARA\",\"DIKEMASKINI_PADA\"]],\"LOG_MATA\":[[\"ID_LOG\",\"TIMESTAMP\",\"ID_ACARA\",\"RUMAH_SUKAN\",\"MATA_LAMA\",\"MATA_BAHARU\",\"TINDAKAN\",\"ADMIN_ID\"],[\"mock-1\",\"2026-11-01T07:35:05.937Z\",\"EVT001\",\"MERAH\",\"\",10,\"CIPTA\",\"admin@example.invalid\"],[\"mock-2\",\"2026-11-01T07:35:05.937Z\",\"EVT001\",\"BIRU\",\"\",10,\"CIPTA\",\"admin@example.invalid\"],[\"mock-3\",\"2026-11-01T07:35:05.937Z\",\"EVT001\",\"HIJAU\",\"\",5,\"CIPTA\",\"admin@example.invalid\"],[\"mock-4\",\"2026-11-01T07:35:05.937Z\",\"EVT001\",\"KUNING\",\"\",0,\"CIPTA\",\"admin@example.invalid\"]]}'\n- '{\"ACARA\":[[\"ID_ACARA\",\"NAMA_ACARA\",\"TARIKH_ACARA\",\"STATUS\",\"CATATAN\",\"DICIPTA_PADA\",\"DIKEMASKINI_PADA\"]],\"MATA_ACARA\":[[\"ID_ACARA\",\"RUMAH_SUKAN\",\"MATA\",\"DIKEMASKINI_PADA\",\"DIKEMASKINI_OLEH\"]],\"KEDUDUKAN\":[[\"RUMAH_SUKAN\",\"JUMLAH_MATA\",\"KEDUDUKAN\",\"JUMLAH_ACARA\",\"DIKEMASKINI_PADA\"]],\"LOG_MATA\":[[\"ID_LOG\",\"TIMESTAMP\",\"ID_ACARA\",\"RUMAH_SUKAN\",\"MATA_LAMA\",\"MATA_BAHARU\",\"TINDAKAN\",\"ADMIN_ID\"]]}'\n"
+    },
+    {
+      "id": "4.audit failure retry restores missing audit",
+      "status": "FAIL",
+      "detail": "Expected values to be strictly equal:\n\n0 !== 4\n"
+    },
+    {
+      "id": "4.ranking failure clears prior ranking",
+      "status": "FAIL",
+      "detail": "Materialised ranking is empty after clearContent + failed setValues\n\n0 !== 4\n"
+    },
+    {
+      "id": "4.stale edit conflict rejected",
+      "status": "FAIL",
+      "detail": "Missing expected exception."
+    },
+    {
+      "id": "4.orphan event detected on list",
+      "status": "FAIL",
+      "detail": "Missing expected exception."
+    },
+    {
+      "id": "4.staging journal recovery positive control",
+      "status": "PASS",
+      "detail": "Staging-only control; does not certify Bridge recovery"
+    },
+    {
+      "id": "4.staging recovery boundary MATA_ACARA",
+      "status": "PASS",
+      "detail": "Assertion satisfied"
+    },
+    {
+      "id": "4.staging recovery boundary LOG_MATA",
+      "status": "PASS",
+      "detail": "Assertion satisfied"
+    },
+    {
+      "id": "4.staging recovery boundary KEDUDUKAN",
+      "status": "PASS",
+      "detail": "Assertion satisfied"
+    },
+    {
+      "id": "4.cancel audit fault retry recalculates ranking",
+      "status": "FAIL",
+      "detail": "Cancel retry returns BATAL without recalculation; stale totals remain"
+    },
+    {
+      "id": "3.valid boundary blank zero max numeric string",
+      "status": "PASS",
+      "detail": "Assertion satisfied"
+    }
+  ]
+}

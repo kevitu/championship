@@ -1,0 +1,33 @@
+{
+  "status": "PASS",
+  "test": "Two real Node worker requests released together; shared Sheets mock serialised by Atomics lock",
+  "responses": [
+    {
+      "index": 1,
+      "result": {
+        "id_acara": "EVT001",
+        "status": "SELESAI"
+      },
+      "trace": [
+        "acquire",
+        "release"
+      ]
+    },
+    {
+      "index": 2,
+      "result": {
+        "id_acara": "EVT002",
+        "status": "SELESAI"
+      },
+      "trace": [
+        "acquire",
+        "release"
+      ]
+    }
+  ],
+  "events": 2,
+  "scores": 8,
+  "logs": 8,
+  "rankingRows": 4,
+  "limitation": "Mock LockService implementation; does not certify actual GAS LockService waiting, quotas or cross-project locks"
+}

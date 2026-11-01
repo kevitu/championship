@@ -1,0 +1,561 @@
+{
+  "timestamp": "2026-11-01T07:37:18.102Z",
+  "sourceSHA256": "c4c79593bcb92a769770a100d7760facf6629b670a8331448e5c512c78587354",
+  "runtime": "v24.22.1",
+  "summary": {
+    "total": 105,
+    "pass": 49,
+    "fail": 56
+  },
+  "boundaryCounts": {
+    "create": 8,
+    "edit": 7
+  },
+  "results": [
+    {
+      "id": "auth legacy doPost",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "auth anonymous apiListKevituEvents",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "auth anonymous apiSaveKevituEvent",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "auth anonymous apiCancelKevituEvent",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "auth anonymous apiRecoverKevituTransaction",
+      "status": "FAIL",
+      "detail": "The input did not match the regular expression /Admin/. Input:\n\n'TypeError: q.c[method] is not a function'\n"
+    },
+    {
+      "id": "auth anonymous apiInspectKevituTransactions",
+      "status": "FAIL",
+      "detail": "The input did not match the regular expression /Admin/. Input:\n\n'TypeError: q.c[method] is not a function'\n"
+    },
+    {
+      "id": "auth outsider apiListKevituEvents",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "auth outsider apiSaveKevituEvent",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "auth outsider apiCancelKevituEvent",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "auth outsider apiRecoverKevituTransaction",
+      "status": "FAIL",
+      "detail": "The input did not match the regular expression /Admin/. Input:\n\n'TypeError: q.c[method] is not a function'\n"
+    },
+    {
+      "id": "auth outsider apiInspectKevituTransactions",
+      "status": "FAIL",
+      "detail": "The input did not match the regular expression /Admin/. Input:\n\n'TypeError: q.c[method] is not a function'\n"
+    },
+    {
+      "id": "config empty whitelist",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "config wrong book",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "config migration gate",
+      "status": "FAIL",
+      "detail": "Missing expected exception."
+    },
+    {
+      "id": "input points -1 number",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "input points 1000001 number",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "input points NaN number",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "input points Infinity number",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "input points -Infinity number",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "input points true boolean",
+      "status": "FAIL",
+      "detail": "Missing expected exception."
+    },
+    {
+      "id": "input points false boolean",
+      "status": "FAIL",
+      "detail": "Missing expected exception."
+    },
+    {
+      "id": "input points  object",
+      "status": "FAIL",
+      "detail": "Missing expected exception."
+    },
+    {
+      "id": "input points 7 object",
+      "status": "FAIL",
+      "detail": "Missing expected exception."
+    },
+    {
+      "id": "input points [object Object] object",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "input points abc string",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "input points =1 string",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "input points 0x10 string",
+      "status": "FAIL",
+      "detail": "Missing expected exception."
+    },
+    {
+      "id": "input points 1e2 string",
+      "status": "FAIL",
+      "detail": "Missing expected exception."
+    },
+    {
+      "id": "input name \"\"",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "input name \"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\"",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "input name \"<img src=x>\"",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "input name \"=1+1\"",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "input name \"+1\"",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "input name \"@SUM(1)\"",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "input name \"-1\"",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "input name \"safe\\u0000bad\"",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "input name \"safe\\nbad\"",
+      "status": "FAIL",
+      "detail": "Missing expected exception."
+    },
+    {
+      "id": "input name []",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "input name {}",
+      "status": "FAIL",
+      "detail": "Missing expected exception."
+    },
+    {
+      "id": "input date 2026-02-30",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "input date 2026-13-01",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "input date 2026-1-01",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "input date x",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "input date true",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "input date ",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "input unknown field rejected",
+      "status": "FAIL",
+      "detail": "Missing expected exception."
+    },
+    {
+      "id": "input fake event FAKE",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "input fake event EVT999",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "request ID \"\"",
+      "status": "FAIL",
+      "detail": "Missing expected exception."
+    },
+    {
+      "id": "request ID \"=formula\"",
+      "status": "FAIL",
+      "detail": "Missing expected exception."
+    },
+    {
+      "id": "request ID \"short\"",
+      "status": "FAIL",
+      "detail": "Missing expected exception."
+    },
+    {
+      "id": "request ID []",
+      "status": "FAIL",
+      "detail": "Missing expected exception."
+    },
+    {
+      "id": "request ID {}",
+      "status": "FAIL",
+      "detail": "Missing expected exception."
+    },
+    {
+      "id": "create repeat after restart",
+      "status": "FAIL",
+      "detail": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n+   id_acara: 'EVT002',\n-   id_acara: 'EVT001',\n    status: 'SELESAI'\n  }\n"
+    },
+    {
+      "id": "request ID different payload actor action rejected",
+      "status": "FAIL",
+      "detail": "Missing expected exception."
+    },
+    {
+      "id": "revision stale two admins",
+      "status": "FAIL",
+      "detail": "Missing expected exception."
+    },
+    {
+      "id": "replacement ranking ties and blank zero max",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "cancel retry and cancelled edit",
+      "status": "FAIL",
+      "detail": "Invalid event ID"
+    },
+    {
+      "id": "preflight bad header ACARA",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "preflight bad header MATA_ACARA",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "preflight bad header KEDUDUKAN",
+      "status": "FAIL",
+      "detail": "Expected values to be strictly deep-equal:\n+ actual - expected\n... Skipped lines\n\n  {\n    ACARA: [\n      [\n        'ID_ACARA',\n        'NAMA_ACARA',\n...\n      ],\n+     [\n+       'EVT001',\n+       'QA Event',\n+       '2026-11-01',\n+       'SELESAI',\n+       '',\n+       '2026-11-01T07:37:18.014Z',\n+       '2026-11-01T07:37:18.014Z'\n+     ]\n    ],\n    KEDUDUKAN: [\n      [\n        'BAD',\n        'JUMLAH_MATA',\n...\n      ],\n+     [\n+       'bd348396-92bf-49da-83fe-6f7bf7b5ade7',\n+       '2026-11-01T07:37:18.014Z',\n+       'EVT001',\n+       'MERAH',\n+       '',\n+       10,\n+       'CIPTA',\n+       'admin@example.invalid'\n+     ],\n+     [\n+       'c1b63d76-0262-42e9-9eee-551722175d27',\n+       '2026-11-01T07:37:18.014Z',\n+       'EVT001',\n+       'BIRU',\n+       '',\n+       10,\n+       'CIPTA',\n+       'admin@example.invalid'\n+     ],\n+     [\n+       'afea1194-3e20-42d5-ab2f-c2461edeffdc',\n+       '2026-11-01T07:37:18.014Z',\n+       'EVT001',\n+       'HIJAU',\n+       '',\n+       5,\n+       'CIPTA',\n+       'admin@example.invalid'\n+     ],\n+     [\n+       '96b5d9c6-d3d6-4016-8d9f-dfa737b8b275',\n+       '2026-11-01T07:37:18.014Z',\n+       'EVT001',\n+       'KUNING',\n+       '',\n+       0,\n+       'CIPTA',\n+       'admin@example.invalid'\n+     ]\n    ],\n    MATA_ACARA: [\n      [\n        'ID_ACARA',\n        'RUMAH_SUKAN',\n...\n      ],\n+     [\n+       'EVT001',\n+       'MERAH',\n+       10,\n+       '2026-11-01T07:37:18.014Z',\n+       'admin@example.invalid'\n+     ],\n+     [\n+       'EVT001',\n+       'BIRU',\n+       10,\n+       '2026-11-01T07:37:18.014Z',\n+       'admin@example.invalid'\n+     ],\n+     [\n+       'EVT001',\n+       'HIJAU',\n+       5,\n+       '2026-11-01T07:37:18.014Z',\n+       'admin@example.invalid'\n+     ],\n+     [\n+       'EVT001',\n+       'KUNING',\n+       0,\n+       '2026-11-01T07:37:18.014Z',\n+       'admin@example.invalid'\n+     ]\n    ],\n    V9_JOURNAL: [\n      [\n        'REQUEST_ID',\n        'FINGERPRINT',\n"
+    },
+    {
+      "id": "preflight bad header LOG_MATA",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "preflight bad header V9_JOURNAL",
+      "status": "FAIL",
+      "detail": "Missing expected exception."
+    },
+    {
+      "id": "duplicate active or BATAL IDs rejected",
+      "status": "FAIL",
+      "detail": "Missing expected exception."
+    },
+    {
+      "id": "duplicate score rejected",
+      "status": "PASS",
+      "detail": "assertions satisfied"
+    },
+    {
+      "id": "stored formula rejected before journal",
+      "status": "FAIL",
+      "detail": "Missing expected exception."
+    },
+    {
+      "id": "revision missing and legacy positional cancel fail closed",
+      "status": "FAIL",
+      "detail": "Missing expected exception."
+    },
+    {
+      "id": "committed retry remains original result after later valid edits",
+      "status": "FAIL",
+      "detail": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n+   id_acara: 'EVT002',\n-   id_acara: 'EVT001',\n    status: 'SELESAI'\n  }\n"
+    },
+    {
+      "id": "fault create 1 before",
+      "status": "FAIL",
+      "detail": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n+   id_acara: 'EVT002',\n-   id_acara: 'EVT001',\n    status: 'SELESAI'\n  }\n"
+    },
+    {
+      "id": "fault create 1 after",
+      "status": "FAIL",
+      "detail": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n+   id_acara: 'EVT003',\n-   id_acara: 'EVT002',\n    status: 'SELESAI'\n  }\n"
+    },
+    {
+      "id": "fault create 2 before",
+      "status": "FAIL",
+      "detail": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n+   id_acara: 'EVT003',\n-   id_acara: 'EVT002',\n    status: 'SELESAI'\n  }\n"
+    },
+    {
+      "id": "fault create 2 after",
+      "status": "FAIL",
+      "detail": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n+   id_acara: 'EVT003',\n-   id_acara: 'EVT002',\n    status: 'SELESAI'\n  }\n"
+    },
+    {
+      "id": "fault create 3 before",
+      "status": "FAIL",
+      "detail": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n+   id_acara: 'EVT003',\n-   id_acara: 'EVT002',\n    status: 'SELESAI'\n  }\n"
+    },
+    {
+      "id": "fault create 3 after",
+      "status": "FAIL",
+      "detail": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n+   id_acara: 'EVT003',\n-   id_acara: 'EVT002',\n    status: 'SELESAI'\n  }\n"
+    },
+    {
+      "id": "fault create 4 before",
+      "status": "FAIL",
+      "detail": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n+   id_acara: 'EVT003',\n-   id_acara: 'EVT002',\n    status: 'SELESAI'\n  }\n"
+    },
+    {
+      "id": "fault create 4 after",
+      "status": "FAIL",
+      "detail": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n+   id_acara: 'EVT003',\n-   id_acara: 'EVT002',\n    status: 'SELESAI'\n  }\n"
+    },
+    {
+      "id": "fault create 5 before",
+      "status": "FAIL",
+      "detail": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n+   id_acara: 'EVT003',\n-   id_acara: 'EVT002',\n    status: 'SELESAI'\n  }\n"
+    },
+    {
+      "id": "fault create 5 after",
+      "status": "FAIL",
+      "detail": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n+   id_acara: 'EVT003',\n-   id_acara: 'EVT002',\n    status: 'SELESAI'\n  }\n"
+    },
+    {
+      "id": "fault create 6 before",
+      "status": "FAIL",
+      "detail": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n+   id_acara: 'EVT003',\n-   id_acara: 'EVT002',\n    status: 'SELESAI'\n  }\n"
+    },
+    {
+      "id": "fault create 6 after",
+      "status": "FAIL",
+      "detail": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n+   id_acara: 'EVT003',\n-   id_acara: 'EVT002',\n    status: 'SELESAI'\n  }\n"
+    },
+    {
+      "id": "fault create 7 before",
+      "status": "FAIL",
+      "detail": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n+   id_acara: 'EVT003',\n-   id_acara: 'EVT002',\n    status: 'SELESAI'\n  }\n"
+    },
+    {
+      "id": "fault create 7 after",
+      "status": "FAIL",
+      "detail": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n+   id_acara: 'EVT003',\n-   id_acara: 'EVT002',\n    status: 'SELESAI'\n  }\n"
+    },
+    {
+      "id": "fault create 8 before",
+      "status": "FAIL",
+      "detail": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n+   id_acara: 'EVT003',\n-   id_acara: 'EVT002',\n    status: 'SELESAI'\n  }\n"
+    },
+    {
+      "id": "fault create 8 after",
+      "status": "FAIL",
+      "detail": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n+   id_acara: 'EVT003',\n-   id_acara: 'EVT002',\n    status: 'SELESAI'\n  }\n"
+    },
+    {
+      "id": "fault edit 1 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": false
+      }
+    },
+    {
+      "id": "fault edit 1 after",
+      "status": "FAIL",
+      "detail": "Expected values to be strictly deep-equal:\n+ actual - expected\n... Skipped lines\n\n  {\n    ACARA: [\n      [\n        'ID_ACARA',\n        'NAMA_ACARA',\n...\n        '2026-11-01T07:37:18.066Z',\n+       '2026-11-01T07:37:18.068Z'\n-       '2026-11-01T07:37:18.067Z'\n      ]\n    ],\n    KEDUDUKAN: [\n      [\n        'RUMAH_SUKAN',\n...\n        1,\n+       '2026-11-01T07:37:18.068Z'\n-       '2026-11-01T07:37:18.067Z'\n      ],\n      [\n        'BIRU',\n        10,\n        2,\n        1,\n+       '2026-11-01T07:37:18.068Z'\n-       '2026-11-01T07:37:18.067Z'\n      ],\n      [\n        'HIJAU',\n        5,\n        3,\n        1,\n+       '2026-11-01T07:37:18.068Z'\n-       '2026-11-01T07:37:18.067Z'\n      ],\n      [\n        'KUNING',\n        0,\n        4,\n        1,\n+       '2026-11-01T07:37:18.068Z'\n-       '2026-11-01T07:37:18.067Z'\n      ]\n    ],\n    LOG_MATA: [\n      [\n        'ID_LOG',\n"
+    },
+    {
+      "id": "fault edit 2 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": false
+      }
+    },
+    {
+      "id": "fault edit 2 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": false
+      }
+    },
+    {
+      "id": "fault edit 3 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": false
+      }
+    },
+    {
+      "id": "fault edit 3 after",
+      "status": "FAIL",
+      "detail": "Expected values to be strictly equal:\n\n4 !== 5\n"
+    },
+    {
+      "id": "fault edit 4 before",
+      "status": "FAIL",
+      "detail": "Expected values to be strictly equal:\n\n4 !== 5\n"
+    },
+    {
+      "id": "fault edit 4 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": false
+      }
+    },
+    {
+      "id": "fault edit 5 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": false
+      }
+    },
+    {
+      "id": "fault edit 5 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": false
+      }
+    },
+    {
+      "id": "fault edit 6 before",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": false
+      }
+    },
+    {
+      "id": "fault edit 6 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": false
+      }
+    },
+    {
+      "id": "fault edit 7 before",
+      "status": "FAIL",
+      "detail": "Expected values to be strictly deep-equal:\n+ actual - expected\n... Skipped lines\n\n  {\n    ACARA: [\n      [\n        'ID_ACARA',\n        'NAMA_ACARA',\n...\n        '2026-11-01T07:37:18.089Z',\n+       '2026-11-01T07:37:18.091Z'\n-       '2026-11-01T07:37:18.090Z'\n      ]\n    ],\n    KEDUDUKAN: [\n      [\n        'RUMAH_SUKAN',\n...\n        1,\n+       '2026-11-01T07:37:18.091Z'\n-       '2026-11-01T07:37:18.090Z'\n      ],\n      [\n        'BIRU',\n        10,\n        2,\n        1,\n+       '2026-11-01T07:37:18.091Z'\n-       '2026-11-01T07:37:18.090Z'\n      ],\n      [\n        'HIJAU',\n        5,\n        3,\n        1,\n+       '2026-11-01T07:37:18.091Z'\n-       '2026-11-01T07:37:18.090Z'\n      ],\n      [\n        'KUNING',\n        0,\n        4,\n        1,\n+       '2026-11-01T07:37:18.091Z'\n-       '2026-11-01T07:37:18.090Z'\n      ]\n    ],\n    LOG_MATA: [\n      [\n        'ID_LOG',\n"
+    },
+    {
+      "id": "fault edit 7 after",
+      "status": "PASS",
+      "detail": {
+        "pendingRecovered": false
+      }
+    },
+    {
+      "id": "fault discovery cancel",
+      "status": "FAIL",
+      "detail": "Invalid event ID"
+    },
+    {
+      "id": "journal corrupted checksum blocks without writes",
+      "status": "FAIL",
+      "detail": "Cannot read properties of undefined (reading '3')"
+    },
+    {
+      "id": "foreign edit during pending recovery blocks",
+      "status": "FAIL",
+      "detail": "The input did not match the regular expression /CONSISTENCY|Orphan/. Input:\n\n'TypeError: q.c.apiRecoverKevituTransaction is not a function'\n"
+    },
+    {
+      "id": "malformed partial journal row blocks",
+      "status": "FAIL",
+      "detail": "Missing expected exception."
+    },
+    {
+      "id": "tampered result JSON blocked",
+      "status": "FAIL",
+      "detail": "Cannot set properties of undefined (setting '5')"
+    },
+    {
+      "id": "orphan score and stale ranking block preflight",
+      "status": "FAIL",
+      "detail": "Missing expected exception."
+    },
+    {
+      "id": "capacity fail closed",
+      "status": "FAIL",
+      "detail": "row is not iterable"
+    }
+  ]
+}
