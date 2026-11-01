@@ -2,28 +2,28 @@
   "name": "KEVITU Sports Championship",
   "short_name": "KEVITU Cup",
   "lang": "ms",
-  "start_url": "./",
+  "start_url": "/championship/",
   "display": "standalone",
   "background_color": "#081326",
   "theme_color": "#101b32",
   "description": "Dashboard kedudukan mata rumah sukan KEVITU",
-  "scope": "./",
-  "id": "./",
+  "scope": "/championship/",
+  "id": "/championship/",
   "icons": [
     {
-      "src": "./assets/icons/kevitu-pwa.svg",
-      "sizes": "192x192 512x512",
+      "src": "/championship/assets/icons/kevitu-pwa.svg",
+      "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any"
     },
     {
-      "src": "./assets/icons/kevitu-maskable.svg",
-      "sizes": "192x192 512x512",
+      "src": "/championship/assets/icons/kevitu-maskable.svg",
+      "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "maskable"
     },
     {
-      "src": "./assets/img/brand/kevitu-logo.webp",
+      "src": "/championship/assets/img/brand/kevitu-logo.webp",
       "sizes": "any",
       "type": "image/webp",
       "purpose": "any"
