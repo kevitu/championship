@@ -120,87 +120,146 @@ function kevituEventInput_(payload) {
   return {name, date, status, notes, scores: normalized};
 }
 
-function kevituSaveEvent_(payload, admin) {
-  const input = kevituEventInput_(payload);
-  const requestedId = String(payload.id_acara || '').trim().toUpperCase();
-  if (requestedId && !/^EVT\d{3,}$/.test(requestedId)) throw new Error('ID acara tidak sah.');
-  const lock = LockService.getScriptLock();
-  lock.waitLock(20000);
-  try {
-    const ss = kevituBook_();
-    const acara = kevituTable_(ss, KEVITU_SHEETS.acara);
-    const mata = kevituTable_(ss, KEVITU_SHEETS.mata);
-    const ranking = kevituTable_(ss, KEVITU_SHEETS.ranking);
-    const audit = kevituTable_(ss, KEVITU_SHEETS.audit);
-    const events = kevituRows_(acara, 7);
-    const scores = kevituRows_(mata, 5);
-    // Verify current data before any write: stop if inconsistent.
-    kevituAggregate_(events, scores);
-    const now = new Date();
-    let id = requestedId;
-    let rowIndex = events.findIndex(row => String(row[0]).trim().toUpperCase() === id);
-    if (id && rowIndex < 0) throw new Error('Acara tidak dijumpai.');
-    if (!id) {
-      const numbers = events.map(row => /^EVT(\d+)$/.exec(String(row[0]).trim())).filter(Boolean).map(m => Number(m[1]));
-      id = 'EVT' + String(Math.max(0, ...numbers) + 1).padStart(3,'0');
-    }
-    const stored = new Map();
-    scores.forEach((row, i) => {
-      const key = String(row[0]).trim().toUpperCase() + ':' + String(row[1]).trim().toUpperCase();
-      if (stored.has(key)) throw new Error('Rekod mata pendua ditemui: ' + key);
-      stored.set(key, {row: i + 2, value: row[2]});
-    });
-    // Validate target shape before any write.
-    const updates = KEVITU_HOUSES.map(h => ({house:h, prior:stored.get(id + ':' + h), score:input.scores[h]}));
-    if (rowIndex >= 0) {
-      const existing = events[rowIndex];
-      if (String(existing[3]).trim().toUpperCase() === 'BATAL') throw new Error('Acara BATAL tidak boleh diubah.');
-      acara.getRange(rowIndex + 2, 2, 1, 4).setValues([[input.name,input.date,input.status,input.notes]]);
-      acara.getRange(rowIndex + 2, 7).setValue(now);
-    } else {
-      acara.appendRow([id,input.name,input.date,input.status,input.notes,now,now]);
-    }
-    const changed = [];
-    updates.forEach(u => {
-      const old = u.prior ? u.prior.value : '';
-      const oldNormal = old === '' || old === null ? '' : Number(old);
-      const equal = oldNormal === u.score;
-      if (equal) return;
-      if (u.prior) mata.getRange(u.prior.row, 3, 1, 3).setValues([[u.score,now,admin]]);
-      else mata.appendRow([id,u.house,u.score,now,admin]);
-      changed.push([Utilities.getUuid(),now,id,u.house,old,u.score,u.prior ? 'EDIT' : 'CIPTA',admin]);
-    });
-    if (changed.length) audit.getRange(audit.getLastRow()+1,1,changed.length,8).setValues(changed);
-    kevituRecalculate_(acara,mata,ranking,now);
-    return {id_acara:id, changed_houses:changed.length};
-  } finally {
-    lock.releaseLock();
+
+/**
+ * One pending operation at a time, stored before any sheet writes.
+ * Replay is idempotent; audit row keys are stable per operation + house.
+ * This is a DEV recovery strategy, not a transactional Google Sheets commit.
+ */
+const KEVITU_PENDING_KEY = 'PENDING_SCORE_OPERATION';
+
+function kevituApplyPending_(ss, op) {
+  const acara = kevituTable_(ss,'ACARA');
+  const mata = kevituTable_(ss,'MATA_ACARA');
+  const ranking = kevituTable_(ss,'KEDUDUKAN');
+  const audit = kevituTable_(ss,'LOG_MATA');
+  const eventRows = kevituRows_(acara,7);
+  const matches = eventRows.map((r,i)=>({r,row:i+2})).filter(x=>String(x.r[0]).trim()===op.id);
+  if(matches.length>1) throw new Error('ID acara pendua; recovery dihentikan.');
+  if(op.type==='SAVE') {
+    const rec=[op.id,op.name,op.date,op.status,op.notes,new Date(op.created),new Date(op.timestamp)];
+    if(matches.length) acara.getRange(matches[0].row,1,1,7).setValues([rec]);
+    else acara.appendRow(rec);
+  } else {
+    if(!matches.length) throw new Error('Acara hendak dibatalkan tidak wujud.');
+    acara.getRange(matches[0].row,4).setValue('BATAL');
+    acara.getRange(matches[0].row,7).setValue(new Date(op.timestamp));
   }
+  const currentScores = kevituRows_(mata,5);
+  const seen = new Map();
+  currentScores.forEach((r,i)=>{
+    const key=String(r[0]).trim()+':'+String(r[1]).trim();
+    if(seen.has(key)) throw new Error('Mata pendua; recovery dihentikan.');
+    seen.set(key,i+2);
+  });
+  if(op.type==='SAVE') {
+    op.changes.forEach(c=>{
+      const key=op.id+':'+c.house;
+      const newRow=[op.id,c.house,c.after,new Date(op.timestamp),op.admin];
+      if(seen.has(key)) mata.getRange(seen.get(key),1,1,5).setValues([newRow]);
+      else mata.appendRow(newRow);
+    });
+  }
+  const existingLogIds=new Set(kevituRows_(audit,8).map(r=>String(r[0])));
+  op.changes.forEach(c=>{
+    const logId=op.uid+':'+c.house;
+    if(!existingLogIds.has(logId)) {
+      audit.appendRow([logId,new Date(op.timestamp),op.id,c.house,c.before,c.after,
+        op.type==='CANCEL'?'BATAL_ACARA':c.action,op.admin]);
+    }
+  });
+  kevituRecalculate_(acara,mata,ranking,new Date(op.timestamp));
+  SpreadsheetApp.flush();
 }
 
-function kevituCancelEvent_(payload, admin) {
-  const id = String(payload.id_acara || '').trim().toUpperCase();
-  if (!/^EVT\d{3,}$/.test(id)) throw new Error('ID acara tidak sah.');
-  const lock = LockService.getScriptLock();
-  lock.waitLock(20000);
+function kevituPending_(props) {
+  const raw=props.getProperty(KEVITU_PENDING_KEY);
+  if(!raw)return null;
+  const op=JSON.parse(raw);
+  if(!op||!['SAVE','CANCEL'].includes(op.type)||!/^EVT\\d{3,}$/.test(op.id)) {
+    throw new Error('Journal rosak; jangan teruskan.');
+  }
+  return op;
+}
+
+/** Manual operator recovery, only after inspecting last failed DEV operation. */
+function recoverKevituPendingDev() {
+  const admin=kevituAdmin_();
+  const lock=LockService.getScriptLock();lock.waitLock(20000);
   try {
-    const ss = kevituBook_();
-    const acara = kevituTable_(ss,'ACARA');
-    const mata = kevituTable_(ss,'MATA_ACARA');
-    const ranking = kevituTable_(ss,'KEDUDUKAN');
-    const audit = kevituTable_(ss,'LOG_MATA');
-    const events = kevituRows_(acara,7);
-    kevituAggregate_(events, kevituRows_(mata,5));
-    const index = events.findIndex(row => String(row[0]).trim().toUpperCase() === id);
-    if (index < 0) throw new Error('Acara tidak dijumpai.');
-    if (String(events[index][3]).trim().toUpperCase() === 'BATAL') return {id_acara:id,status:'BATAL'};
-    const now = new Date();
-    acara.getRange(index+2,4).setValue('BATAL');
-    acara.getRange(index+2,7).setValue(now);
-    audit.appendRow([Utilities.getUuid(),now,id,'','','','BATAL_ACARA',admin]);
-    kevituRecalculate_(acara,mata,ranking,now);
-    return {id_acara:id,status:'BATAL'};
-  } finally { lock.releaseLock(); }
+    const props=PropertiesService.getScriptProperties();
+    const pending=kevituPending_(props);
+    if(!pending) {Logger.log('PASS: no pending operation.');return;}
+    if(pending.admin!==admin)throw new Error('Journal owned by another Admin.');
+    const ss=kevituBook_();
+    kevituApplyPending_(ss,pending);
+    props.deleteProperty(KEVITU_PENDING_KEY);
+    Logger.log('RECOVERED operation '+pending.uid+' on '+ss.getName());
+  } finally {lock.releaseLock();}
+}
+
+function kevituExecute_(build) {
+  const lock=LockService.getScriptLock();lock.waitLock(20000);
+  try {
+    const props=PropertiesService.getScriptProperties();
+    if(kevituPending_(props))throw new Error('Ada operasi belum selesai. Jalankan recoverKevituPendingDev dahulu.');
+    const ss=kevituBook_();
+    const sheets=['ACARA','MATA_ACARA','KEDUDUKAN','LOG_MATA'].map(n=>kevituTable_(ss,n));
+    const events=kevituRows_(sheets[0],7);
+    const points=kevituRows_(sheets[1],5);
+    kevituAggregate_(events,points);
+    const op=build(events,points);
+    props.setProperty(KEVITU_PENDING_KEY,JSON.stringify(op));
+    kevituApplyPending_(ss,op);
+    props.deleteProperty(KEVITU_PENDING_KEY);
+    return {id_acara:op.id,changed_houses:op.changes.length,status:op.status||'BATAL'};
+  } finally {lock.releaseLock();}
+}
+
+function kevituSaveEvent_(payload,admin) {
+  const input=kevituEventInput_(payload);
+  const requestedId=String(payload.id_acara||'').trim().toUpperCase();
+  if(requestedId&&!/^EVT\\d{3,}$/.test(requestedId))throw new Error('ID acara tidak sah.');
+  return kevituExecute_((events,points)=>{
+    const existing=events.filter(r=>String(r[0]).trim()===requestedId);
+    if(existing.length>1)throw new Error('ID acara pendua.');
+    if(requestedId&&!existing.length)throw new Error('Acara tidak dijumpai.');
+    if(existing.length&&String(existing[0][3]).trim()==='BATAL')throw new Error('Acara batal tidak boleh diedit.');
+    const nums=events.map(r=>/^EVT(\\d+)$/.exec(String(r[0]))).filter(Boolean).map(m=>Number(m[1]));
+    const id=requestedId||'EVT'+String(Math.max(0,...nums)+1).padStart(3,'0');
+    const current=new Map();
+    points.filter(r=>String(r[0])===id).forEach(r=>{
+      const h=String(r[1]).trim();
+      if(current.has(h))throw new Error('Mata pendua bagi '+h);
+      current.set(h,r[2]);
+    });
+    const changes=KEVITU_HOUSES.map(h=>{
+      const before=current.has(h)?current.get(h):'';
+      const after=input.scores[h];
+      const oldVal=before===''||before===null?'':Number(before);
+      if(oldVal===after)return null;
+      return {house:h,before:before===null?'':before,after,
+        action:current.has(h)?'EDIT':'CIPTA'};
+    }).filter(Boolean);
+    const now=new Date().toISOString();
+    return {uid:Utilities.getUuid(),type:'SAVE',id,admin,timestamp:now,
+      created:existing.length&&existing[0][5] instanceof Date?
+        existing[0][5].toISOString():now,
+      name:input.name,date:input.date,status:input.status,notes:input.notes,changes};
+  });
+}
+
+function kevituCancelEvent_(payload,admin) {
+  const id=String(payload.id_acara||'').trim().toUpperCase();
+  if(!/^EVT\\d{3,}$/.test(id))throw new Error('ID acara tidak sah.');
+  return kevituExecute_((events)=>{
+    const matches=events.filter(r=>String(r[0]).trim()===id);
+    if(matches.length!==1)throw new Error('ID acara tiada atau pendua.');
+    if(String(matches[0][3])==='BATAL')throw new Error('Acara telah dibatalkan.');
+    return {uid:Utilities.getUuid(),type:'CANCEL',id,admin,
+      timestamp:new Date().toISOString(),
+      changes:[{house:'',before:'',after:'',action:'BATAL_ACARA'}]};
+  });
 }
 
 function kevituAggregate_(events, scores) {
