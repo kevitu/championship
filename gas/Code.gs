@@ -17,11 +17,10 @@ const KEVITU_HEADERS = Object.freeze({
 });
 
 function kevituBook_() {
-  // No spreadsheet ID/URL stored in public repository.
-  // Install this script as a bound project in the restricted master spreadsheet.
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
-  if (!ss) throw new Error('Spreadsheet bound tidak tersedia.');
-  return ss;
+  // Standalone GAS: source workbook ID stays in private Script Properties.
+  const id = String(PropertiesService.getScriptProperties().getProperty('SPREADSHEET_ID') || '').trim();
+  if (!id) throw new Error('SPREADSHEET_ID belum dikonfigurasi.');
+  return SpreadsheetApp.openById(id);
 }
 
 function kevituTable_(ss, name) {
@@ -263,4 +262,11 @@ function testKevituAggregate_() {
       result.find(x=>x.rumah_sukan==='KUNING').jumlah_mata!==0 ||
       result.find(x=>x.rumah_sukan==='HIJAU').jumlah_acara!==1) throw new Error('Aggregate FAIL');
   Logger.log('PASS: tied scores, zero scores, cancelled event excluded.');
+}
+
+/** Safe configuration check: reads headers only; does not write data. */
+function testKevituConnection_() {
+  const ss = kevituBook_();
+  ['ACARA','MATA_ACARA','KEDUDUKAN','LOG_MATA'].forEach(name => kevituTable_(ss,name));
+  Logger.log('PASS: connection to ' + ss.getName() + ' and 4 system headers.');
 }
