@@ -2,7 +2,7 @@
 const KEVITU_OAUTH_CLIENT_ID='556436437882-flsu8vhvkt2cmsvbbp0nm3mtn7s0cth0.apps.googleusercontent.com';
 const $=id=>document.getElementById(id);
 const bridge=String(window.KEVITU_ADMIN_BRIDGE_URL||'').trim();
-let credential='',events=[],pending=null,busy=false;
+let credential='',events=[],pending=null,busy=false,authorised=false;
 const fields=['existing','eventName','eventDate','eventStatus','merah','biru','hijau','kuning'];
 function validBridge(){
   try {const u=new URL(bridge);return u.protocol==='https:'&&u.hostname==='script.google.com'&&u.pathname.endsWith('/exec')}catch(_){return false}
@@ -11,7 +11,7 @@ function status(t){$('bridge-status').textContent=t}
 function message(t){$('operation-status').textContent=t}
 function selected(){return events.find(x=>x.id_acara===$('existing').value)}
 function enable(){
-  const ok=!!credential&&validBridge()&&!busy;
+  const ok=!!credential&&authorised&&validBridge()&&!busy;
   for(const id of fields)$(id).disabled=!ok;
   const item=selected();
   $('save').disabled=!ok||item?.status==='BATAL';
@@ -59,12 +59,13 @@ function request(action,payload){
  });
 }
 async function refresh(preferred=''){
- try{const rows=await request('list',{});if(!Array.isArray(rows))throw Error('Format senarai tidak sah');events=rows;renderEvents(preferred);status('Akses Admin disahkan oleh backend DEV.');message('Acara berjaya dimuatkan.')}
- catch(e){status('Admin belum boleh digunakan: '+e.message);message('');}
+ try{const rows=await request('list',{});if(!Array.isArray(rows))throw Error('Format senarai tidak sah');events=rows;authorised=true;renderEvents(preferred);status('Akses Admin disahkan oleh backend DEV.');message('Acara berjaya dimuatkan.')}
+ catch(e){authorised=false;enable();status('Admin belum boleh digunakan: '+e.message);message('');}
 }
 function onGoogleCredential(response){
  if(!response||typeof response.credential!=='string'){status('Google Sign-In gagal.');return}
- credential=response.credential;
+ credential=response.credential;authorised=false;
+ status('Sedang menghubungi backend DEV untuk semakan Admin…');
  $('login-status').textContent='Google Sign-In berjaya. Menyemak whitelist Admin dengan backend…';
  $('signout').hidden=false;enable();
  if(validBridge())refresh();else status('Google Sign-In berjaya. Backend DEV belum dipasang; fungsi simpan masih dikunci.');
@@ -89,7 +90,7 @@ $('cancel').addEventListener('click',async()=>{
 });
 $('signout').addEventListener('click',()=>{
  if(pending)return message('Selesaikan operasi terdahulu sebelum log keluar.');
- credential='';events=[];renderEvents();$('signout').hidden=true;
+ credential='';authorised=false;events=[];renderEvents();$('signout').hidden=true;
  window.google?.accounts?.id?.disableAutoSelect();
  $('login-status').textContent='Telah log keluar daripada sesi aplikasi.';
  status('Log masuk Admin diperlukan.');
