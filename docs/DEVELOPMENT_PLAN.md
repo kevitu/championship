@@ -1,24 +1,31 @@
 # KEVITU Championship — Development Plan
 
-## Completed
-- Fasa 0: repository initialised, workbook/tab/header audit read-only.
-- Fasa 1A: data schema designed and header layout verified.
-- Fasa 1B: first GAS backend draft in `gas/Code.gs`; 9/9 pure-logic test cases pass after input validation improvements.
-- Basic security: current README has no private spreadsheet URL; source workbook sharing verified Restricted.
+## Checkpoint: Fasa 3 Public Reader DEV — 1 November 2026
 
-## Outstanding security note
-Original public commit history contained the spreadsheet URL. It was removed from the current README but not purged from Git object history. Link access alone does not grant access to a Restricted spreadsheet.
+### Selesai dan disahkan
+- Skema empat tab dalam master dan salinan DEV QA diperiksa.
+- Backend GAS standalone di DEV menggunakan Script Properties; sambungan dan empat header PASS.
+- Ujian pengiraan & identiti Admin daripada Editor PASS.
+- Tambah `EVT001` (STRAVA STRIKE 2026 — UJIAN DEV), edit mata MERAH 10→30, kemudian batal: setiap operasi PASS dan data empat tab diverifikasi.
+- Ranking selepas batal: keempat-empat rumah 0 mata, kedudukan 1. Sejarah mata dan log kekal.
+- Dashboard GitHub Pages tersedia dengan lima logo sebenar.
+- Public Reader GAS asing, deployment read-only disambung kepada DEV QA; screenshot pengguna mengesahkan empat rumah dan skor 0 muncul pada GitHub Pages.
 
-## Next — minimal, focused workflow
-1. Complete current Markdown project documentation.
-2. Create separate restricted `KEVITU Championship - DEV QA` workbook with system-tab headers and **no participant data**.
-3. Bind a DEV GAS project and load the GitHub GAS source, after closing known security and partial-write blockers.
-4. Test create, edit, cancel, rankings, audit, and deny non-admin access using the DEV workbook.
-5. Build approved dashboard Design V1 using the four supplied logos; do not use placeholder scores as real scores.
-6. Deploy controlled LIVE setup only after user approval and safety verification.
+### Masih perlu diselesaikan sebelum LIVE
+- Admin UI dan kaedah autentikasi Web App yang selamat; ujian penolakan bukan Admin belum selesai.
+- Fault-injection/pemulihan journal; Google Sheets bukan pangkalan data bertransaksi.
+- Validasi akses serta rekod pertukaran data DEV → LIVE.
+- Audit keselamatan endpoint bacaan awam dan keputusan untuk menyembunyikan hasil DEV daripada pelawat umum.
+- Paparan responsif telefon/PWA dan polish logo putih jika perlu.
 
-## QA approach
-Lean QA: focus on critical flows, fix actual failures, do not expand into repeated QA phases unnecessarily. Pure JavaScript test success does not imply integration or deployment success.
+### Susunan kerja seterusnya
+1. Selaraskan label UI sebagai DEV (bukan “data rasmi”).
+2. Bina UI Admin terkawal dalam persekitaran GAS, bukan memanggil `doPost` Admin secara terbuka daripada GitHub Pages.
+3. Uji akses bukan Admin, recovery dan senario minimum.
+4. Semak LIVE data, dapatkan kelulusan sebelum deployment rasmi.
 
-## Current hold
-No GAS DEV project or QA workbook was created, and LIVE has not been modified.
+## Amalan checkpoint dokumentasi
+Kemas kini README + DEVELOPMENT_PLAN + satu ringkasan checkpoint apabila **fasa integrasi utama siap** atau **keputusan seni bina/akses berubah**. Tidak perlu buat dokumen selepas setiap ujian kecil.
+
+## Nota keselamatan
+Jangan letak ID spreadsheet Google dalam repo awam. Original commit history pernah memuatkan URL master dan belum dibersihkan; Spreadsheet masih Restricted.
