@@ -1,6 +1,7 @@
 /**
- * KEVITU PUBLIC READ — hardened, read-only, DEV.
+ * KEVITU PUBLIC READ — hardened, read-only, approved LIVE workbook.
  * Spreadsheet ID belongs in private Script Properties: SPREADSHEET_ID.
+ * Fail-closed against switching source to a different workbook.
  * No Admin functions, write methods, or participant information.
  * Cache 60 seconds; the public scoreboard may lag by up to one minute.
  */
@@ -24,7 +25,7 @@ function readRows_(book, name, headers) {
 
 function publicSnapshot_() {
   const id=String(PropertiesService.getScriptProperties().getProperty('SPREADSHEET_ID')||'').trim();
-  if (!id) throw Error('Missing configuration');
+  if (id !== '1j8xz7G2CksaZt_LOVvSSk8fVsC78LXMVDgioF2tqQ-E') throw Error('STOP: unapproved LIVE workbook');
   const book=SpreadsheetApp.openById(id);
   const events=readRows_(book,'ACARA',['ID_ACARA','NAMA_ACARA','TARIKH_ACARA','STATUS','CATATAN','DICIPTA_PADA','DIKEMASKINI_PADA']);
   const scores=readRows_(book,'MATA_ACARA',['ID_ACARA','RUMAH_SUKAN','MATA','DIKEMASKINI_PADA','DIKEMASKINI_OLEH']);
