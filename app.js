@@ -1,10 +1,10 @@
 'use strict';
 // Public scoreboard only. Admin writes occur through separately authorised API.
 const HOUSES=[
-{id:'MERAH',name:'Rumah Merah',image:'./assets/img/houses/rumah-merah.webp',fallback:'🔴',colour:'#f04b55',identity:'Pantang Menyerah'},
-{id:'BIRU',name:'Rumah Biru',image:'./assets/img/houses/rumah-biru.webp',fallback:'🐉',colour:'#459bfa',identity:'Semangat Kental Pantang Mundur'},
-{id:'HIJAU',name:'Rumah Hijau',image:'./assets/img/houses/rumah-hijau.webp',fallback:'🐢',colour:'#4ccd99',identity:'Green Turtle'},
-{id:'KUNING',name:'Rumah Kuning',image:'./assets/img/houses/rumah-kuning.webp',fallback:'🐝',colour:'#f6c74b',identity:'Sengat Sampai Menang'}];
+{id:'MERAH',name:'Rumah Merah',image:'./assets/img/houses/rumah_merah.png',fallback:'🔴',colour:'#f04b55',identity:'Pantang Menyerah'},
+{id:'BIRU',name:'Rumah Biru',image:'./assets/img/houses/rumah_biru.png',fallback:'🐉',colour:'#459bfa',identity:'Semangat Kental Pantang Mundur'},
+{id:'HIJAU',name:'Rumah Hijau',image:'./assets/img/houses/rumah-hijau.png',fallback:'🐢',colour:'#4ccd99',identity:'Green Turtle'},
+{id:'KUNING',name:'Rumah Kuning',image:'./assets/img/houses/rumah_kuning.png',fallback:'🐝',colour:'#f6c74b',identity:'Sengat Sampai Menang'}];
 const $=id=>document.getElementById(id);
 function element(tag,cls,text){const e=document.createElement(tag);if(cls)e.className=cls;if(text!==undefined)e.textContent=String(text);return e}
 const REDUCED_MOTION=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
