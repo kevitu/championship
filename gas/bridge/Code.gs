@@ -19,7 +19,7 @@ function bridgeReply_(result,requestId){
   const safe=JSON.stringify({source:'kevitu-admin-bridge',requestId:String(requestId||''),...result})
     .replace(/</g,'\\u003c').replace(/\u2028/g,'\\u2028').replace(/\u2029/g,'\\u2029');
   // Only this exact origin receives the callback. Never echo the Google token.
-  return HtmlService.createHtmlOutput('<!doctype html><meta charset="utf-8"><script>parent.postMessage('+safe+','+JSON.stringify(KEVITU_BRIDGE_ORIGIN)+');<\\/script>')
+  return HtmlService.createHtmlOutput('<!doctype html><meta charset="utf-8"><script>parent.postMessage('+safe+','+JSON.stringify(KEVITU_BRIDGE_ORIGIN)+');<\/script>')
     .setTitle('KEVITU Admin Response');
 }
 function bridgeProperties_(){
