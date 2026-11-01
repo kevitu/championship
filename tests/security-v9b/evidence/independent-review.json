@@ -1,0 +1,126 @@
+{
+  "reviewer": "Separate security-review agent v9b_reviewer",
+  "recordedFrom": "Completed reviewer messages before interruption; no review or tests rerun during documentation completion",
+  "initial": {
+    "commit": "b5f394942c3003bbed2b8c84f5b6ecad1da40d6f",
+    "filesRead": [
+      "admin-auth.js",
+      "gas/bridge/Code.gs",
+      "gas/public/Code.gs",
+      "app.js",
+      "docs/SECURITY_V9B_EXECUTION.md",
+      "tests/security-v9b/publication.cjs",
+      "tests/security-v9b/integration.cjs",
+      "tests/security-v9b/concurrency.cjs",
+      "tests/security-v9b/evidence/browser-results.json"
+    ],
+    "staticStatus": "PASS within reviewed scope",
+    "execution": {
+      "status": "PASS",
+      "checks": 13,
+      "cases": [
+        {
+          "case": "decimal parity",
+          "input": [],
+          "value": 0
+        },
+        {
+          "case": "decimal parity",
+          "input": [
+            0.1,
+            0.2
+          ],
+          "value": 0.3
+        },
+        {
+          "case": "decimal parity",
+          "input": [
+            0.3
+          ],
+          "value": 0.3
+        },
+        {
+          "case": "decimal parity",
+          "input": [
+            1e-7,
+            2e-7
+          ],
+          "value": 3e-7
+        },
+        {
+          "case": "decimal parity",
+          "input": [
+            1000000,
+            0.000001
+          ],
+          "value": 1000000.000001
+        },
+        {
+          "case": "decimal parity",
+          "input": [
+            0,
+            0
+          ],
+          "value": 0
+        },
+        {
+          "case": "decimal parity",
+          "input": [
+            5e-324,
+            5e-324
+          ],
+          "value": 1e-323
+        },
+        {
+          "case": "empty valid snapshot accepted"
+        },
+        {
+          "case": "duplicate BATAL rejected",
+          "error": "Duplicate event including BATAL"
+        },
+        {
+          "case": "wrong rank rejected",
+          "error": "Snapshot ranking mismatch"
+        },
+        {
+          "case": "invalid date rejected",
+          "error": "Invalid snapshot event data"
+        },
+        {
+          "case": "negative score rejected",
+          "error": "Invalid snapshot points"
+        },
+        {
+          "case": "extra event field rejected",
+          "error": "Invalid snapshot event"
+        }
+      ]
+    }
+  },
+  "finalDelta": {
+    "commit": "a65d55200ac0495f68d1ba2c2d4a4a6d7a79952d",
+    "filesRead": [
+      "gas/bridge/Code.gs",
+      "gas/public/Code.gs"
+    ],
+    "staticStatus": "PASS; no concrete blocker found within reviewed scope",
+    "execution": {
+      "status": "PASS",
+      "checks": 14,
+      "details": [
+        "Bridge sensitive helper globals undefined",
+        "Bridge exports frozen with exact ten keys",
+        "All eight Bridge API wrappers reject anonymous mocked Session",
+        "Reader sensitive helper globals undefined",
+        "Reader exports frozen with exact two safe handlers",
+        "Original implementation bodies byte-identical after trim within closures"
+      ]
+    }
+  },
+  "totalFocusedIndependentChecks": 27,
+  "fullSuiteIndependentExecution": "NOT VERIFIED",
+  "realExecutionApiRouting": "NOT VERIFIED",
+  "realGoogleServices": "NOT VERIFIED",
+  "mutationsByReviewer": 0,
+  "nonblockingFinding": "Bootstrap consumes one snapshot row; maximum 1999 new committed generations in 2000-row snapshot capacity; cell-size/table limits may be reached earlier."
+}

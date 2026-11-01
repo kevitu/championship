@@ -14,16 +14,19 @@ Baseline read and rerun: V9-A 331/331 PASS (325 regression +6 worker scenarios);
 - Frontend Web Locks (nonwaiting) + durable localStorage metadata scoped by backend actor/scope hashes, no tokens persisted. Unsupported/failed storage/locks fails closed. Immutable pending survives logout/reload; user must authenticate again.
 - Safe explicit abandonment uses a backend CLOSED tombstone with original actor/command fingerprint. If original already started, close finishes/returns it instead. A late original request then returns the same terminal result and cannot create another event. Never clear an uncertain request merely on NOT_FOUND.
 - Existing 331 assertions retained; mock provisioning adds snapshot fixtures and synthetic HMAC. Dynamic all-boundary fault loops expand naturally after new publication boundaries.
-- Static independent reviewer proved Git access to actual spec and source. Final exact-candidate read/review required; execution status reported separately.
+- Independent reviewer read actual spec/source, reviewed b5f3949 and final a65d552; 13 initial plus14 final-delta checks PASS. Full independent suite and real services NOT VERIFIED.
 
 ## Tasks
-[ ] Publication + closure backend tests RED, implement, GREEN.
-[ ] Read-only signed Reader, duplicate/BATAL/decimal/expiry/tamper/physical-isolation tests.
-[ ] Frontend persistent identity/revision/retry/close/logout/storage failure/mobile DOM integration tests.
-[ ] Whole baseline/concurrency/recovery suite, exact-file independent review, docs/report.
-[ ] QA-only commit, remote byte/hash verification and unchanged main.
+[x] Publication + closure backend tests RED, implement, GREEN.
+[x] Read-only signed Reader, duplicate/BATAL/decimal/expiry/tamper/physical-isolation tests.
+[x] Frontend persistent identity/revision/retry/close/logout/storage failure/mobile DOM integration tests.
+[x] Whole baseline/concurrency/recovery suite, exact-file independent review, docs/report.
+[x] QA-only commit, remote byte/hash verification and unchanged main.
 
 Implemented: signed persistent journal plans, signed publication source-state commitment, deterministic publication after COMMITTED; terminal CLOSED excludes generation; Counts are recorded in machine evidence. Actual local Chromium390/1280 retry/reload tested with synthetic OAuth; server stopped and browser overrides/tabs cleaned.
 Minimal app.js change: publication provenance/freshness required, actual snapshot timestamp shown and fractional final counter preserved; no dashboard redesign.
 
 Final hardening: functions ending underscore are not treated as an Execution API security boundary. All helpers (including key/config/signing) are lexical closure locals; only explicit API wrappers and safe Reader handlers are global. Source-level RED at b5f3949 reproduced, then closure fix GREEN. Native browser390/1280 network-drop/reload/retry repeated on closure-protected source; one event/four audit records remain.
+
+Reconnect completion: QA HEAD a65d552 and main5babbe2 verified. No completed suite rerun. Evidence counts/coverage/source hashes/remote blobs checked PASS;31 test/evidence files and five core files matched. Independent evidence persisted; final report and migration/deployment/rollback runbook completed. Final documentation commit and unchanged-main verification are identified in delivery receipt. No source change after reviewed code candidate.
+QA branch advanced concurrently to9d71707 (four PNG logos only). Documentation rebuilt on that exact head; image additions preserved, no force push or merge. Code candidate/test hashes unchanged.

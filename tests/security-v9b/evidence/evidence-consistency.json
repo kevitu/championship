@@ -1,0 +1,106 @@
+{
+  "checkedAt": "2026-11-01T09:02:34.589Z",
+  "codeCommit": "a65d55200ac0495f68d1ba2c2d4a4a6d7a79952d",
+  "status": "PASS",
+  "method": "Read-only JSON/count/coverage/Git-blob/SHA256 verification; completed test suites were NOT rerun",
+  "baseline331": {
+    "commit": "4234353c947f7c5f8a1527618345b5e16bdfe7f6",
+    "total": 331,
+    "pass": 331,
+    "fail": 0
+  },
+  "current": {
+    "total": 438,
+    "pass": 438,
+    "fail": 0
+  },
+  "browser": {
+    "total": 6,
+    "pass": 6,
+    "fail": 0
+  },
+  "suites": [
+    {
+      "name": "expandedV9AOnV9B",
+      "file": "v9a-on-v9b-regression.json",
+      "total": 373,
+      "pass": 373,
+      "fail": 0
+    },
+    {
+      "name": "v9AWorkerOnV9B",
+      "file": "v9a-on-v9b-parallel.json",
+      "total": 6,
+      "pass": 6,
+      "fail": 0
+    },
+    {
+      "name": "publication",
+      "file": "publication-results.json",
+      "total": 40,
+      "pass": 40,
+      "fail": 0
+    },
+    {
+      "name": "adminIntegration",
+      "file": "integration-results.json",
+      "total": 12,
+      "pass": 12,
+      "fail": 0
+    },
+    {
+      "name": "concurrency",
+      "file": "concurrency-results.json",
+      "total": 3,
+      "pass": 3,
+      "fail": 0
+    },
+    {
+      "name": "publicClient",
+      "file": "public-client-results.json",
+      "total": 4,
+      "pass": 4,
+      "fail": 0
+    }
+  ],
+  "hashChecks": [
+    {
+      "path": "gas/bridge/Code.gs",
+      "sha256": "e9298ffafa65242d7dd958a7f3fa00f29046bd5493d781ade0191db72a2419f3",
+      "gitBlob": "f7547f2aedeb64eaab85ec7f499f0b58014c16c2"
+    },
+    {
+      "path": "gas/public/Code.gs",
+      "sha256": "7d83ce171e4aa898275823c47f1c9ef5d7504b3ee8a69f4c3498ed3828269ae5",
+      "gitBlob": "425cf6061241baf361582025bca6b5281e1740cc"
+    },
+    {
+      "path": "admin-auth.js",
+      "sha256": "331c728c6804f41c88bfe5106c7ac4a748b54a2ee1ebe8c26e5393e36f305ced",
+      "gitBlob": "c8e62068ebc12003f27bae05d34652020f44cf97"
+    },
+    {
+      "path": "admin.html",
+      "sha256": "18f26d9e75a688d6b5724fe88cb658bbc11e64f5dc2e6c3ae473515aac6fd5c3",
+      "gitBlob": "3ebc4a64be28ac505e4412e11a3e72e5ca861b00"
+    },
+    {
+      "path": "app.js",
+      "sha256": "a0403761f8d1bd0ff4dcd0881ae58b8ac5eaebb86c4e89d7f383157de8217d66",
+      "gitBlob": "555a9dee4961ecf8b3a5cd28c064f81cd9ebcedb"
+    }
+  ],
+  "existingTestFilesMatchedRemote": 31,
+  "branchAdvance": {
+    "checkedAt": "2026-11-01T09:13:14.272Z",
+    "head": "9d71707cee2d907882ae5031230743da43b09f29",
+    "addedAssets": [
+      "assets/img/houses/rumah-hijau.png",
+      "assets/img/houses/rumah_biru.png",
+      "assets/img/houses/rumah_kuning.png",
+      "assets/img/houses/rumah_merah.png"
+    ],
+    "sourceOrTestsChanged": false,
+    "preserved": true
+  }
+}
