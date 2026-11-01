@@ -11,6 +11,18 @@
   "id": "./",
   "icons": [
     {
+      "src": "./assets/icons/kevitu-pwa.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "./assets/icons/kevitu-maskable.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    },
+    {
       "src": "./assets/img/brand/kevitu-logo.webp",
       "sizes": "any",
       "type": "image/webp",
