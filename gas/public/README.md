@@ -1,12 +1,18 @@
-# KEVITU Public Reader — standalone, read-only
+# KEVITU Public Reader — read-only GAS
 
-**Not deployed.** This separate Apps Script project must contain **only** `Code.gs` in this folder. Never include Admin `doPost` or score mutation helpers.
+## Current status (1 November 2026)
+- Separate standalone Apps Script project deployed as a Web App, pointing to **KEVITU Championship - DEV QA** via private Script Property `SPREADSHEET_ID`.
+- Editor test passed (four houses, zero points, zero eligible events after EVT001 cancellation).
+- GitHub Pages DEV dashboard successfully displayed returned values and tie ranking.
+- This deployment is **DEV testing only**, even though its read-only output is publicly accessible.
 
-1. Create a separate standalone Apps Script project (e.g. `KEVITU Championship - PUBLIC READ`).
-2. Copy this file into it. Configure Script Property `SPREADSHEET_ID` for the workbook intended for public scoreboard publication.
-3. The script's Google account requires read access; the spreadsheet itself stays Restricted.
-4. Audit outputs: public score totals and safe event summaries only. No participant records, Editor identities, or audit logs.
-5. Review the security and privacy boundary before deploying as a web app (execute as deployer, access Anyone only for this reader). Do not use DEV QA dummy points as official results.
-6. After authorised deployment, configure `public-config.js` in the static site with the reader's `/exec` URL and verify on desktop/mobile.
+## Contract
+- `doGet` supports fixed `callback=kevituPublicCallback`.
+- Output contains `kedudukan` (house total, rank, event count) and `acara` (event id, name, date, status); not participant data, editor identities or logs.
+- No `doPost` or mutation functions in this dedicated project.
 
-The dashboard uses a fixed JSONP callback solely because Apps Script ContentService cross-origin fetches may be restricted. This endpoint **must contain public data only**.
+## Safeguards
+- Do NOT paste `gas/Code.gs` Admin backend into the Public Reader project.
+- Source workbook sharing stays Restricted; Web App execution identity must have read permission.
+- Never publish sensitive rows or raw audit logs.
+- The GitHub Pages config references a DEV Reader endpoint; switching to LIVE is a separate approved release.
