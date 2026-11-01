@@ -1,44 +1,43 @@
 # KEVITU Sports Championship
 
-Sistem mata terkumpul Kejohanan Sukan KEVITU untuk empat rumah sukan: **Merah**, **Biru**, **Hijau** dan **Kuning**.
+Sistem mata terkumpul untuk empat rumah sukan **Merah, Biru, Hijau dan Kuning**.
 
-## Status projek
+## Status semasa — 1 November 2026
 
-**Fasa 0 — Audit awal dan asas repository.** Dashboard Design V1 telah dipersetujui. Belum ada versi aplikasi diterbitkan melalui repository ini.
+- **Fasa 0 / 1A:** Audit sumber dan skema empat tab sistem selesai.
+- **Fasa 1B — Backend GAS DEV:** pengiraan, tambah acara, edit, batal, kedudukan dan audit berjaya diuji menggunakan spreadsheet **KEVITU Championship - DEV QA**. Journal pemulihan tersedia tetapi belum diuji dengan fault injection.
+- **Fasa 2 — Dashboard V1.1:** GitHub Pages aktif, responsive desktop; logo KEVITU dan keempat-empat logo rumah sukan telah dipasang dan dipaparkan.
+- **Fasa 3 — Public Reader DEV:** Google Apps Script bacaan sahaja di-deploy berasingan dan dashboard berjaya memaparkan empat rumah dengan mata 0, kedudukan seri 1. Sumber ialah **DEV QA**, bukan keputusan rasmi.
 
-## Skop MVP yang dipersetujui
+**Dashboard sementara:** https://kevitu.github.io/championship/ — **MOD UJIAN DEV, BUKAN KEPUTUSAN RASMI.**
 
-- Dashboard responsif untuk desktop dan telefon/PWA.
-- AJK Sukan/Admin memasukkan **nama acara** serta **mata setiap rumah**.
-- Nilai mata bagi acara ditetapkan oleh **Ketua Biro Sukan**; aplikasi tidak mencipta formula pemberian mata sendiri.
-- Kedudukan keseluruhan rumah sukan dikira secara automatik daripada mata acara yang direkodkan.
-- **STRAVA STRIKE 2026** merupakan acara pertama.
-- Sumber utama ialah spreadsheet Google **Daftar Rumah Sukan Kevitu** dengan tab pendaftaran sedia ada serta tiga tab sistem: `ACARA`, `MATA_ACARA`, dan `KEDUDUKAN`.
+## Keputusan produk yang LOCK
 
+- Admin/AJK memasukkan nama acara serta mata empat rumah; Ketua Biro Sukan menetapkan mata.
+- **Pilihan B Direct Scoring:** simpan terus mengemas kini ranking. Edit dibenarkan selepas persetujuan lisan AJK, menggantikan nilai terdahulu (bukan jumlah berganda).
+- Status acara: AKTIF, SELESAI, BATAL. Acara batal dikecualikan.
+- Sifar bermaksud mata rasmi 0; kosong bermaksud belum diisi. Seri berkongsi kedudukan.
+- STRAVA STRIKE 2026 acara pertama; mata rasmi belum dimasukkan.
+- Tab: `ACARA`, `MATA_ACARA`, `KEDUDUKAN`, `LOG_MATA`; tab pendaftaran LIVE tidak disentuh.
 
-## Keputusan pengurusan mata — LOCK (Pilihan B)
+## Komponen
 
-- Mata yang disimpan oleh Admin/AJK Sukan terus diambil kira dalam ranking tanpa aliran kelulusan digital.
-- Admin boleh mengubah mata acara pada bila-bila masa selepas persetujuan lisan antara AJK.
-- Edit menggantikan nilai mata sebelumnya; jumlah terkumpul dikira semula, bukan ditambah dua kali.
-- Cadangan teknikal: simpan log audit perubahan (masa, identiti Admin, acara, rumah, mata lama/baharu) tanpa menjadikannya syarat kelulusan.
-- Mata acara ditentukan oleh Ketua Biro Sukan, bukan dijana secara automatik oleh sistem.
+- `index.html`, `styles.css`, `app.js`: dashboard web responsif.
+- `assets/img/`: lima logo rasmi (KEVITU dan empat rumah sukan).
+- `public-config.js`: konfigurasi URL **Public Reader DEV sahaja**, tanpa URL spreadsheet atau kelayakan Admin.
+- `gas/Code.gs`: backend GAS Admin — source development, **bukan deployment awam**.
+- `gas/public/Code.gs`: GAS pembaca skor sahaja — projek dan deployment berasingan.
+- `docs/`: keputusan, seni bina, model data, rancangan dan checkpoint.
 
-## Teknologi yang dirancang
+## Langkah berikutnya
 
-HTML, CSS, JavaScript, PWA, Google Apps Script (GAS), Google Sheets dan GitHub Pages.
+1. Kemaskan label DEV supaya tiada istilah “data rasmi” ketika ujian.
+2. Bangunkan **UI Admin yang berautentikasi**, tidak bergantung pada rahsia/identiti yang dihantar frontend awam.
+3. Uji penolakan akses bukan Admin serta pemulihan operasi terganggu.
+4. Sambung ke keputusan rasmi dan deploy LIVE **hanya selepas pengesahan dan kelulusan**.
 
-## Rujukan
+## Keselamatan
 
-- Repository: https://github.com/kevitu/championship
-- Spreadsheet utama: **Daftar Rumah Sukan Kevitu** (pautan disimpan di luar repository awam).
+Spreadsheet utama kekal Restricted. Jangan commit ID/URL spreadsheet, PIN, email peserta, atau credentials dalam GitHub public. URL spreadsheet pernah terdapat dalam sejarah commit pertama tetapi telah dikeluarkan daripada README semasa; sejarah Git belum dibersihkan. Public Reader hanya mendedahkan ringkasan mata dan acara; tidak membaca tab peserta.
 
-## Langkah kerja
-
-1. **Fasa 0 — Audit sumber**: semak struktur sebenar spreadsheet, nama kolum, jenis data dan keadaan tab; jangan ganggu pendaftaran sedia ada.
-2. **Fasa 1 — Model data dan GAS**: sahkan skema serta bina API untuk acara, mata rumah dan ranking.
-3. **Fasa 2 — Frontend Design V1**: hasilkan dashboard dan paparan Admin yang responsif.
-4. **Fasa 3 — QA dan PWA**: uji pengiraan, validasi, kebenaran akses dan paparan desktop/telefon.
-5. **Fasa 4 — Deployment**: terbitkan secara terkawal selepas semakan.
-
-**Prinsip keselamatan:** jangan andaikan susun atur tab/kolum tanpa audit. Jangan ubah data pendaftaran sedia ada. Data sebenar, akses Admin dan kaedah penerbitan perlu disahkan sebelum integrasi LIVE.
+**Dokumentasi checkpoint:** `docs/CHECKPOINT_2026-11-01_FASA3.md`.
