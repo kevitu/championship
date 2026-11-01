@@ -1,6 +1,6 @@
 # SECURITY_V9B_QA_REPORT
 
-**Keputusan: PASS untuk skop implementation/QA yang dinyatakan; production release masih BLOCKED.**  
+**Keputusan sejarah: PASS untuk skop implementation/mock QA asal; audit susulan menemui freshness FAIL. Production release masih BLOCKED.**  
 Tiada tuntutan keselamatan 9/10 atau production PASS.
 
 Repository: kevitu/championship  
@@ -209,3 +209,36 @@ Source review SHA ialah a65d552. SHA commit dokumentasi terakhir dan pengesahan 
 Tiada PR, merge, deploy GAS/GitHub Pages, mutasi official spreadsheet, perubahan OAuth production, real Admin-token test, stress/flood atau fault injection LIVE. Push hanya ke security/v9-transaction-integrity-qa. Existing main ref dibandingkan semula selepas final push.
 
 Kerja dihentikan selepas dokumen, bukti dan QA-only push. Production menunggu semakan serta release approval pemilik.
+
+
+## 10. Audit susulan — dasar satu spreadsheet rasmi (1 November 2026)
+Bahagian ini mengatasi cadangan staging lama dan kenyataan tiada unresolved implementation defect apabila digunakan untuk readiness terkini. Tidak mengubah bukti sejarah438 PASS/0 FAIL atau mendakwa suite dijalankan semula.
+
+Checkpoint awal fe56172af9d6020a114309b6ca9c2b08a4263cce disahkan identical dengan QA HEAD; main disahkan identical dengan5babbe255a26beb330d5db9ca80b03d9dfaa6512 sebelum perubahan dokumentasi.
+
+| Semakan | Status semasa |
+|---|---|
+| Empat header business LIVE sepadan source | PASS melalui bounded header reads sahaja |
+| Source contracts Admin/Bridge/Reader/dashboard, workbook pin | PASS semakan statik; deployed mapping NOT VERIFIED |
+| V9 schema readiness LIVE | FAIL: tiga tab V9 belum wujud, grid business masih4/5/5/6 rows |
+| Heartbeat renew sebelum expiry | FAIL: Bridge line463 memulangkan pointer asal selagi belum luput |
+| Dashboard expiry selepas render | FAIL: app.js validate dalam init sahaja; halaman terbuka tiada invalidation/refetch |
+| Historical summary |438 PASS/0 FAIL direkodkan; tidak diulang, bukan production PASS |
+| Google deployment/Session/ACL/key/scopes/service semantics | NOT VERIFIED |
+| Legacy body/formula reconciliation, backup/restore drill | NOT VERIFIED |
+| Mutation/fault/concurrency Google sebenar | NOT VERIFIED; dilarang pada LIVE, tiada isolation |
+| Full independent suite execution/physical devices | NOT VERIFIED, kekal daripada laporan asal |
+
+Metadata workbook rasmi mengesahkan Form Responses 1 serta empat business tabs; tujuh tab protokol tidak bermakna memadam tab pendaftaran. Header inspected: ACARA A1:I1, MATA_ACARA A1:G1, KEDUDUKAN A1:G1, LOG_MATA A1:I1, FORMULA rendering. Tiada body peserta/markah dibaca untuk audit ini. Header PASS tidak membuktikan keseluruhan legacy data bersih.
+
+admin-auth.js menggunakan API_URL hard-coded dan devMode:false, bukan URL legacy admin-config.js. public-config.js masih LIVE endpoint. Tiada GAS manifests pada dua path konvensional yang diperiksa; ini bukan bukti projek sebenar tiada manifest. Actual deployed versions tidak diketahui. Tiada endpoint Google dipanggil dalam sesi ini selain metadata/header connector reads.
+
+**Dasar pemilik:** satu workbook rasmi sahaja; tiada spreadsheet QA/projek GAS tambahan. Staging bukan lagi tindakan yang dicadangkan. Mock lokal boleh diteruskan; missing real Google evidence tidak hilang dengan dasar ini dan hanya boleh diputuskan sebagai risiko oleh pemilik, bukan dinaikkan menjadi PASS.
+
+**Release blockers konkrit:** dua freshness defects; provisioning tiga tab/grid; inventori existing endpoints/versions/writers; legacy reconciliation; secure key custody/protections; coherent backup/recovery readiness; coordinated cutover dan risk decision bagi Google semantics belum terbukti.
+
+**Tindakan minimum seterusnya:** baiki freshness dalam branch QA dengan focused mock/time tests apabila diarahkan; teruskan inventori read-only existing GAS/config tanpa membocorkan key. Kemudian semak readiness/risiko bersama pemilik sebelum maintenance migration berasingan. Tiada deploy atau LIVE mutation dibenarkan oleh laporan ini.
+
+Runbook dikemas kini dengan offline backups (bukan workbook tambahan), tujuh schema, private shared HMAC custody, generation0 bootstrap, maintenance cutover dan rollback ke workbook yang sama. Bootstrap/recovery/publish/provision ialah mutasi masa hadapan, bukan read-only tests dan belum dilaksanakan.
+
+Safety LOCK sesi audit: hanya dua fail Markdown pada branch QA dikemas kini; tiada perubahan source/tests, main, PR/merge/deploy, spreadsheet/properties/OAuth/GAS atau projek/spreadsheet baharu. Final ref/diff readback direkodkan dalam respons serahan.
