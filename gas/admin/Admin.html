@@ -1,0 +1,16 @@
+<!doctype html><html><head><base target="_top"><meta name="viewport" content="width=device-width,initial-scale=1"><style>
+:root{font-family:system-ui,Arial;color:#edf4ff;background:#0b1730}*{box-sizing:border-box}body{margin:0;padding:24px;max-width:860px}h1{margin:0 0 8px}p{color:#a8bad8}label{display:block;margin:14px 0 6px;font-weight:700}input,select,textarea,button{font:inherit}input,select,textarea{width:100%;padding:12px;border-radius:10px;border:1px solid #526685;background:#192944;color:white}.four{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.panel{border:1px solid #33496d;border-radius:16px;background:#152540;padding:20px}button{padding:12px 20px;border-radius:10px;border:0;background:#ffdb75;color:#162039;font-weight:800;cursor:pointer;margin-top:18px}button:disabled{opacity:.5;cursor:wait}#message{white-space:pre-wrap;color:#e8dbaa;margin:16px 0}.tag{color:#f8c75a;font-size:.8rem;font-weight:800}@media(max-width:520px){body{padding:12px}.four{grid-template-columns:1fr}}</style></head><body>
+<p class="tag">KEVITU · ADMIN DEV ONLY</p><h1>Pengurusan Mata Acara</h1><p>Terhad kepada akaun Admin yang disahkan oleh GAS. Acara baru sahaja untuk preview awal; edit dan batal akan ditambah selepas semakan UI.</p>
+<form id="scoreForm" class="panel">
+<label for="eventName">Nama acara</label><input id="eventName" maxlength="120" required placeholder="Contoh: Bola Jaring">
+<label for="eventDate">Tarikh acara</label><input id="eventDate" type="date" required>
+<label for="eventStatus">Status</label><select id="eventStatus"><option value="AKTIF">AKTIF</option><option value="SELESAI">SELESAI</option></select>
+<div class="four"><div><label for="merah">🔴 Mata Merah</label><input id="merah" type="number" min="0" max="1000000" step="any" required></div><div><label for="biru">🔵 Mata Biru</label><input id="biru" type="number" min="0" max="1000000" step="any" required></div><div><label for="hijau">🟢 Mata Hijau</label><input id="hijau" type="number" min="0" max="1000000" step="any" required></div><div><label for="kuning">🟡 Mata Kuning</label><input id="kuning" type="number" min="0" max="1000000" step="any" required></div></div>
+<button id="submit" type="submit">Simpan Acara DEV</button><div id="message" role="status"></div></form>
+<script>
+const $=id=>document.getElementById(id);
+$('scoreForm').addEventListener('submit',e=>{e.preventDefault();$('submit').disabled=true;$('message').textContent='Memproses...';
+const payload={nama_acara:$('eventName').value,tarikh_acara:$('eventDate').value,status:$('eventStatus').value,catatan:'Dicipta dari UI Admin DEV',mata:{MERAH:Number($('merah').value),BIRU:Number($('biru').value),HIJAU:Number($('hijau').value),KUNING:Number($('kuning').value)}};
+google.script.run.withSuccessHandler(r=>{$('submit').disabled=false;$('message').textContent='Berjaya: '+r.id_acara;}).withFailureHandler(err=>{$('submit').disabled=false;$('message').textContent='Gagal: '+String(err.message||err);}).adminCreateEventFromUi(payload);
+});
+</script></body></html>
