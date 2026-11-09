@@ -8,7 +8,7 @@
 'use strict';
 const HOUSES = ['MERAH','BIRU','HIJAU','KUNING'];
 const VALID_STATUS = new Set(['AKTIF','SELESAI']);
-const CACHE_KEY = 'kevitu_public_snapshot_v2';
+const CACHE_KEY = 'kevitu_public_snapshot_v3';
 const CACHE_SECONDS = 60;
 const MAX_ROWS = 2000;
 
@@ -36,7 +36,7 @@ function publicSnapshot_() {
     if(eligible.has(id)) throw Error('Duplicate event');
     if(VALID_STATUS.has(status)) {
       if(r[1].length>120||/[<>]/.test(r[1])) throw Error('Invalid event name');
-      eligible.set(id,{id_acara:id,nama_acara:r[1],tarikh_acara:r[2],tarikh_tamat:r[7].trim(),status});
+      eligible.set(id,{id_acara:id,nama_acara:r[1],tarikh_acara:r[2],tarikh_tamat:r[7].trim(),status,mata:{MERAH:null,BIRU:null,HIJAU:null,KUNING:null}});
     } else if(status!=='BATAL') throw Error('Invalid event status');
   });
   const acc=new Map(HOUSES.map(h=>[h,{rumah_sukan:h,jumlah_mata:0,jumlah_acara:0}]));
@@ -50,6 +50,7 @@ function publicSnapshot_() {
     if(r[2].trim()==='') return;
     const value=Number(r[2]);
     if(!Number.isFinite(value)||value<0||value>1000000) throw Error('Invalid points');
+    eligible.get(id).mata[house]=value;
     const item=acc.get(house);
     item.jumlah_mata+=value;
     if(!Number.isSafeInteger(Math.trunc(item.jumlah_mata))) throw Error('Invalid total');

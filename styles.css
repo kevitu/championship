@@ -64,3 +64,13 @@
  .houses:has(.podium-slot-1) .podium-slot-2 .rank{color:#ffe178}
  .houses:has(.podium-slot-1) .podium-slot-2 .podium-base span:before{content:'★';display:block;font-size:1.2rem;line-height:1.2;text-align:center;margin-bottom:9px}
 }
+
+/* Per-acara: ringkasan empat rumah; kosong ditandai — (bukan 0). */
+.event>div:first-child{min-width:0;flex:1}
+.event-points{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:14px;max-width:590px}
+.event-point{--event-colour:#aebbd2;border:1px solid color-mix(in srgb,var(--event-colour) 45%,#35425a);background:color-mix(in srgb,var(--event-colour) 10%,#0f1e36);border-radius:10px;padding:7px 10px;display:flex;align-items:baseline;gap:5px;flex-wrap:wrap}
+.event-point-merah{--event-colour:#f04b55}.event-point-biru{--event-colour:#459bfa}.event-point-hijau{--event-colour:#4ccd99}.event-point-kuning{--event-colour:#f6c74b}
+.event-point-name{display:block;flex-basis:100%;font-weight:700;font-size:.75rem;color:var(--event-colour)}
+.event-point b{font-size:1.15rem;line-height:1.2;color:var(--ink)}
+.event-point-unit{font-size:.7rem;color:var(--muted)}
+@media(max-width:520px){.event-points{grid-template-columns:repeat(2,minmax(0,1fr))}.event-point{padding:7px 9px}.event{gap:8px}.event .status{font-size:.85rem}}

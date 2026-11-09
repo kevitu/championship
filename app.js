@@ -26,7 +26,24 @@ function drawHouses(items){
  }
 }
 function formatEventDate(value){const s=String(value||'');return /^\d{4}-\d{2}-\d{2}$/.test(s)?s.slice(8,10)+'/'+s.slice(5,7)+'/'+s.slice(0,4):s}
-function drawEvents(items){const el=$('events');el.replaceChildren();if(!items?.length){el.append(element('p','muted','Belum ada acara rasmi untuk dipaparkan.'));return}for(const item of items){const row=element('article','event'),meta=element('div');meta.append(element('strong','',item.nama_acara),element('small','',item.tarikh_acara?(item.tarikh_tamat?formatEventDate(item.tarikh_acara)+' – '+formatEventDate(item.tarikh_tamat):formatEventDate(item.tarikh_acara)):'Tarikh belum ditetapkan'));row.append(meta,element('span','status',item.status));el.append(row)}}
+function drawEvents(items){
+ const el=$('events');el.replaceChildren();
+ if(!items?.length){el.append(element('p','muted','Belum ada acara rasmi untuk dipaparkan.'));return}
+ for(const item of items){
+  const row=element('article','event'),meta=element('div');
+  const dates=item.tarikh_acara?(item.tarikh_tamat?formatEventDate(item.tarikh_acara)+' – '+formatEventDate(item.tarikh_tamat):formatEventDate(item.tarikh_acara)):'Tarikh belum ditetapkan';
+  meta.append(element('strong','',item.nama_acara),element('small','',dates));
+  const points=element('div','event-points');
+  for(const h of HOUSES){
+   const tile=element('span','event-point event-point-'+h.id.toLowerCase());
+   const score=item.mata?.[h.id];
+   tile.append(element('span','event-point-name',h.name),element('b','',typeof score==='number'&&Number.isFinite(score)?score:'—'),element('span','event-point-unit','mata'));
+   points.append(tile);
+  }
+  meta.append(points);
+  row.append(meta,element('span','status',item.status));el.append(row);
+ }
+}
 function validate(payload){if(!payload||!Array.isArray(payload.kedudukan)||!Array.isArray(payload.acara))throw Error('Format API tidak sah');if(payload.kedudukan.length!==4||new Set(payload.kedudukan.map(x=>x.rumah_sukan)).size!==4||payload.kedudukan.some(x=>!HOUSES.some(h=>h.id===x.rumah_sukan)||!Number.isFinite(x.jumlah_mata)||x.jumlah_mata<0||!Number.isInteger(x.kedudukan)||x.kedudukan<1))throw Error('Kedudukan API tidak sah');return payload}
 function readPublicJsonp(endpoint){return new Promise((resolve,reject)=>{let done=false;const script=document.createElement('script');const url=new URL(endpoint);if(url.protocol!=='https:'||url.hostname!=='script.google.com'||!url.pathname.endsWith('/exec')){reject(Error('Unapproved endpoint'));return;}url.searchParams.set('callback','kevituPublicCallback');const finish=(err,data)=>{if(done)return;done=true;delete window.kevituPublicCallback;script.remove();err?reject(err):resolve(data)};window.kevituPublicCallback=data=>finish(null,data);script.onerror=()=>finish(Error('Network error'));script.src=url.href;document.head.append(script);});}
 async function init(){drawHouses(null);drawEvents([]);const endpoint=String(window.KEVITU_PUBLIC_READ_URL||'').trim();if(!endpoint){$('connection').textContent='Paparan V1 · Menunggu sambungan API rasmi';return}try{const json=await readPublicJsonp(endpoint);if(!json.ok)throw Error('API tidak berjaya');const data=validate(json.data);drawHouses(data.kedudukan);drawEvents(data.acara);$('connection').textContent='Kedudukan rasmi berjaya dimuatkan';$('updated').textContent='Dikemas kini semasa halaman dibuka'}catch(err){$('connection').textContent='Kedudukan belum tersedia — cuba lagi kemudian';$('updated').textContent='Tiada data sah';}}
