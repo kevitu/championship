@@ -47,3 +47,20 @@
  .podium-slot-4{order:4;grid-column:1/-1;min-height:0;transform:none;margin-bottom:0}
  .podium-neutral{margin-bottom:0}
 }
+
+/* Strong stepped podium — cards stand on visible tiered plinths. Desktop only.
+   Existing 2–1–3–4 order, ranking, points and house logos are unchanged. */
+@media(min-width:851px){
+ .houses:has(.podium-slot-1){align-items:end;padding-top:24px}
+ .houses:has(.podium-slot-1) .podium-card{transform:none;margin-bottom:0;min-height:0;padding-bottom:22px}
+ .houses:has(.podium-slot-1) .podium-card .logo-frame{height:125px}
+ .houses:has(.podium-slot-1) .podium-card .points{margin-top:24px}
+ .houses:has(.podium-slot-1) .podium-base{margin-top:20px;min-height:0;display:flex;align-items:center;justify-content:center;flex-direction:column;font-size:2.4rem;font-weight:900;letter-spacing:-.04em;border-top-width:5px;border-radius:0 0 17px 17px;box-shadow:inset 0 12px 24px #0002}
+ .houses:has(.podium-slot-1) .podium-slot-2 .podium-base{height:158px;background:linear-gradient(180deg,#9e853830,#4b401e66 50%,#192638);color:#ffe178}
+ .houses:has(.podium-slot-1) .podium-slot-1 .podium-base{height:112px;background:linear-gradient(180deg,#aebfd02b,#475a6b52 55%,#192638);color:#dfecf8}
+ .houses:has(.podium-slot-1) .podium-slot-3 .podium-base{height:76px;background:linear-gradient(180deg,#b87d5730,#55433452 55%,#192638);color:#eac5a9}
+ .houses:has(.podium-slot-1) .podium-slot-4 .podium-base{height:48px;font-size:1.5rem;color:var(--muted)}
+ .houses:has(.podium-slot-1) .podium-slot-2{border-color:#cba850;box-shadow:0 0 0 1px #ffe17855,0 0 38px #ffe17819}
+ .houses:has(.podium-slot-1) .podium-slot-2 .rank{color:#ffe178}
+ .houses:has(.podium-slot-1) .podium-slot-2 .podium-base span:before{content:'★';display:block;font-size:1.2rem;line-height:1.2;text-align:center;margin-bottom:9px}
+}
