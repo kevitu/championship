@@ -27,7 +27,7 @@ function publicSnapshot_() {
   const id=String(PropertiesService.getScriptProperties().getProperty('SPREADSHEET_ID')||'').trim();
   if (id !== '1j8xz7G2CksaZt_LOVvSSk8fVsC78LXMVDgioF2tqQ-E') throw Error('STOP: unapproved LIVE workbook');
   const book=SpreadsheetApp.openById(id);
-  const events=readRows_(book,'ACARA',['ID_ACARA','NAMA_ACARA','TARIKH_ACARA','STATUS','CATATAN','DICIPTA_PADA','DIKEMASKINI_PADA']);
+  const events=readRows_(book,'ACARA',['ID_ACARA','NAMA_ACARA','TARIKH_ACARA','STATUS','CATATAN','DICIPTA_PADA','DIKEMASKINI_PADA','TARIKH_TAMAT']);
   const scores=readRows_(book,'MATA_ACARA',['ID_ACARA','RUMAH_SUKAN','MATA','DIKEMASKINI_PADA','DIKEMASKINI_OLEH']);
   const eligible=new Map();
   events.forEach(r=>{
@@ -36,7 +36,7 @@ function publicSnapshot_() {
     if(eligible.has(id)) throw Error('Duplicate event');
     if(VALID_STATUS.has(status)) {
       if(r[1].length>120||/[<>]/.test(r[1])) throw Error('Invalid event name');
-      eligible.set(id,{id_acara:id,nama_acara:r[1],tarikh_acara:r[2],status});
+      eligible.set(id,{id_acara:id,nama_acara:r[1],tarikh_acara:r[2],tarikh_tamat:r[7].trim(),status});
     } else if(status!=='BATAL') throw Error('Invalid event status');
   });
   const acc=new Map(HOUSES.map(h=>[h,{rumah_sukan:h,jumlah_mata:0,jumlah_acara:0}]));

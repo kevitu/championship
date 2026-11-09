@@ -4,7 +4,7 @@ const KEVITU_CLIENT_ID='556436437882-flsu8vhvkt2cmsvbbp0nm3mtn7s0cth0.apps.googl
 const API_URL='https://script.googleapis.com/v1/scripts/AKfycbwTHh9hIeFQXALpkZwqwwyr1WGCZTOux-hUpJj4knw3dRImwdnvmYpUHO9J99o9UJ9g:run';
 const API_SCOPES='https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/script.external_request https://www.googleapis.com/auth/userinfo.email';
 const $=id=>document.getElementById(id);
-const ids=['existing','eventName','eventDate','eventStatus','merah','biru','hijau','kuning'];
+const ids=['existing','eventName','eventDate','eventEndDate','eventStatus','merah','biru','hijau','kuning'];
 let accessToken='',expiry=0,authorised=false,busy=false,events=[],tokenClient;
 function status(t){$('bridge-status').textContent=t}
 function message(t){$('operation-status').textContent=t}
@@ -19,6 +19,7 @@ function fill(){
  const e=selected();
  $('eventName').value=e?.nama_acara||'';
  $('eventDate').value=e?.tarikh_acara||'';
+ $('eventEndDate').value=e?.tarikh_tamat||'';
  $('eventStatus').value=e?.status==='SELESAI'?'SELESAI':'AKTIF';
  for(const [house,id] of [['MERAH','merah'],['BIRU','biru'],['HIJAU','hijau'],['KUNING','kuning']])$(id).value=e?.mata?.[house]??'';
  enable();
@@ -68,8 +69,10 @@ $('signout').addEventListener('click',clearSession);
 $('save').addEventListener('click',async()=>{
  if(!authorised||busy)return;
  const event=selected();
- const body={id_acara:event?.id_acara||'',nama_acara:$('eventName').value.trim(),tarikh_acara:$('eventDate').value,status:$('eventStatus').value};
- if(!body.nama_acara||!body.tarikh_acara)return message('Nama dan tarikh acara diperlukan.');
+ const body={id_acara:event?.id_acara||'',nama_acara:$('eventName').value.trim(),tarikh_acara:$('eventDate').value,tarikh_tamat:$('eventEndDate').value,status:$('eventStatus').value};
+ if(!body.nama_acara||!body.tarikh_acara)return message('Nama dan Tarikh Mula diperlukan.');
+ if(!event&&!body.tarikh_tamat)return message('Tarikh Tamat diperlukan untuk acara baharu.');
+ if(body.tarikh_tamat&&body.tarikh_tamat<body.tarikh_acara)return message('Tarikh Tamat tidak boleh sebelum Tarikh Mula.');
  for(const [h,id] of [['MERAH','merah'],['BIRU','biru'],['HIJAU','hijau'],['KUNING','kuning']])body['mata_'+h]=$(id).value;
  message('Menyimpan…');
  try{const r=await run('apiSaveKevituEvent',[body]);message('Berjaya: '+r.id_acara+'. Refresh dashboard selepas 60 saat.');await refresh(r.id_acara)}

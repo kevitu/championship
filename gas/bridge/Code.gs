@@ -40,27 +40,30 @@ function bridgeRows_(sheet,w){
   return n>0?sheet.getRange(2,1,n,w).getValues():[];
 }
 function bridgeData_(book){
-  const acara=bridgeTable_(book,'ACARA',['ID_ACARA','NAMA_ACARA','TARIKH_ACARA','STATUS','CATATAN','DICIPTA_PADA','DIKEMASKINI_PADA']);
+  const acara=bridgeTable_(book,'ACARA',['ID_ACARA','NAMA_ACARA','TARIKH_ACARA','STATUS','CATATAN','DICIPTA_PADA','DIKEMASKINI_PADA','TARIKH_TAMAT']);
   const mata=bridgeTable_(book,'MATA_ACARA',['ID_ACARA','RUMAH_SUKAN','MATA','DIKEMASKINI_PADA','DIKEMASKINI_OLEH']);
   const scores=bridgeRows_(mata,5),seen=new Set();
   scores.forEach(row=>{const key=String(row[0])+':'+String(row[1]);if(seen.has(key))throw Error('Duplicate score record');seen.add(key)});
-  return bridgeRows_(acara,7).map(row=>{
+  return bridgeRows_(acara,8).map(row=>{
     const id=String(row[0]).trim();
     const date=row[2] instanceof Date?Utilities.formatDate(row[2],'Asia/Kuala_Lumpur','yyyy-MM-dd'):String(row[2]).slice(0,10);
+    const end=row[7] instanceof Date?Utilities.formatDate(row[7],'Asia/Kuala_Lumpur','yyyy-MM-dd'):String(row[7]||'').slice(0,10);
     const points={MERAH:null,BIRU:null,HIJAU:null,KUNING:null};
     scores.filter(r=>String(r[0]).trim()===id).forEach(r=>{
       const house=String(r[1]).trim();if(Object.prototype.hasOwnProperty.call(points,house))points[house]=r[2]===''?null:Number(r[2]);
     });
-    return {id_acara:id,nama_acara:String(row[1]),tarikh_acara:date,status:String(row[3]),catatan:String(row[4]||''),mata:points};
+    return {id_acara:id,nama_acara:String(row[1]),tarikh_acara:date,tarikh_tamat:end,status:String(row[3]),catatan:String(row[4]||''),mata:points};
   });
 }
 function bridgeInput_(body){
   const name=String(body.nama_acara||'').trim().replace(/\s+/g,' ');
   const date=String(body.tarikh_acara||'');
+  const end=String(body.tarikh_tamat||'');
   const status=String(body.status||'AKTIF');
   const id=String(body.id_acara||'').trim();
   if(!name||name.length>120||/^[=+@-]|[<>\x00-\x1f]/.test(name))throw Error('Invalid event name');
   if(!/^\d{4}-\d{2}-\d{2}$/.test(date)||!Number.isFinite(Date.parse(date+'T00:00:00Z'))||new Date(date+'T00:00:00Z').toISOString().slice(0,10)!==date)throw Error('Invalid event date');
+  if(end&&(!/^\d{4}-\d{2}-\d{2}$/.test(end)||!Number.isFinite(Date.parse(end+'T00:00:00Z'))||new Date(end+'T00:00:00Z').toISOString().slice(0,10)!==end||end<date))throw Error('Invalid event end date');
   if(!['AKTIF','SELESAI'].includes(status))throw Error('Invalid status');
   if(id&&!/^EVT\d{3,}$/.test(id))throw Error('Invalid event ID');
   const scores={};
@@ -71,13 +74,13 @@ function bridgeInput_(body){
     if(!Number.isFinite(n)||n<0||n>1000000)throw Error('Invalid points: '+h);
     scores[h]=n;
   });
-  return {id,name,date,status,scores};
+  return {id,name,date,end,status,scores};
 }
 function bridgeRecalculate_(book,now){
-  const acara=bridgeTable_(book,'ACARA',['ID_ACARA','NAMA_ACARA','TARIKH_ACARA','STATUS','CATATAN','DICIPTA_PADA','DIKEMASKINI_PADA']);
+  const acara=bridgeTable_(book,'ACARA',['ID_ACARA','NAMA_ACARA','TARIKH_ACARA','STATUS','CATATAN','DICIPTA_PADA','DIKEMASKINI_PADA','TARIKH_TAMAT']);
   const mata=bridgeTable_(book,'MATA_ACARA',['ID_ACARA','RUMAH_SUKAN','MATA','DIKEMASKINI_PADA','DIKEMASKINI_OLEH']);
   const ranking=bridgeTable_(book,'KEDUDUKAN',['RUMAH_SUKAN','JUMLAH_MATA','KEDUDUKAN','JUMLAH_ACARA','DIKEMASKINI_PADA']);
-  const events=bridgeRows_(acara,7),rows=bridgeRows_(mata,5);
+  const events=bridgeRows_(acara,8),rows=bridgeRows_(mata,5);
   const active=new Set(events.filter(x=>['AKTIF','SELESAI'].includes(String(x[3]).trim())).map(x=>String(x[0])));
   const agg=KEVITU_BRIDGE_HOUSES.map(h=>({h,total:0,eventIds:new Set()})),seen=new Set();
   rows.forEach(r=>{
@@ -94,10 +97,10 @@ function bridgeRecalculate_(book,now){
   ranking.getRange(2,1,4,5).setValues(agg.map(x=>[x.h,x.total,1+agg.filter(y=>y.total>x.total).length,x.eventIds.size,now]));
 }
 function bridgeMutation_(book,action,body,email){
-  const eventsSheet=bridgeTable_(book,'ACARA',['ID_ACARA','NAMA_ACARA','TARIKH_ACARA','STATUS','CATATAN','DICIPTA_PADA','DIKEMASKINI_PADA']);
+  const eventsSheet=bridgeTable_(book,'ACARA',['ID_ACARA','NAMA_ACARA','TARIKH_ACARA','STATUS','CATATAN','DICIPTA_PADA','DIKEMASKINI_PADA','TARIKH_TAMAT']);
   const pointsSheet=bridgeTable_(book,'MATA_ACARA',['ID_ACARA','RUMAH_SUKAN','MATA','DIKEMASKINI_PADA','DIKEMASKINI_OLEH']);
   const audit=bridgeTable_(book,'LOG_MATA',['ID_LOG','TIMESTAMP','ID_ACARA','RUMAH_SUKAN','MATA_LAMA','MATA_BAHARU','TINDAKAN','ADMIN_ID']);
-  const events=bridgeRows_(eventsSheet,7),scores=bridgeRows_(pointsSheet,5);
+  const events=bridgeRows_(eventsSheet,8),scores=bridgeRows_(pointsSheet,5);
   const input=action==='save'?bridgeInput_(body):{id:String(body.id_acara||'')};
   const now=new Date();
   if(action==='cancel'){
@@ -113,14 +116,15 @@ function bridgeMutation_(book,action,body,email){
   }
   const index=input.id?events.findIndex(r=>String(r[0])===input.id):-1;
   if(input.id&&index<0)throw Error('Event not found');
+  if(index<0&&!input.end)throw Error('Tarikh Tamat diperlukan untuk acara baharu');
   if(index>=0&&String(events[index][3])==='BATAL')throw Error('Cancelled event cannot be edited');
   const next=events.map(r=>/^EVT(\d+)$/.exec(String(r[0]))).filter(Boolean).map(x=>Number(x[1]));
   const id=input.id||'EVT'+String(Math.max(0,...next)+1).padStart(3,'0');
   // Fail before writes if the selected ID already has duplicate score rows.
   const found=new Map();
   scores.forEach((r,i)=>{const key=String(r[0])+':'+String(r[1]);if(found.has(key))throw Error('Duplicate score row');found.set(key,{row:i+2,value:r[2]})});
-  if(index>=0){eventsSheet.getRange(index+2,2,1,4).setValues([[input.name,input.date,input.status,'']]);eventsSheet.getRange(index+2,7).setValue(now)}
-  else eventsSheet.appendRow([id,input.name,input.date,input.status,'',now,now]);
+  if(index>=0){eventsSheet.getRange(index+2,2,1,4).setValues([[input.name,input.date,input.status,'']]);eventsSheet.getRange(index+2,7).setValue(now);eventsSheet.getRange(index+2,8).setValue(input.end)}
+  else eventsSheet.appendRow([id,input.name,input.date,input.status,'',now,now,input.end]);
   const changes=[];
   KEVITU_BRIDGE_HOUSES.forEach(h=>{
     const prev=found.get(id+':'+h),old=prev?prev.value:'',value=input.scores[h];
