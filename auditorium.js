@@ -6,13 +6,14 @@ const HOUSES=[
 {id:'HIJAU',name:'Rumah Hijau',image:'./assets/img/houses/rumah-hijau.png',colour:'#4ccd99'},
 {id:'KUNING',name:'Rumah Kuning',image:'./assets/img/houses/rumah_kuning.png',colour:'#f6c74b'}];
 const $=id=>document.getElementById(id);
-let busy=false,serial=0;
+let busy=false;
 function status(message,state){$('status').textContent=message;$('dot').className='dot '+state}
 function readPublic(endpoint){
  return new Promise((resolve,reject)=>{
   const url=new URL(endpoint);
   if(url.protocol!=='https:'||url.hostname!=='script.google.com'||!url.pathname.endsWith('/exec')){reject(Error('Endpoint tidak diluluskan'));return}
-  const callback='kevituAuditoriumCallback'+(++serial);
+  // The deployed public GAS endpoint accepts exactly this callback name.
+  const callback='kevituPublicCallback';
   const script=document.createElement('script');
   const timer=setTimeout(()=>finish(Error('Timeout API')),15000);
   function finish(error,data){clearTimeout(timer);delete window[callback];script.remove();error?reject(error):resolve(data)}
